@@ -1,0 +1,39 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # ручной запуск из Actions tab
+
+# Только одна выкатка за раз — если прилетел новый push пока прошлый ещё катится,
+# отменяем предыдущий (ему уже нет смысла).
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: set up ssh
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: run deploy.sh on VPS
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'bash /opt/spain-map/ops/deploy.sh'
+
+      - name: smoke test prod
+        run: |
+          curl -sSf https://dubson.org/api/health > /dev/null
+          curl -sSf 'https://dubson.org/api/counts?bbox=-9.5,35.9,4.5,43.8' \
+            | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['counts']['schools'] > 30000, d; print('ok:', d['counts']['schools'])"
