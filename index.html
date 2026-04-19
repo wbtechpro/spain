@@ -10,6 +10,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <style>
   html, body { height: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
@@ -898,7 +899,8 @@ const HEAT_DEFS = {
   hate_crimes:    { label: 'Преступления по ненависти',    source: 'json', url: 'data/hate_crimes.json' },
   power_outages:  { label: 'Зона блэкаута 28.04.2025',      source: 'json', url: 'data/power_outages.json' },
   yoga_price:     { label: 'Средняя цена часа йоги',       source: 'json', url: 'data/yoga_price.json' },
-  cita_previa:    { label: 'Срок ожидания cita previa',    source: 'json', url: 'data/cita_previa.json' }
+  cita_previa:    { label: 'Срок ожидания cita previa',    source: 'json', url: 'data/cita_previa.json' },
+  salary_net_median: { label: 'Медианный доход семьи (ADRH 2023)', source: 'json', url: 'data/salary_net_median.json' }
 };
 
 // Список испанских горнолыжных курортов (открытая инфа)
@@ -944,6 +946,8 @@ const layerLoading = {};   // layerLoading[key][mode] -> Promise
 const dataCache = {};      // dataCache[key] -> parsed JSON
 const heatMeta = {};       // heatMeta[key] -> { min, max, sub } (из JSON, не зависит от режима)
 let provincesGeo = null;   // lazy-loaded provinces GeoJSON
+let municipiosGeo = null;  // lazy-loaded municipalities GeoJSON (decoded from topojson)
+const municipioCentroids = {};  // INE-5 → [lat, lng] (bbox midpoint, used for heat mode)
 
 async function loadProvincesGeo() {
   if (provincesGeo) return provincesGeo;
@@ -951,6 +955,32 @@ async function loadProvincesGeo() {
   if (!res.ok) throw new Error('provinces geojson: HTTP ' + res.status);
   provincesGeo = await res.json();
   return provincesGeo;
+}
+
+function geomBboxCenter(geom) {
+  let latMin = 90, latMax = -90, lngMin = 180, lngMax = -180;
+  const walk = a => {
+    if (typeof a[0] === 'number') {
+      const [lng, lat] = a;
+      if (lat < latMin) latMin = lat; if (lat > latMax) latMax = lat;
+      if (lng < lngMin) lngMin = lng; if (lng > lngMax) lngMax = lng;
+    } else a.forEach(walk);
+  };
+  walk(geom.coordinates);
+  return [(latMin + latMax) / 2, (lngMin + lngMax) / 2];
+}
+
+async function loadMunicipiosGeo() {
+  if (municipiosGeo) return municipiosGeo;
+  const res = await fetch('data/municipalities_es.topojson');
+  if (!res.ok) throw new Error('municipios topojson: HTTP ' + res.status);
+  const topo = await res.json();
+  // topojson-client decodes compact arcs → full GeoJSON coordinates
+  municipiosGeo = topojson.feature(topo, topo.objects.municipalities);
+  municipiosGeo.features.forEach(f => {
+    if (f.id) municipioCentroids[f.id] = geomBboxCenter(f.geometry);
+  });
+  return municipiosGeo;
 }
 
 async function loadHeatData(key) {
@@ -1058,7 +1088,73 @@ function unitFor(key) {
   if (key === 'hate_crimes') return ' случаев';
   if (key === 'cita_previa') return ' дн.';
   if (key === 'yoga_price') return ' €/час';
+  if (key === 'salary_net_median') return ' €/год';
   return '';
+}
+
+// Normalize a muni value to [0..1] via p5/p95 from data.stats.
+function muniIntensity(value, stats) {
+  if (value == null || !stats) return null;
+  const lo = stats.p5_eur ?? stats.p5 ?? stats.min;
+  const hi = stats.p95_eur ?? stats.p95 ?? stats.max;
+  if (lo == null || hi == null || hi === lo) return 0.5;
+  return Math.max(0, Math.min(1, (value - lo) / (hi - lo)));
+}
+
+function formatMuniValue(key, value) {
+  if (value == null) return 'н.д.';
+  if (key === 'salary_net_median') {
+    return `${Math.round(value).toLocaleString('ru-RU').replace(/,/g, ' ')} €/год`;
+  }
+  return `${value}${unitFor(key)}`;
+}
+
+// Muni choropleth: 8k+ polygons → canvas renderer for perf. Saturation/hue via heatColor().
+async function buildMuniChoroplethLayer(data, key) {
+  const geo = await loadMunicipiosGeo();
+  const byIne = {};
+  (data.municipios || []).forEach(m => {
+    byIne[m.ine] = { ...m, intensity: muniIntensity(m.value_eur ?? m.value, data.stats) };
+  });
+  return L.geoJSON(geo, {
+    renderer: L.canvas({ padding: 0.5 }),
+    style: feature => {
+      const m = byIne[feature.id];
+      if (!m || m.intensity == null) {
+        return { fillColor: '#eee', fillOpacity: 0.15, color: '#bbb', weight: 0.3 };
+      }
+      return {
+        fillColor: heatColor(m.intensity),
+        fillOpacity: 0.70,
+        color: '#333',
+        weight: 0.25
+      };
+    },
+    onEachFeature: (feature, layer) => {
+      const m = byIne[feature.id];
+      const name = (feature.properties && feature.properties.name) || feature.id;
+      const val = m ? formatMuniValue(key, m.value_eur ?? m.value) : 'нет данных';
+      layer.bindTooltip(`<b>${name}</b><br>${val}`, { sticky: true });
+    }
+  });
+}
+
+// Muni heat: point per municipio centroid, weighted by normalized value.
+async function buildMuniHeatLayer(data) {
+  await loadMunicipiosGeo();
+  const pts = [];
+  (data.municipios || []).forEach(m => {
+    const c = municipioCentroids[m.ine];
+    const intensity = muniIntensity(m.value_eur ?? m.value, data.stats);
+    if (!c || intensity == null) return;
+    pts.push([c[0], c[1], intensity]);
+  });
+  return L.heatLayer(pts, {
+    radius: data.render_radius ?? 18,
+    blur: data.render_blur ?? 12,
+    maxZoom: 11,
+    minOpacity: 0.35
+  });
 }
 
 async function ensureLayer(key, mode) {
@@ -1074,7 +1170,11 @@ async function ensureLayer(key, mode) {
     const data = await loadHeatData(key);
     const unit = unitFor(key);
     let layer;
-    if (mode === 'heat') {
+    if (data.granularity === 'municipio') {
+      layer = mode === 'heat'
+        ? await buildMuniHeatLayer(data)
+        : await buildMuniChoroplethLayer(data, key);
+    } else if (mode === 'heat') {
       layer = buildHeatLayer(data);
     } else if (key === 'internet_speed') {
       layer = buildGridLayer(data, unit);

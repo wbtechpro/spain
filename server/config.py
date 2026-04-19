@@ -40,6 +40,7 @@ HEATMAP_JSON_FILES: dict[str, str] = {
     "power_outages": "power_outages.json",
     "cita_previa": "cita_previa.json",
     "yoga_price": "yoga_price.json",
+    "salary_net_median": "salary_net_median.json",
 }
 
 
@@ -57,10 +58,11 @@ LAYER_CATALOGUE: dict[str, dict] = {
     "neurorehab": {"type": "points", "label": "Нейрореабилитационные центры",    "icon": "🧠", "color": "#9b59b6", "zoom_min": 0},
     "speech":     {"type": "points", "label": "Логопеды: CAS / диспраксия",      "icon": "💬", "color": "#f39c12", "zoom_min": 0},
     # heatmaps
-    "internet_speed": {"type": "heatmap", "label": "Скорость интернета"},
-    "rent_cost":      {"type": "heatmap", "label": "Стоимость аренды"},
-    "hate_crimes":    {"type": "heatmap", "label": "Преступления по ненависти"},
-    "power_outages":  {"type": "heatmap", "label": "Блэкаут 2025-04-28"},
-    "cita_previa":    {"type": "heatmap", "label": "Срок ожидания cita previa"},
-    "yoga_price":     {"type": "heatmap", "label": "Средняя цена часа йоги"},
+    "internet_speed":    {"type": "heatmap", "label": "Скорость интернета"},
+    "rent_cost":         {"type": "heatmap", "label": "Стоимость аренды"},
+    "hate_crimes":       {"type": "heatmap", "label": "Преступления по ненависти"},
+    "power_outages":     {"type": "heatmap", "label": "Блэкаут 2025-04-28"},
+    "cita_previa":       {"type": "heatmap", "label": "Срок ожидания cita previa"},
+    "yoga_price":        {"type": "heatmap", "label": "Средняя цена часа йоги"},
+    "salary_net_median": {"type": "heatmap", "label": "Медианный доход семьи (ADRH 2023)"},
 }
