@@ -560,7 +560,13 @@ function abortApi(key) {
 
 function bboxStr() {
   const b = map.getBounds();
-  return `${b.getWest()},${b.getSouth()},${b.getEast()},${b.getNorth()}`;
+  // Клэмпим в разумные границы: глобус на zoom 0 / панорама вокруг антимеридиана
+  // могут давать значения вне [-180,180]/[-90,90], а бэкенд тогда отдаёт 400.
+  const w = Math.max(-180, b.getWest());
+  const e = Math.min( 180, b.getEast());
+  const s = Math.max( -90, b.getSouth());
+  const n = Math.min(  90, b.getNorth());
+  return `${w},${s},${e},${n}`;
 }
 
 async function apiGet(path, key) {
