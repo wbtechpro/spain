@@ -38,6 +38,8 @@ HEATMAP_JSON_FILES: dict[str, str] = {
     "rent_cost": "rent_cost.json",
     "hate_crimes": "hate_crimes.json",
     "power_outages": "power_outages.json",
+    "cita_previa": "cita_previa.json",
+    "yoga_price": "yoga_price.json",
 }
 
 
@@ -59,4 +61,6 @@ LAYER_CATALOGUE: dict[str, dict] = {
     "rent_cost":      {"type": "heatmap", "label": "Стоимость аренды"},
     "hate_crimes":    {"type": "heatmap", "label": "Преступления по ненависти"},
     "power_outages":  {"type": "heatmap", "label": "Блэкаут 2025-04-28"},
+    "cita_previa":    {"type": "heatmap", "label": "Срок ожидания cita previa"},
+    "yoga_price":     {"type": "heatmap", "label": "Средняя цена часа йоги"},
 }

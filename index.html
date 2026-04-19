@@ -897,8 +897,8 @@ const HEAT_DEFS = {
   rent_cost:      { label: 'Стоимость аренды',             source: 'json', url: 'data/rent_cost.json' },
   hate_crimes:    { label: 'Преступления по ненависти',    source: 'json', url: 'data/hate_crimes.json' },
   power_outages:  { label: 'Зона блэкаута 28.04.2025',      source: 'json', url: 'data/power_outages.json' },
-  yoga_price:     { label: 'Средняя цена часа йоги',       source: null },
-  cita_previa:    { label: 'Срок ожидания cita previa',    source: null }
+  yoga_price:     { label: 'Средняя цена часа йоги',       source: 'json', url: 'data/yoga_price.json' },
+  cita_previa:    { label: 'Срок ожидания cita previa',    source: 'json', url: 'data/cita_previa.json' }
 };
 
 // Список испанских горнолыжных курортов (открытая инфа)
@@ -1056,6 +1056,8 @@ function unitFor(key) {
   if (key === 'internet_speed') return ' Мбит/с';
   if (key === 'rent_cost') return ' €/мес';
   if (key === 'hate_crimes') return ' случаев';
+  if (key === 'cita_previa') return ' дн.';
+  if (key === 'yoga_price') return ' €/час';
   return '';
 }
 
