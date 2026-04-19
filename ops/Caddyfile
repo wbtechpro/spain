@@ -1,0 +1,17 @@
+dubson.org {
+    encode gzip zstd
+
+    # backend API — uvicorn listens on localhost
+    reverse_proxy /api/* 127.0.0.1:8000
+
+    # static frontend (index.html + data/*.json for legacy fallbacks + provinces_es.geojson)
+    root * /var/www/spain-map
+    file_server
+
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}

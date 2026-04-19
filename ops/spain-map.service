@@ -1,0 +1,22 @@
+[Unit]
+Description=spain-map FastAPI backend (uvicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=caddy
+Group=caddy
+WorkingDirectory=/opt/spain-map
+Environment="PATH=/root/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="SPAIN_MAP_DATA=/opt/spain-map/data"
+ExecStart=/root/.local/bin/uv run --project server uvicorn server.main:app --host 127.0.0.1 --port 8000 --workers 2 --no-access-log
+Restart=on-failure
+RestartSec=3
+# hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/spain-map
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+{
+  "source": "Informe delitos de odio 2024 — Ministerio del Interior",
+  "source_url": "https://interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/INFORME_Evolucion_delitos_de_odio_2024.pdf",
+  "period": "2024",
+  "metric": "infracciones penales e incidentes de odio (hechos conocidos)",
+  "granularity": "provincia",
+  "legend_min": "2 случаев",
+  "legend_max": "145+ случаев",
+  "legend_sub": "Мин-во внутренних дел · 2024 · 52 провинций",
+  "render_radius": 55,
+  "render_blur": 45,
+  "count": 52
+}
