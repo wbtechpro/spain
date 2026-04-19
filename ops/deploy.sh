@@ -47,4 +47,14 @@ systemctl reload caddy
 
 echo "--- status ---"
 systemctl is-active spain-map caddy
-curl -sf http://127.0.0.1:8000/api/health && echo
+
+# wait up to 15s for uvicorn to come up after restart
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+    if curl -sf http://127.0.0.1:8000/api/health > /dev/null; then
+        echo "backend healthy after ${i}s"
+        exit 0
+    fi
+    sleep 1
+done
+echo "backend did NOT respond within 15s" >&2
+exit 1
