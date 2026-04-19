@@ -1,0 +1,803 @@
+{
+ "source": "SISLE-SNS · Ministerio de Sanidad",
+ "source_url": "https://www.sanidad.gob.es/estadEstudios/estadisticas/inforRecopilaciones/listaEsperaInfCCAA.htm",
+ "period": "2024-12-31",
+ "metric": "días de espera para primera consulta con especialista (primera consulta externa)",
+ "granularity": "comunidad autónoma (broadcast a provincia)",
+ "count": 52,
+ "legend_min": "23 дн.",
+ "legend_max": "157 дн.",
+ "legend_sub": "SISLE · дек 2024 · 19 CCAA → 52 провинций",
+ "render_radius": 55,
+ "render_blur": 45,
+ "stats": {
+  "min_days": 23,
+  "max_days": 157,
+  "national_avg_days": 105
+ },
+ "missing_provinces": [],
+ "provinces": [
+  {
+   "ine": "01",
+   "province_ru": "Алава",
+   "province_es": "Araba/Álava",
+   "lat": 42.84,
+   "lng": -2.71,
+   "ccaa_key": "pais_vasco",
+   "wait_days": 43
+  },
+  {
+   "ine": "02",
+   "province_ru": "Альбасете",
+   "province_es": "Albacete",
+   "lat": 38.83,
+   "lng": -1.86,
+   "ccaa_key": "castilla_mancha",
+   "wait_days": 60
+  },
+  {
+   "ine": "03",
+   "province_ru": "Аликанте",
+   "province_es": "Alicante",
+   "lat": 38.48,
+   "lng": -0.54,
+   "ccaa_key": "valenciana",
+   "wait_days": 93
+  },
+  {
+   "ine": "04",
+   "province_ru": "Альмерия",
+   "province_es": "Almería",
+   "lat": 37.16,
+   "lng": -2.33,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "05",
+   "province_ru": "Авила",
+   "province_es": "Ávila",
+   "lat": 40.57,
+   "lng": -4.95,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "06",
+   "province_ru": "Бадахос",
+   "province_es": "Badajoz",
+   "lat": 38.8,
+   "lng": -6.0,
+   "ccaa_key": "extremadura",
+   "wait_days": 125
+  },
+  {
+   "ine": "07",
+   "province_ru": "Балеары",
+   "province_es": "Illes Balears",
+   "lat": 39.5,
+   "lng": 2.8,
+   "ccaa_key": "baleares",
+   "wait_days": 84
+  },
+  {
+   "ine": "08",
+   "province_ru": "Барселона",
+   "province_es": "Barcelona",
+   "lat": 41.6,
+   "lng": 2.0,
+   "ccaa_key": "cataluna",
+   "wait_days": 110
+  },
+  {
+   "ine": "09",
+   "province_ru": "Бургос",
+   "province_es": "Burgos",
+   "lat": 42.35,
+   "lng": -3.6,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "10",
+   "province_ru": "Касерес",
+   "province_es": "Cáceres",
+   "lat": 39.7,
+   "lng": -6.3,
+   "ccaa_key": "extremadura",
+   "wait_days": 125
+  },
+  {
+   "ine": "11",
+   "province_ru": "Кадис",
+   "province_es": "Cádiz",
+   "lat": 36.5,
+   "lng": -5.8,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "12",
+   "province_ru": "Кастельон",
+   "province_es": "Castellón",
+   "lat": 40.08,
+   "lng": -0.11,
+   "ccaa_key": "valenciana",
+   "wait_days": 93
+  },
+  {
+   "ine": "13",
+   "province_ru": "Сьюдад-Реаль",
+   "province_es": "Ciudad Real",
+   "lat": 39.0,
+   "lng": -3.9,
+   "ccaa_key": "castilla_mancha",
+   "wait_days": 60
+  },
+  {
+   "ine": "14",
+   "province_ru": "Кордова",
+   "province_es": "Córdoba",
+   "lat": 37.9,
+   "lng": -4.85,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "15",
+   "province_ru": "Ла-Корунья",
+   "province_es": "A Coruña",
+   "lat": 43.17,
+   "lng": -8.4,
+   "ccaa_key": "galicia",
+   "wait_days": 61
+  },
+  {
+   "ine": "16",
+   "province_ru": "Куэнка",
+   "province_es": "Cuenca",
+   "lat": 40.0,
+   "lng": -2.2,
+   "ccaa_key": "castilla_mancha",
+   "wait_days": 60
+  },
+  {
+   "ine": "17",
+   "province_ru": "Жирона",
+   "province_es": "Girona",
+   "lat": 42.15,
+   "lng": 2.55,
+   "ccaa_key": "cataluna",
+   "wait_days": 110
+  },
+  {
+   "ine": "18",
+   "province_ru": "Гранада",
+   "province_es": "Granada",
+   "lat": 37.3,
+   "lng": -3.1,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "19",
+   "province_ru": "Гвадалахара",
+   "province_es": "Guadalajara",
+   "lat": 40.8,
+   "lng": -2.3,
+   "ccaa_key": "castilla_mancha",
+   "wait_days": 60
+  },
+  {
+   "ine": "20",
+   "province_ru": "Гипускоа",
+   "province_es": "Gipuzkoa",
+   "lat": 43.17,
+   "lng": -2.2,
+   "ccaa_key": "pais_vasco",
+   "wait_days": 43
+  },
+  {
+   "ine": "21",
+   "province_ru": "Уэльва",
+   "province_es": "Huelva",
+   "lat": 37.55,
+   "lng": -6.95,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "22",
+   "province_ru": "Уэска",
+   "province_es": "Huesca",
+   "lat": 42.2,
+   "lng": -0.1,
+   "ccaa_key": "aragon",
+   "wait_days": 128
+  },
+  {
+   "ine": "23",
+   "province_ru": "Хаэн",
+   "province_es": "Jaén",
+   "lat": 38.0,
+   "lng": -3.5,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "24",
+   "province_ru": "Леон",
+   "province_es": "León",
+   "lat": 42.67,
+   "lng": -6.0,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "25",
+   "province_ru": "Льейда",
+   "province_es": "Lleida",
+   "lat": 42.0,
+   "lng": 1.0,
+   "ccaa_key": "cataluna",
+   "wait_days": 110
+  },
+  {
+   "ine": "26",
+   "province_ru": "Ла-Риоха",
+   "province_es": "La Rioja",
+   "lat": 42.3,
+   "lng": -2.5,
+   "ccaa_key": "rioja",
+   "wait_days": 79
+  },
+  {
+   "ine": "27",
+   "province_ru": "Луго",
+   "province_es": "Lugo",
+   "lat": 43.0,
+   "lng": -7.5,
+   "ccaa_key": "galicia",
+   "wait_days": 61
+  },
+  {
+   "ine": "28",
+   "province_ru": "Мадрид",
+   "province_es": "Madrid",
+   "lat": 40.45,
+   "lng": -3.7,
+   "ccaa_key": "madrid",
+   "wait_days": 72
+  },
+  {
+   "ine": "29",
+   "province_ru": "Малага",
+   "province_es": "Málaga",
+   "lat": 36.75,
+   "lng": -4.7,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "30",
+   "province_ru": "Мурсия",
+   "province_es": "Murcia",
+   "lat": 38.05,
+   "lng": -1.6,
+   "ccaa_key": "murcia",
+   "wait_days": 97
+  },
+  {
+   "ine": "31",
+   "province_ru": "Наварра",
+   "province_es": "Navarra",
+   "lat": 42.7,
+   "lng": -1.65,
+   "ccaa_key": "navarra",
+   "wait_days": 154
+  },
+  {
+   "ine": "32",
+   "province_ru": "Оренсе",
+   "province_es": "Ourense",
+   "lat": 42.2,
+   "lng": -7.6,
+   "ccaa_key": "galicia",
+   "wait_days": 61
+  },
+  {
+   "ine": "33",
+   "province_ru": "Астурия",
+   "province_es": "Asturias",
+   "lat": 43.35,
+   "lng": -6.0,
+   "ccaa_key": "asturias",
+   "wait_days": 97
+  },
+  {
+   "ine": "34",
+   "province_ru": "Паленсия",
+   "province_es": "Palencia",
+   "lat": 42.3,
+   "lng": -4.55,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "35",
+   "province_ru": "Лас-Пальмас",
+   "province_es": "Las Palmas",
+   "lat": 28.2,
+   "lng": -15.45,
+   "ccaa_key": "canarias",
+   "wait_days": 157
+  },
+  {
+   "ine": "36",
+   "province_ru": "Понтеведра",
+   "province_es": "Pontevedra",
+   "lat": 42.5,
+   "lng": -8.5,
+   "ccaa_key": "galicia",
+   "wait_days": 61
+  },
+  {
+   "ine": "37",
+   "province_ru": "Саламанка",
+   "province_es": "Salamanca",
+   "lat": 40.8,
+   "lng": -6.0,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "38",
+   "province_ru": "Санта-Крус",
+   "province_es": "Santa Cruz de Tenerife",
+   "lat": 28.5,
+   "lng": -16.9,
+   "ccaa_key": "canarias",
+   "wait_days": 157
+  },
+  {
+   "ine": "39",
+   "province_ru": "Кантабрия",
+   "province_es": "Cantabria",
+   "lat": 43.2,
+   "lng": -4.03,
+   "ccaa_key": "cantabria",
+   "wait_days": 77
+  },
+  {
+   "ine": "40",
+   "province_ru": "Сеговия",
+   "province_es": "Segovia",
+   "lat": 41.05,
+   "lng": -4.1,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "41",
+   "province_ru": "Севилья",
+   "province_es": "Sevilla",
+   "lat": 37.4,
+   "lng": -5.6,
+   "ccaa_key": "andalucia",
+   "wait_days": 150
+  },
+  {
+   "ine": "42",
+   "province_ru": "Сория",
+   "province_es": "Soria",
+   "lat": 41.7,
+   "lng": -2.7,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "43",
+   "province_ru": "Таррагона",
+   "province_es": "Tarragona",
+   "lat": 41.2,
+   "lng": 1.1,
+   "ccaa_key": "cataluna",
+   "wait_days": 110
+  },
+  {
+   "ine": "44",
+   "province_ru": "Теруэль",
+   "province_es": "Teruel",
+   "lat": 40.6,
+   "lng": -0.8,
+   "ccaa_key": "aragon",
+   "wait_days": 128
+  },
+  {
+   "ine": "45",
+   "province_ru": "Толедо",
+   "province_es": "Toledo",
+   "lat": 39.8,
+   "lng": -4.1,
+   "ccaa_key": "castilla_mancha",
+   "wait_days": 60
+  },
+  {
+   "ine": "46",
+   "province_ru": "Валенсия",
+   "province_es": "Valencia",
+   "lat": 39.5,
+   "lng": -0.85,
+   "ccaa_key": "valenciana",
+   "wait_days": 93
+  },
+  {
+   "ine": "47",
+   "province_ru": "Вальядолид",
+   "province_es": "Valladolid",
+   "lat": 41.7,
+   "lng": -4.8,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "48",
+   "province_ru": "Бискайя",
+   "province_es": "Bizkaia",
+   "lat": 43.25,
+   "lng": -2.9,
+   "ccaa_key": "pais_vasco",
+   "wait_days": 43
+  },
+  {
+   "ine": "49",
+   "province_ru": "Самора",
+   "province_es": "Zamora",
+   "lat": 41.7,
+   "lng": -6.0,
+   "ccaa_key": "castilla_leon",
+   "wait_days": 89
+  },
+  {
+   "ine": "50",
+   "province_ru": "Сарагоса",
+   "province_es": "Zaragoza",
+   "lat": 41.65,
+   "lng": -0.9,
+   "ccaa_key": "aragon",
+   "wait_days": 128
+  },
+  {
+   "ine": "51",
+   "province_ru": "Сеута",
+   "province_es": "Ceuta",
+   "lat": 35.89,
+   "lng": -5.31,
+   "ccaa_key": "ceuta",
+   "wait_days": 83
+  },
+  {
+   "ine": "52",
+   "province_ru": "Мелилья",
+   "province_es": "Melilla",
+   "lat": 35.29,
+   "lng": -2.94,
+   "ccaa_key": "melilla",
+   "wait_days": 23
+  }
+ ],
+ "points": [
+  [
+   42.84,
+   -2.71,
+   0.149,
+   43
+  ],
+  [
+   38.83,
+   -1.86,
+   0.276,
+   60
+  ],
+  [
+   38.48,
+   -0.54,
+   0.522,
+   93
+  ],
+  [
+   37.16,
+   -2.33,
+   0.948,
+   150
+  ],
+  [
+   40.57,
+   -4.95,
+   0.493,
+   89
+  ],
+  [
+   38.8,
+   -6.0,
+   0.761,
+   125
+  ],
+  [
+   39.5,
+   2.8,
+   0.455,
+   84
+  ],
+  [
+   41.6,
+   2.0,
+   0.649,
+   110
+  ],
+  [
+   42.35,
+   -3.6,
+   0.493,
+   89
+  ],
+  [
+   39.7,
+   -6.3,
+   0.761,
+   125
+  ],
+  [
+   36.5,
+   -5.8,
+   0.948,
+   150
+  ],
+  [
+   40.08,
+   -0.11,
+   0.522,
+   93
+  ],
+  [
+   39.0,
+   -3.9,
+   0.276,
+   60
+  ],
+  [
+   37.9,
+   -4.85,
+   0.948,
+   150
+  ],
+  [
+   43.17,
+   -8.4,
+   0.284,
+   61
+  ],
+  [
+   40.0,
+   -2.2,
+   0.276,
+   60
+  ],
+  [
+   42.15,
+   2.55,
+   0.649,
+   110
+  ],
+  [
+   37.3,
+   -3.1,
+   0.948,
+   150
+  ],
+  [
+   40.8,
+   -2.3,
+   0.276,
+   60
+  ],
+  [
+   43.17,
+   -2.2,
+   0.149,
+   43
+  ],
+  [
+   37.55,
+   -6.95,
+   0.948,
+   150
+  ],
+  [
+   42.2,
+   -0.1,
+   0.784,
+   128
+  ],
+  [
+   38.0,
+   -3.5,
+   0.948,
+   150
+  ],
+  [
+   42.67,
+   -6.0,
+   0.493,
+   89
+  ],
+  [
+   42.0,
+   1.0,
+   0.649,
+   110
+  ],
+  [
+   42.3,
+   -2.5,
+   0.418,
+   79
+  ],
+  [
+   43.0,
+   -7.5,
+   0.284,
+   61
+  ],
+  [
+   40.45,
+   -3.7,
+   0.366,
+   72
+  ],
+  [
+   36.75,
+   -4.7,
+   0.948,
+   150
+  ],
+  [
+   38.05,
+   -1.6,
+   0.552,
+   97
+  ],
+  [
+   42.7,
+   -1.65,
+   0.978,
+   154
+  ],
+  [
+   42.2,
+   -7.6,
+   0.284,
+   61
+  ],
+  [
+   43.35,
+   -6.0,
+   0.552,
+   97
+  ],
+  [
+   42.3,
+   -4.55,
+   0.493,
+   89
+  ],
+  [
+   28.2,
+   -15.45,
+   1.0,
+   157
+  ],
+  [
+   42.5,
+   -8.5,
+   0.284,
+   61
+  ],
+  [
+   40.8,
+   -6.0,
+   0.493,
+   89
+  ],
+  [
+   28.5,
+   -16.9,
+   1.0,
+   157
+  ],
+  [
+   43.2,
+   -4.03,
+   0.403,
+   77
+  ],
+  [
+   41.05,
+   -4.1,
+   0.493,
+   89
+  ],
+  [
+   37.4,
+   -5.6,
+   0.948,
+   150
+  ],
+  [
+   41.7,
+   -2.7,
+   0.493,
+   89
+  ],
+  [
+   41.2,
+   1.1,
+   0.649,
+   110
+  ],
+  [
+   40.6,
+   -0.8,
+   0.784,
+   128
+  ],
+  [
+   39.8,
+   -4.1,
+   0.276,
+   60
+  ],
+  [
+   39.5,
+   -0.85,
+   0.522,
+   93
+  ],
+  [
+   41.7,
+   -4.8,
+   0.493,
+   89
+  ],
+  [
+   43.25,
+   -2.9,
+   0.149,
+   43
+  ],
+  [
+   41.7,
+   -6.0,
+   0.493,
+   89
+  ],
+  [
+   41.65,
+   -0.9,
+   0.784,
+   128
+  ],
+  [
+   35.89,
+   -5.31,
+   0.448,
+   83
+  ],
+  [
+   35.29,
+   -2.94,
+   0.0,
+   23
+  ]
+ ]
+}

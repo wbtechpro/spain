@@ -1,0 +1,187 @@
+{
+ "source": "Cronoshare · ¿Cuánto cuesta una clase de yoga? (2025)",
+ "source_url": "https://www.cronoshare.com/cuanto-cuesta/clase-yoga",
+ "period": "2025",
+ "metric": "цена групповой часовой йоги, медиана диапазона (€/час)",
+ "granularity": "город (7 крупных)",
+ "count": 7,
+ "legend_min": "9.5 €/час",
+ "legend_max": "14.0 €/час",
+ "legend_sub": "Cronoshare · 2025 · 7/52 провинций (остальные н.д.)",
+ "render_radius": 55,
+ "render_blur": 45,
+ "stats": {
+  "min_eur": 9.5,
+  "max_eur": 14.0
+ },
+ "missing_provinces": [
+  "Araba/Álava",
+  "Albacete",
+  "Alicante",
+  "Almería",
+  "Ávila",
+  "Badajoz",
+  "Illes Balears",
+  "Burgos",
+  "Cáceres",
+  "Cádiz",
+  "Castellón",
+  "Ciudad Real",
+  "Córdoba",
+  "A Coruña",
+  "Cuenca",
+  "Girona",
+  "Granada",
+  "Guadalajara",
+  "Gipuzkoa",
+  "Huelva",
+  "Huesca",
+  "Jaén",
+  "León",
+  "Lleida",
+  "La Rioja",
+  "Lugo",
+  "Murcia",
+  "Navarra",
+  "Ourense",
+  "Asturias",
+  "Palencia",
+  "Las Palmas",
+  "Pontevedra",
+  "Salamanca",
+  "Santa Cruz de Tenerife",
+  "Cantabria",
+  "Segovia",
+  "Soria",
+  "Tarragona",
+  "Teruel",
+  "Toledo",
+  "Valladolid",
+  "Zamora",
+  "Ceuta",
+  "Melilla"
+ ],
+ "provinces": [
+  {
+   "ine": "08",
+   "province_ru": "Барселона",
+   "province_es": "Barcelona",
+   "lat": 41.6,
+   "lng": 2.0,
+   "city": "Barcelona",
+   "price_eur_min": 10,
+   "price_eur_max": 17,
+   "price_eur_median": 13.5
+  },
+  {
+   "ine": "28",
+   "province_ru": "Мадрид",
+   "province_es": "Madrid",
+   "lat": 40.45,
+   "lng": -3.7,
+   "city": "Madrid",
+   "price_eur_min": 10,
+   "price_eur_max": 18,
+   "price_eur_median": 14.0
+  },
+  {
+   "ine": "29",
+   "province_ru": "Малага",
+   "province_es": "Málaga",
+   "lat": 36.75,
+   "lng": -4.7,
+   "city": "Málaga",
+   "price_eur_min": 8,
+   "price_eur_max": 14,
+   "price_eur_median": 11.0
+  },
+  {
+   "ine": "41",
+   "province_ru": "Севилья",
+   "province_es": "Sevilla",
+   "lat": 37.4,
+   "lng": -5.6,
+   "city": "Sevilla",
+   "price_eur_min": 7,
+   "price_eur_max": 12,
+   "price_eur_median": 9.5
+  },
+  {
+   "ine": "46",
+   "province_ru": "Валенсия",
+   "province_es": "Valencia",
+   "lat": 39.5,
+   "lng": -0.85,
+   "city": "Valencia",
+   "price_eur_min": 8,
+   "price_eur_max": 14,
+   "price_eur_median": 11.0
+  },
+  {
+   "ine": "48",
+   "province_ru": "Бискайя",
+   "province_es": "Bizkaia",
+   "lat": 43.25,
+   "lng": -2.9,
+   "city": "Bilbao",
+   "price_eur_min": 9,
+   "price_eur_max": 15,
+   "price_eur_median": 12.0
+  },
+  {
+   "ine": "50",
+   "province_ru": "Сарагоса",
+   "province_es": "Zaragoza",
+   "lat": 41.65,
+   "lng": -0.9,
+   "city": "Zaragoza",
+   "price_eur_min": 8,
+   "price_eur_max": 13,
+   "price_eur_median": 10.5
+  }
+ ],
+ "points": [
+  [
+   41.6,
+   2.0,
+   0.889,
+   13.5
+  ],
+  [
+   40.45,
+   -3.7,
+   1.0,
+   14.0
+  ],
+  [
+   36.75,
+   -4.7,
+   0.333,
+   11.0
+  ],
+  [
+   37.4,
+   -5.6,
+   0.0,
+   9.5
+  ],
+  [
+   39.5,
+   -0.85,
+   0.333,
+   11.0
+  ],
+  [
+   43.25,
+   -2.9,
+   0.556,
+   12.0
+  ],
+  [
+   41.65,
+   -0.9,
+   0.222,
+   10.5
+  ]
+ ]
+}

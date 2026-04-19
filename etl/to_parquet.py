@@ -44,6 +44,8 @@ HEATMAP_LAYERS: dict[str, str] = {
     "rent_cost": "rent_cost.json",
     "hate_crimes": "hate_crimes.json",
     "power_outages": "power_outages.json",
+    "cita_previa": "cita_previa.json",
+    "yoga_price": "yoga_price.json",
 }
 
 # keys promoted to their own columns on point layers; everything else goes into props_json
