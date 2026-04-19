@@ -66,5 +66,5 @@ LAYER_CATALOGUE: dict[str, dict] = {
     "cita_previa":       {"type": "heatmap", "label": "Срок ожидания cita previa"},
     "yoga_price":        {"type": "heatmap", "label": "Средняя цена часа йоги"},
     "salary_net_median": {"type": "heatmap", "label": "Медианный доход семьи (ADRH 2023)"},
-    "russian_share":     {"type": "heatmap", "label": "Русские и украинцы, % (2022)"},
+    "russian_share":     {"type": "heatmap", "label": "Русскоговорящие"},
 }
