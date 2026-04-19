@@ -1,0 +1,208 @@
+{
+ "source": "Ручная курация: AEDEQ + публичные сайты центров, верифицированных по веб-поиску",
+ "period": "2026-04",
+ "metric": "иппотерапия, лечебная и адаптивная верховая езда",
+ "count": 13,
+ "license": "Публичные данные с официальных сайтов учреждений",
+ "features": [
+  {
+   "name": "ECRIN Terapias (Hípica Soto del Espinar)",
+   "city": "Fuente el Saz de Jarama",
+   "ccaa": "Madrid",
+   "lat": 40.614381,
+   "lng": -3.555355,
+   "website": "https://ecrinterapias.es/",
+   "services": [
+    "hipoterapia",
+    "equinoterapia",
+    "psicología con caballos"
+   ],
+   "note": "На базе Hípica Soto del Espinar, ≈20 мин от Plaza de Castilla",
+   "precision": "exact (nominatim)",
+   "osm_match": "Camino del Espinar, Fuente el Saz de Jarama, Comunidad de Madrid, 28120, España"
+  },
+  {
+   "name": "PSICAB — Terapia asistida con caballos",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.51044,
+   "lng": -3.7336,
+   "website": "https://www.psicab.com/",
+   "services": [
+    "psicología asistida con caballos",
+    "neuropsicología"
+   ],
+   "note": "Hípica El Molino, M-612 km 3.400 (El Pardo / Fuencarral)",
+   "precision": "exact (hardcoded)",
+   "osm_match": null
+  },
+  {
+   "name": "Asociación Al Paso — Terapias con caballos",
+   "city": "Villanueva de la Cañada",
+   "ccaa": "Madrid",
+   "lat": 40.475805,
+   "lng": -3.940308,
+   "website": "https://www.terapiasalpaso.org/",
+   "services": [
+    "terapia ecuestre",
+    "equipo interdisciplinar"
+   ],
+   "note": "Centro Ecuestre Villafranca del Castillo (между Majadahonda и Villanueva de la Cañada)",
+   "precision": "exact (nominatim)",
+   "osm_match": "Pista Hípica de Competición Exterior, Calle Castillo de Alarcón, Sexmo de Casarr"
+  },
+  {
+   "name": "Equinoterapia Mas Alba",
+   "city": "Sant Pere de Ribes",
+   "ccaa": "Catalunya",
+   "lat": 42.118,
+   "lng": 2.889,
+   "website": "https://www.equinoterapia.es/",
+   "services": [
+    "equinoterapia",
+    "hipoterapia"
+   ],
+   "note": "Подтверждён в OSM",
+   "precision": "exact (OSM)",
+   "osm_match": null
+  },
+  {
+   "name": "Associació Centre Indiana Equinoteràpia",
+   "city": "Tordera",
+   "ccaa": "Catalunya",
+   "lat": 41.70297,
+   "lng": 2.76161,
+   "website": "https://www.centreindiana.com/",
+   "services": [
+    "equinoterapia",
+    "psicoterapia con caballos"
+   ],
+   "note": "Disseminat Sant Daniel 200, Tordera, 08490",
+   "precision": "exact (hardcoded)",
+   "osm_match": null
+  },
+  {
+   "name": "Asociación EPONA — Equinoterapia Barcelona",
+   "city": "Cerdanyola del Vallès",
+   "ccaa": "Catalunya",
+   "lat": 41.501553,
+   "lng": 2.106261,
+   "website": "https://www.eponaequinoterapia.com/",
+   "services": [
+    "equinoterapia",
+    "formación"
+   ],
+   "note": "Кампус UAB, Carrer de les Granges s/n, Bellaterra",
+   "precision": "exact (nominatim)",
+   "osm_match": "Universidad Autónoma de Barcelona, Plaça Civica, Bellaterra, Cerdanyola del Vall"
+  },
+  {
+   "name": "Centro Ecuestre Zabolain",
+   "city": "Arrasate-Mondragón",
+   "ccaa": "País Vasco",
+   "lat": 43.072154,
+   "lng": -2.542277,
+   "website": "https://www.zabolain.com/",
+   "services": [
+    "hipoterapia",
+    "equitación adaptada",
+    "equinoterapia"
+   ],
+   "note": "Адаптивная езда + hipoterapia",
+   "precision": "exact (nominatim)",
+   "osm_match": "Zabolain, 36, Gesalibar auzoa, Mondragón, Guipúzcoa, País Vasco, 20509, España"
+  },
+  {
+   "name": "Asociación West Galicia — Equinoterapia",
+   "city": "Vigo",
+   "ccaa": "Galicia",
+   "lat": 42.2406,
+   "lng": -8.7207,
+   "website": "https://westgalicia.es/equinoterapia/",
+   "services": [
+    "equinoterapia",
+    "autismo",
+    "epilepsia refractaria"
+   ],
+   "note": "Точный адрес не опубликован; координата приблизительная",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "Asociación Hispalense de Terapias Ecuestres",
+   "city": "Sevilla",
+   "ccaa": "Andalucía",
+   "lat": 37.411069,
+   "lng": -5.91703,
+   "website": "https://hipoterapiasevilla1.wordpress.com/",
+   "services": [
+    "hipoterapia",
+    "terapia ecuestre"
+   ],
+   "note": "Parque del Tamarguillo, Av. Séneca / C. María Fulmen",
+   "precision": "exact (nominatim)",
+   "osm_match": "Avenida Séneca, Parque Alcosa, Distrito Este-Alcosa-Torreblanca, Sevilla, Andalu"
+  },
+  {
+   "name": "EQUITEA — Centro de Equinoterapia (Finca Los Seises)",
+   "city": "Sanlúcar la Mayor",
+   "ccaa": "Andalucía",
+   "lat": 37.403508,
+   "lng": -6.188411,
+   "website": "https://equitea.es/site/",
+   "services": [
+    "equinoterapia",
+    "autismo",
+    "granja escuela"
+   ],
+   "note": "Finca Los Seises, Camino de las Palmillas s/n, 41800",
+   "precision": "exact (nominatim)",
+   "osm_match": "Camino Las Palmillas, Santa Isabel, Sanlúcar la Mayor, Sevilla, Andalucía, 41800"
+  },
+  {
+   "name": "Asociación Hípica Terapéutica Santa Ana",
+   "city": "San Fernando",
+   "ccaa": "Andalucía",
+   "lat": 36.367892,
+   "lng": -6.152784,
+   "website": null,
+   "services": [
+    "hipoterapia",
+    "terapia ecuestre"
+   ],
+   "note": "Кадис; подтверждён в OSM",
+   "precision": "exact (OSM)",
+   "osm_match": null
+  },
+  {
+   "name": "Centro de Hipoterapia Aurelio Vela",
+   "city": "Alcázar de San Juan",
+   "ccaa": "Castilla-La Mancha",
+   "lat": 39.322,
+   "lng": -3.238,
+   "website": "https://policlinicaaureliovela.es/terapias-asistidas-con-caballos/",
+   "services": [
+    "hipoterapia",
+    "terapias asistidas con caballos"
+   ],
+   "note": "Ciudad Real; подтверждён в OSM",
+   "precision": "exact (OSM)",
+   "osm_match": null
+  },
+  {
+   "name": "El Mas de Xetà — Terapias con caballos",
+   "city": "Llutxent",
+   "ccaa": "Valenciana",
+   "lat": 38.929353,
+   "lng": -0.361912,
+   "website": "https://elmasdexeta.com/terapias/",
+   "services": [
+    "terapia con caballos",
+    "diversidad funcional"
+   ],
+   "note": "Camí de Xetà s/n, 46838 Llutxent, Vall d'Albaida",
+   "precision": "exact (nominatim)",
+   "osm_match": "Camí de Xetà, Llutxent, La Vall d'Albaida, Valencia, Comunidad Valenciana, 46842"
+  }
+ ]
+}

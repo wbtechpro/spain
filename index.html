@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Интерактивная карта Испании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<style>
+  html, body { height: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    height: 100vh;
+    width: 100vw;
+  }
+  #map { position: relative; width: 100%; height: 100%; }
+  #map.adding-flag { cursor: crosshair; }
+  #map.adding-flag .leaflet-grab { cursor: crosshair; }
+
+  #sidebar {
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.08);
+    padding: 16px 18px;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+  }
+  #sidebar h2 { font-size: 15px; margin: 0 0 4px; }
+  #sidebar .sub { font-size: 11px; color: #777; margin-bottom: 10px; }
+  #sidebar h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+    margin: 14px 0 6px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+  }
+  #sidebar .spacer { flex: 1; }
+
+  /* ===== Сворачиваемые группы ===== */
+  details.group { margin-top: 10px; }
+  details.group > summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+    padding: 6px 0 4px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  details.group > summary::-webkit-details-marker { display: none; }
+  details.group > summary::before {
+    content: '▸';
+    font-size: 10px;
+    color: #999;
+    transition: transform 0.15s;
+    display: inline-block;
+    width: 10px;
+  }
+  details.group[open] > summary::before { transform: rotate(90deg); }
+  details.group > summary:hover { color: #000; }
+  details.group > summary:hover::before { color: #555; }
+  details.group > .group-body { padding: 8px 0 4px; }
+
+  /* ===== Вложенные подгруппы внутри «Точек на карте» ===== */
+  details.subgroup { margin: 6px 0 2px; }
+  details.subgroup > summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    color: #444;
+    padding: 4px 0 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  details.subgroup > summary::-webkit-details-marker { display: none; }
+  details.subgroup > summary::before {
+    content: '▸';
+    font-size: 9px;
+    color: #999;
+    transition: transform 0.15s;
+    display: inline-block;
+    width: 10px;
+  }
+  details.subgroup[open] > summary::before { transform: rotate(90deg); }
+  details.subgroup > .subgroup-body { padding: 2px 0 4px 0; }
+
+  .summary-title { flex: 1; }
+  .summary-count { color: #999; text-transform: none; font-size: 11px; letter-spacing: 0; }
+  .row { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
+  .row input { margin: 0; cursor: pointer; }
+  .row label { flex: 1; cursor: pointer; user-select: none; }
+  .row.unavailable {
+    color: #aaa;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+  .row.unavailable input { pointer-events: none; opacity: 0.35; }
+  .row.unavailable label { cursor: not-allowed; }
+  .tag-no-data {
+    font-size: 10px;
+    text-decoration: none;
+    color: #c0392b;
+    background: #fbeceb;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+  }
+  .status {
+    font-size: 11px;
+    color: #888;
+    margin-left: 4px;
+    min-width: 36px;
+    text-align: right;
+  }
+  .status.loading { color: #2a71d0; }
+  .status.error { color: #c0392b; }
+  .dot {
+    display: inline-block; width: 3px; height: 16px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ===== Кластеры точек (окрашены в цвет категории) ===== */
+  .cat-cluster { background: transparent; }
+  .cat-cluster .cc-outer {
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+  }
+  .cat-cluster .cc-inner {
+    border-radius: 50%;
+    color: #fff; font-weight: 700; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+  .hint { font-size: 11px; color: #777; margin-top: 4px; font-style: italic; }
+  .master-row {
+    padding: 6px 0 8px;
+    border-bottom: 1px dashed #e5e5e5;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  .master-row label { cursor: pointer; }
+  .refresh-btn {
+    font-size: 11px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    margin-top: 8px;
+    width: 100%;
+  }
+  .refresh-btn:hover { background: #e5e5e5; }
+
+  .legend {
+    position: absolute;
+    bottom: 18px;
+    left: 12px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 12px;
+    display: none;
+  }
+  .legend.active { display: block; }
+  .gradient {
+    width: 180px; height: 12px;
+    background: linear-gradient(to right, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000);
+    border-radius: 3px;
+    margin: 4px 0;
+  }
+  .g-labels { display: flex; justify-content: space-between; font-size: 11px; color: #555; }
+
+  .point-marker {
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    text-align: center;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  /* ===== Карточка нейрореаб-центра в попапе ===== */
+  .nrh-card { min-width: 220px; max-width: 280px; font-size: 12px; line-height: 1.4; }
+  .nrh-card .nrh-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2a71d0;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 2px;
+  }
+  .nrh-card .nrh-name:hover { text-decoration: underline; }
+  .nrh-card .nrh-name.plain { color: #222; cursor: default; }
+  .nrh-card .nrh-name .ext { font-size: 10px; color: #999; margin-left: 3px; }
+  .nrh-card .nrh-loc { color: #666; font-size: 11px; margin-bottom: 6px; }
+  .nrh-card .nrh-chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 6px; }
+  .nrh-card .nrh-chip {
+    display: inline-block;
+    background: #f0ebf7;
+    color: #6d3ea3;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .nrh-card .nrh-note { color: #333; margin-top: 4px; }
+  .nrh-card .nrh-approx {
+    margin-top: 6px;
+    color: #b98100;
+    font-size: 10px;
+    font-style: italic;
+  }
+  .nrh-card .nrh-links { margin-top: 6px; font-size: 11px; }
+  .nrh-card .nrh-links a { color: #2a71d0; text-decoration: none; margin-right: 10px; }
+  .nrh-card .nrh-links a:hover { text-decoration: underline; }
+
+  /* ===== Карточка логопеда (CAS / диспраксия) ===== */
+  .nrh-card .sp-section { margin-top: 6px; }
+  .nrh-card .sp-label {
+    color: #777;
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+  .nrh-card .sp-chip {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .nrh-card .sp-focus { font-weight: 600; }
+  .nrh-card .sp-focus-cas     { background: #ffe1dd; color: #b52418; }
+  .nrh-card .sp-focus-neuro   { background: #e0ecff; color: #1449a6; }
+  .nrh-card .sp-focus-general { background: #ececec; color: #555;  }
+  .nrh-card .sp-lang          { background: #fef4e3; color: #a05a00; }
+  .nrh-card .sp-mode-online   { background: #e8f7ec; color: #1e6a3d; }
+  .nrh-card .sp-mode-offline  { background: #e4eefc; color: #1e4a86; }
+
+  /* ===== NEAE/общие цветные chips ===== */
+  .nrh-card .neae-tea      { background: #fef0e5; color: #c0651c; font-weight: 600; }
+  .nrh-card .neae-motora   { background: #e7f1fa; color: #1f618d; font-weight: 600; }
+  .nrh-card .neae-auditiva { background: #f3e9f8; color: #6c3483; font-weight: 600; }
+  .nrh-card .neae-lenguaje { background: #e1f5ef; color: #117864; font-weight: 600; }
+  .nrh-card .neae-mixta    { background: #fadbd8; color: #922b21; font-weight: 600; }
+  .nrh-card .neae-ee       { background: #eef2f7; color: #5d6d7e; font-weight: 600; }
+  .nrh-card .neae-aa       { background: #fef0e5; color: #c0651c; font-weight: 600; }
+  .nrh-card .neae-eae      { background: #fde9d7; color: #a04000; font-weight: 600; }
+  .nrh-card .neae-ueco     { background: #fef0e5; color: #c0651c; font-weight: 600; }
+  .nrh-card .neae-enclave  { background: #e9f7ef; color: #1e8449; font-weight: 600; }
+  .nrh-card .chip-stage    { background: #f2f2f2; color: #555; font-size: 10px; }
+  .nrh-card .chip-type     { background: #e8ecf2; color: #566573; font-size: 10px; }
+  .nrh-card .chip-region   { background: #ebeef2; color: #5d6d7e; font-size: 10px; }
+
+  /* ===== Spanish language school chips ===== */
+  .nrh-card .sp-kind-eoi       { background: #e1f5ef; color: #117864; font-weight: 600; }
+  .nrh-card .sp-kind-cervantes { background: #fef0e5; color: #c0651c; font-weight: 600; }
+  .nrh-card .sp-kind-academia  { background: #e4eefc; color: #1e4a86; }
+  .nrh-card .sp-kind-uni       { background: #f3e9f8; color: #6c3483; }
+  .nrh-card .sp-kind-other     { background: #ececec; color: #555; }
+
+  /* ===== Флажки ===== */
+  .btn {
+    font-size: 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 6px 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: #eaeaea; }
+  .btn.primary { background: #e74c3c; color: white; border-color: #c0392b; }
+  .btn.primary:hover { background: #c0392b; }
+  .btn.active { background: #e74c3c; color: white; border-color: #c0392b; }
+
+  #flag-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+  #flag-list li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 4px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+  }
+  #flag-list li:last-child { border-bottom: none; }
+  #flag-list .flag-pin {
+    color: #e74c3c;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  #flag-list .flag-name {
+    flex: 1;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #flag-list .flag-name:hover { color: #2a71d0; text-decoration: underline; }
+  #flag-list .flag-coords {
+    color: #999;
+    font-size: 10px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    flex-shrink: 0;
+  }
+  #flag-list .flag-del {
+    background: none;
+    border: none;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  #flag-list .flag-del:hover { background: #fbeceb; }
+  #flag-list .empty {
+    border: none;
+    color: #999;
+    font-style: italic;
+    font-size: 11px;
+    padding: 8px 4px;
+  }
+  .flag-marker {
+    font-size: 22px;
+    text-align: center;
+    line-height: 22px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .mode-toggle {
+    display: flex;
+    gap: 0;
+    margin: 4px 0 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+  }
+  .mode-btn {
+    flex: 1;
+    background: #fafafa;
+    border: none;
+    padding: 6px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    color: #666;
+    border-right: 1px solid #ddd;
+  }
+  .mode-btn:last-child { border-right: none; }
+  .mode-btn:hover { background: #f0f0f0; }
+  .mode-btn.active {
+    background: #2a71d0;
+    color: white;
+  }
+  .leaflet-control-zoom-level {
+    display: block;
+    width: 26px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    background: white;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+  .hint-banner {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: #e74c3c;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map">
+    <div id="hint-banner" class="hint-banner" style="display:none;">Кликните на карте, чтобы поставить метку</div>
+    <div id="legend" class="legend">
+      <div id="legend-title" style="font-weight: 600; margin-bottom: 4px;"></div>
+      <div class="gradient"></div>
+      <div class="g-labels"><span id="legend-min"></span><span id="legend-max"></span></div>
+      <div id="legend-sub" style="font-size:10px;color:#888;margin-top:4px;"></div>
+    </div>
+  </div>
+  <aside id="sidebar">
+    <h2>🗺️ Карта Испании</h2>
+    <div class="sub">Реальные данные: OSM + открытые источники. Недоступные слои <span style="text-decoration:line-through;">зачёркнуты</span>.</div>
+
+    <details class="group" data-group="points" open>
+      <summary><span class="summary-title">Точки на карте</span></summary>
+      <div class="group-body">
+        <label class="row master-row" for="toggle-all-points">
+          <input type="checkbox" id="toggle-all-points">
+          <span class="dot" style="background:transparent;"></span>
+          <label for="toggle-all-points"><b>Включить все слои</b></label>
+        </label>
+        <div id="point-layers"></div>
+      </div>
+    </details>
+
+    <details class="group" data-group="heat" open>
+      <summary><span class="summary-title">Тепловые карты</span></summary>
+      <div class="group-body">
+        <div class="mode-toggle" role="tablist">
+          <button class="mode-btn" data-mode="heat">🌡 Тепловая</button>
+          <button class="mode-btn" data-mode="zones">🧩 По зонам</button>
+        </div>
+        <div id="heat-layers"></div>
+        <div class="hint">Тепловая — градиент с размытием. По зонам — провинция/сетка цельного цвета.</div>
+      </div>
+    </details>
+
+    <div class="spacer"></div>
+
+    <details class="group" data-group="flags" open>
+      <summary>
+        <span class="summary-title">Мои метки</span>
+        <span class="summary-count" id="flag-count"></span>
+      </summary>
+      <div class="group-body">
+        <button class="btn primary" id="add-flag">📍 Поставить метку</button>
+        <ul id="flag-list"></ul>
+      </div>
+    </details>
+  </aside>
+</div>
+
+<script>
+// ================= КАРТА =================
+const map = L.map('map', { zoomControl: true }).setView([40.2, -3.7], 6);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap',
+  maxZoom: 18
+}).addTo(map);
+
+// Показываем текущий zoom между кнопками +/-
+const zoomLevelEl = L.DomUtil.create('div', 'leaflet-control-zoom-level');
+const zoomContainer = map.zoomControl.getContainer();
+zoomContainer.insertBefore(zoomLevelEl, zoomContainer.children[1]);
+const updateZoomLevel = () => { zoomLevelEl.textContent = map.getZoom(); };
+map.on('zoomend', updateZoomLevel);
+updateZoomLevel();
+
+// ================= КАТЕГОРИИ ТОЧЕК =================
+// source: 'osm' = подтягиваем через Overpass API; null = данных пока нет
+const POINT_CATEGORIES = {
+  schools:    { label: 'Школы для детей',                      color: '#e74c3c', icon: '🎒', source: 'json', url: 'data/osm_schools.json' },
+  neae:       { label: 'Школы с поддержкой NEAE',              color: '#2980b9', icon: '🧩', source: 'json', url: 'data/schools_neae.json' },
+  hospitals:  { label: 'Больницы',                             color: '#c2185b', icon: '🏥', source: 'json', url: 'data/osm_hospitals.json' },
+  slp:        { label: 'Логопеды / речевая терапия',           color: '#1abc9c', icon: '🗣️', source: null },
+  spanish:    { label: 'Центры испанского языка',              color: '#27ae60', icon: '📚', source: 'json', url: 'data/osm_spanish.json' },
+  yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘', source: 'json', url: 'data/osm_yoga.json' },
+  hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴', source: 'json', url: 'data/hippo.json' },
+  enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵', source: 'json', url: 'data/enduro.json' },
+  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#9b59b6', icon: '🧠', source: 'json', url: 'data/neurorehab.json' },
+  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬', source: 'json', url: 'data/speech_ru.json' }
+};
+
+// ================= СЛОИ ТОЧЕК =================
+function hexToRgb(hex) {
+  const h = hex.replace('#', '');
+  return {
+    r: parseInt(h.slice(0, 2), 16),
+    g: parseInt(h.slice(2, 4), 16),
+    b: parseInt(h.slice(4, 6), 16)
+  };
+}
+
+function makeClusterIconFn(color) {
+  const { r, g, b } = hexToRgb(color);
+  const outer = `rgba(${r},${g},${b},0.35)`;
+  const inner = `rgba(${r},${g},${b},0.92)`;
+  return function (cluster) {
+    const count = cluster.getChildCount();
+    const size  = count < 10 ? 34 : count < 100 ? 40 : 48;
+    const inSz  = size - 12;
+    const fontSz = count < 100 ? 12 : 11;
+    return L.divIcon({
+      html: `<div class="cc-outer" style="background:${outer};"><div class="cc-inner" style="background:${inner};width:${inSz}px;height:${inSz}px;font-size:${fontSz}px;">${count}</div></div>`,
+      className: 'cat-cluster',
+      iconSize: L.point(size, size)
+    });
+  };
+}
+
+const pointLayers = {};
+Object.keys(POINT_CATEGORIES).forEach(cat => {
+  pointLayers[cat] = L.markerClusterGroup({
+    maxClusterRadius: 45,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    iconCreateFunction: makeClusterIconFn(POINT_CATEGORIES[cat].color)
+  });
+});
+
+function makeIcon(cat, f) {
+  const c = POINT_CATEGORIES[cat];
+  const prio = f?.priority === true;
+  const size = prio ? 40 : 26;
+  const style = prio
+    ? `background:${c.color};width:${size}px;height:${size}px;border:3px solid #fff;box-shadow:0 0 0 2px #b04a00,0 2px 10px rgba(176,74,0,0.45);font-size:22px;line-height:34px;`
+    : `background:${c.color};width:${size}px;height:${size}px;`;
+  return L.divIcon({
+    html: `<div class="point-marker" style="${style}">${c.icon}</div>`,
+    className: '',
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2]
+  });
+}
+
+const loadedCats = new Set();
+
+async function fetchJsonPoints(cat) {
+  const def = POINT_CATEGORIES[cat];
+  const res = await fetch(def.url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  return data.features || [];
+}
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const NRH_SERVICE_RU = {
+  'neuro': 'неврология',
+  'neurorehabilitación': 'нейрореабилитация',
+  'neurofisioterapia': 'нейрофизиотерапия',
+  'neuro pediátrica': 'детская неврология',
+  'spinal cord': 'спинной мозг',
+  'brain injury': 'травмы мозга',
+  'daño cerebral adquirido': 'приобретённое поражение мозга',
+  'parálisis cerebral': 'ДЦП',
+  'discapacidad intelectual': 'интеллектуальные нарушения',
+  'apoyo infantil': 'помощь детям',
+  'pediátrico': 'детское отделение',
+  'infantil': 'детское отделение',
+  'hospital público': 'гос. госпиталь',
+  'hospital infantil': 'детский госпиталь',
+  'hospital pediátrico': 'детский госпиталь',
+};
+
+const HIPPO_SERVICE_RU = {
+  'hipoterapia': 'иппотерапия',
+  'equinoterapia': 'equino-терапия',
+  'equitación adaptada': 'адаптивная верховая езда',
+  'terapia ecuestre': 'терапия с лошадьми',
+  'terapia con caballos': 'терапия с лошадьми',
+  'terapias asistidas con caballos': 'терапия с лошадьми',
+  'psicología con caballos': 'психология с лошадьми',
+  'psicología asistida con caballos': 'психология с лошадьми',
+  'psicoterapia con caballos': 'психотерапия с лошадьми',
+  'neuropsicología': 'нейропсихология',
+  'equipo interdisciplinar': 'междисциплинарная команда',
+  'formación': 'обучение специалистов',
+  'red nacional': 'национальная сеть',
+  'granja escuela': 'ферма-школа',
+  'diversidad funcional': 'инвалидность / инклюзия',
+  'autismo': 'аутизм',
+  'epilepsia refractaria': 'рефрактерная эпилепсия',
+};
+
+const FOCUS_CHIP = {
+  cas:     { label: '🎯 CAS заявлен',     cls: 'sp-focus sp-focus-cas' },
+  neuro:   { label: '🧠 нейрологопедия',  cls: 'sp-focus sp-focus-neuro' },
+  general: { label: '🗣 общая логопедия', cls: 'sp-focus sp-focus-general' },
+};
+const LANG_CHIP = {
+  ru: '🇷🇺 русский',
+  uk: '🇺🇦 українська',
+  es: '🇪🇸 español',
+  ca: '🟡 català',
+  en: '🇬🇧 english',
+  el: '🇬🇷 ελληνικά',
+  it: '🇮🇹 italiano',
+  de: '🇩🇪 deutsch',
+  fr: '🇫🇷 français',
+  pl: '🇵🇱 polski',
+  pt: '🇵🇹 português',
+  ro: '🇷🇴 română',
+  nl: '🇳🇱 nederlands',
+  zh: '🇨🇳 中文',
+  ar: '🇸🇦 العربية',
+  sk: '🇸🇰 slovenčina',
+  gl: '🟣 galego',
+  eu: '🟢 euskara',
+};
+
+function speechSection(label, chipsHtml) {
+  if (!chipsHtml) return '';
+  return `<div class="sp-section"><div class="sp-label">${label}</div><div class="nrh-chips">${chipsHtml}</div></div>`;
+}
+
+function speechPopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+
+  const focusChip = FOCUS_CHIP[f.focus]
+    ? `<span class="sp-chip ${FOCUS_CHIP[f.focus].cls}">${FOCUS_CHIP[f.focus].label}</span>`
+    : '';
+  const langChips = (f.languages || [])
+    .map(l => `<span class="sp-chip sp-lang">${esc(LANG_CHIP[l] || l)}</span>`)
+    .join('');
+  const modeChips = [
+    f.offline ? '<span class="sp-chip sp-mode-offline">🏢 офлайн</span>' : '',
+    f.online  ? '<span class="sp-chip sp-mode-online">🌐 онлайн</span>'  : '',
+  ].filter(Boolean).join('');
+
+  return `<div class="nrh-card">${nameHtml}` +
+    speechSection('Услуги:', focusChip) +
+    speechSection('Языки приёма:', langChips) +
+    speechSection('Формат приёма:', modeChips) +
+    `</div>`;
+}
+
+function neurorehabPopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+  const locParts = [f.city, f.ccaa].filter(Boolean).map(esc);
+  const loc = locParts.length ? `<div class="nrh-loc">${locParts.join(' · ')}</div>` : '';
+  const services = (f.services || []).map(s => NRH_SERVICE_RU[s] || s);
+  const uniqServices = [...new Set(services)];
+  const chips = uniqServices.length
+    ? `<div class="nrh-chips">${uniqServices.map(s => `<span class="nrh-chip">${esc(s)}</span>`).join('')}</div>`
+    : '';
+  const note = f.note ? `<div class="nrh-note">${esc(f.note)}</div>` : '';
+  return `<div class="nrh-card">${nameHtml}${loc}${chips}${note}</div>`;
+}
+
+function hippoPopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+  const locParts = [f.city, f.ccaa].filter(Boolean).map(esc);
+  const loc = locParts.length ? `<div class="nrh-loc">${locParts.join(' · ')}</div>` : '';
+  const services = (f.services || []).map(s => HIPPO_SERVICE_RU[s] || s);
+  const uniqServices = [...new Set(services)];
+  const chips = uniqServices.length
+    ? `<div class="nrh-chips">${uniqServices.map(s => `<span class="nrh-chip">${esc(s)}</span>`).join('')}</div>`
+    : '';
+  const note = f.note ? `<div class="nrh-note">${esc(f.note)}</div>` : '';
+  const approx = (f.precision || '').startsWith('approx')
+    ? `<div class="nrh-approx">~ координата приблизительная (${esc(f.precision)})</div>`
+    : '';
+  return `<div class="nrh-card">${nameHtml}${loc}${chips}${note}${approx}</div>`;
+}
+
+// ================= SPANISH LANGUAGE SCHOOL =================
+// Классификатор по названию. Главное различие для релоканта —
+// EOI (государственная, доступная) vs частная академия.
+function spanishKind(name) {
+  const n = (name || '').toLowerCase();
+  if (/escuela oficial de idiomas|\beoi\b/.test(n))
+    return { label: '🏛 EOI гос.',       cls: 'sp-kind-eoi' };
+  if (/cervantes/.test(n))
+    return { label: '🎓 Cervantes',      cls: 'sp-kind-cervantes' };
+  if (/universidad|universitat|university/.test(n))
+    return { label: '🎓 университет',    cls: 'sp-kind-uni' };
+  if (/\bacademia\b|\bacadèmia\b|\bacademy\b/.test(n))
+    return { label: '🏫 академия',       cls: 'sp-kind-academia' };
+  if (/euskaltegi/.test(n))
+    return { label: '🟢 euskaltegi',     cls: 'sp-kind-other' };
+  return null;
+}
+
+function spanishPopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+
+  const kind = spanishKind(f.name);
+  const chips = kind
+    ? `<div class="nrh-chips"><span class="nrh-chip ${kind.cls}">${kind.label}</span></div>`
+    : '';
+
+  return `<div class="nrh-card">${nameHtml}${chips}</div>`;
+}
+
+// ================= ТЕГИ NEAE =================
+// Клеркурированные ярлыки для типов NEAE-поддержки, чтобы вместо сухого "TEA"
+// пользователь видел понятное "🧩 Аутизм (TEA)" с цветом-подсказкой.
+const NEAE_TYPE_TAGS = {
+  'TEA':          { label: '🧩 Аутизм (TEA)',         cls: 'neae-tea' },
+  'Motora':       { label: '♿ Моторные нарушения',    cls: 'neae-motora' },
+  'Auditiva':     { label: '🦻 Слух',                 cls: 'neae-auditiva' },
+  'Lenguaje':     { label: '🗣 Речь / язык',          cls: 'neae-lenguaje' },
+  'Mixta':        { label: '🧩 Смешанная (TEA+речь)', cls: 'neae-mixta' },
+  'EE':           { label: '🎓 Educación Especial',   cls: 'neae-ee' },
+  'AA':           { label: '🧩 Aula Abierta (TEA)',   cls: 'neae-aa' },
+  'EAE':          { label: '🧠 Equipo Atención TEA',  cls: 'neae-eae' },
+  'UECO':         { label: '🧩 UECO',                 cls: 'neae-ueco' },
+  'Aula Enclave': { label: '♿ Aula Enclave',          cls: 'neae-enclave' },
+};
+
+const STAGE_TAGS = {
+  'INFANTIL':   '👶 детский сад',
+  'PRIMARIA':   '🎒 начальная',
+  'SECUNDARIA': '📚 средняя',
+  'MIXTA':      '🧩 смешанная',
+  'TODAS':      '🧩 все этапы',
+};
+
+const SCHOOL_TYPE_TAGS = {
+  'CEIP':            'CEIP гос.',
+  'CEIPSO':          'CEIPSO гос.',
+  'CEIPS':           'CEIPS гос.',
+  'CRA':             'CRA гос.',
+  'IES':             'IES гос.',
+  'IESO':            'IESO гос.',
+  'CEE':             'CEE спец.',
+  'CC':              'CC концерт.',
+  'CEO':             'CEO гос.',
+  'EEI':             'EEI дет.сад',
+  'Público':         'гос.',
+  'Privado':         'частн.',
+  'Concertado':      'концерт.',
+  'CP INF-PRI':       'CEIP гос.',
+  'CP INF-PRI-SEC':   'CEIP-IES гос.',
+  'CP INF':           'инфант. гос.',
+  'CPR INF-PRI-SEC':  'CPR концерт.',
+  'CPR INF-PRI':      'CPR концерт.',
+  'CPR INF':          'CPR инф. концерт.',
+};
+
+function neaeChips(f) {
+  const chips = [];
+  for (const t of (f.neae_types || [])) {
+    const meta = NEAE_TYPE_TAGS[t];
+    if (meta) chips.push(`<span class="nrh-chip ${meta.cls}">${meta.label}</span>`);
+    else chips.push(`<span class="nrh-chip">${esc(t)}</span>`);
+  }
+  // Этапы — могут быть через дефис (INFANTIL-PRIMARIA-SECUNDARIA)
+  if (f.etapa) {
+    const stages = String(f.etapa).split(/[-\s]+/).filter(Boolean);
+    for (const s of stages) {
+      const label = STAGE_TAGS[s.toUpperCase()];
+      if (label) chips.push(`<span class="nrh-chip chip-stage">${label}</span>`);
+    }
+  }
+  if (f.tipo) {
+    const key = String(f.tipo).trim();
+    const label = SCHOOL_TYPE_TAGS[key] || key;
+    chips.push(`<span class="nrh-chip chip-type">${esc(label)}</span>`);
+  }
+  return chips.join('');
+}
+
+function neaePopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+  const chips = neaeChips(f);
+  return `<div class="nrh-card">${nameHtml}` +
+    (chips ? `<div class="nrh-chips">${chips}</div>` : '') +
+    `</div>`;
+}
+
+// Минимальная карточка: только название (со ссылкой, если есть) + один общий тег.
+function plainPopup(cat, f) {
+  const name = esc(f.name || '(без названия)');
+  const website = f.website || f.url;
+  const nameHtml = website
+    ? `<a class="nrh-name" href="${esc(website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+  const chips = [];
+  // Регион — важен для эндуро, имеет island — для Канар и т.д.
+  if (f.region) chips.push(`<span class="nrh-chip chip-region">📍 ${esc(f.region)}</span>`);
+  else if (f.island) chips.push(`<span class="nrh-chip chip-region">🏝 ${esc(f.island)}</span>`);
+  return `<div class="nrh-card">${nameHtml}` +
+    (chips.length ? `<div class="nrh-chips">${chips.join('')}</div>` : '') +
+    `</div>`;
+}
+
+function renderStaticPoints(cat, features) {
+  const layer = pointLayers[cat];
+  layer.clearLayers();
+  const markers = features.map(f => {
+    let popup;
+    if (cat === 'neurorehab')    popup = neurorehabPopup(f);
+    else if (cat === 'speech')   popup = speechPopup(f);
+    else if (cat === 'hippo')    popup = hippoPopup(f);
+    else if (cat === 'neae')     popup = neaePopup(f);
+    else if (cat === 'spanish')  popup = spanishPopup(f);
+    else                         popup = plainPopup(cat, f);
+    const m = L.marker([f.lat, f.lng], { icon: makeIcon(cat, f) });
+    m.bindPopup(popup);
+    return m;
+  });
+  layer.addLayers(markers);
+  return markers.length;
+}
+
+async function loadCategory(cat) {
+  const statusEl = document.querySelector(`.status[data-status="${cat}"]`);
+  statusEl.textContent = '...';
+  statusEl.className = 'status loading';
+  try {
+    const features = await fetchJsonPoints(cat);
+    const count = renderStaticPoints(cat, features);
+    statusEl.textContent = `(${count})`;
+    statusEl.className = 'status';
+    loadedCats.add(cat);
+  } catch (e) {
+    console.error('load failed for', cat, e);
+    statusEl.textContent = 'ошибка';
+    statusEl.className = 'status error';
+    statusEl.title = e.message || '';
+  }
+}
+
+// ================= ТЕПЛОВЫЕ КАРТЫ =================
+// source: 'computed' = генерим на лету; null = нет данных
+const HEAT_DEFS = {
+  internet_speed: { label: 'Скорость интернета',           source: 'json', url: 'data/internet_speed.json' },
+  rent_cost:      { label: 'Стоимость аренды',             source: 'json', url: 'data/rent_cost.json' },
+  hate_crimes:    { label: 'Преступления по ненависти',    source: 'json', url: 'data/hate_crimes.json' },
+  power_outages:  { label: 'Зона блэкаута 28.04.2025',      source: 'json', url: 'data/power_outages.json' },
+  yoga_price:     { label: 'Средняя цена часа йоги',       source: null },
+  cita_previa:    { label: 'Срок ожидания cita previa',    source: null }
+};
+
+// Список испанских горнолыжных курортов (открытая инфа)
+// elev: [min, max] м; slopes: км трасс; park: snowboard park; price: взрослый 1-дневный ски-пасс в высокий сезон (€, приблизительно)
+const SKI_RESORTS = [
+  { name: 'Sierra Nevada',       lat: 37.0950, lon: -3.3980, url: 'https://sierranevada.es/',                                       elev: [2100, 3300], slopes: 110, park: true,  price: 60 },
+  { name: 'Baqueira Beret',      lat: 42.6985, lon:  0.9344, url: 'https://www.baqueira.es/',                                       elev: [1500, 2610], slopes: 165, park: true,  price: 62 },
+  { name: 'Formigal',            lat: 42.7620, lon: -0.3940, url: 'https://www.formigal-panticosa.com/',                            elev: [1500, 2250], slopes: 137, park: true,  price: 55 },
+  { name: 'Cerler',              lat: 42.5333, lon:  0.4500, url: 'https://www.cerler.com/',                                        elev: [1500, 2630], slopes:  79, park: true,  price: 52 },
+  { name: 'Candanchú',           lat: 42.7833, lon: -0.5167, url: 'https://www.candanchu.com/',                                     elev: [1560, 2400], slopes:  51, park: true,  price: 45 },
+  { name: 'Astún',               lat: 42.7667, lon: -0.5167, url: 'https://www.astun.com/',                                         elev: [1700, 2300], slopes:  50, park: true,  price: 45 },
+  { name: 'Panticosa',           lat: 42.7500, lon: -0.2333, url: 'https://www.formigal-panticosa.com/',                            elev: [1500, 2220], slopes:  39, park: true,  price: 47 },
+  { name: 'Javalambre',          lat: 40.1167, lon: -0.8167, url: 'https://javalambre.aramon.com/',                                 elev: [1650, 2000], slopes:  16, park: true,  price: 35 },
+  { name: 'Valdelinares',        lat: 40.4000, lon: -0.6000, url: 'https://valdelinares.aramon.com/',                               elev: [1700, 2020], slopes:  14, park: true,  price: 35 },
+  { name: 'Navacerrada',         lat: 40.7833, lon: -4.0167, url: 'https://www.puertonavacerrada.com/',                             elev: [1860, 2220], slopes:  12, park: false, price: 35 },
+  { name: 'Valdesquí',           lat: 40.7833, lon: -3.9500, url: 'https://www.valdesqui.es/',                                      elev: [1860, 2260], slopes:  22, park: true,  price: 40 },
+  { name: 'La Pinilla',          lat: 41.2500, lon: -3.5500, url: 'https://www.lapinilla.es/',                                      elev: [1500, 2273], slopes:  22, park: true,  price: 38 },
+  { name: 'Alto Campoo',         lat: 43.0333, lon: -4.4000, url: 'https://www.altocampoo.com/',                                    elev: [1650, 2125], slopes:  27, park: true,  price: 35 },
+  { name: 'San Isidro',          lat: 42.9833, lon: -5.3833, url: 'https://www.dipuleon.es/EstacionesInvernales/SanIsidro',         elev: [1520, 2155], slopes:  25, park: true,  price: 33 },
+  { name: 'Leitariegos',         lat: 42.9833, lon: -6.4000, url: 'https://www.dipuleon.es/EstacionesInvernales/Leitariegos',       elev: [1530, 1900], slopes:   7, park: false, price: 28 },
+  { name: 'Fuentes de Invierno', lat: 43.0500, lon: -5.3667, url: 'https://www.fuentesdeinvierno.com/',                             elev: [1500, 1900], slopes:   7, park: false, price: 30 },
+  { name: 'Manzaneda',           lat: 42.2500, lon: -7.2000, url: 'https://www.manzaneda.com/',                                     elev: [1500, 1800], slopes:  16, park: true,  price: 28 },
+  { name: 'Valgrande-Pajares',   lat: 43.0167, lon: -5.8833, url: 'https://www.pajares.es/',                                        elev: [1500, 1870], slopes:  22, park: true,  price: 30 },
+  { name: 'Boí Taüll',           lat: 42.5167, lon:  0.8500, url: 'https://www.boitaullresort.es/',                                 elev: [2020, 2751], slopes:  45, park: true,  price: 48 },
+  { name: 'Port Ainé',           lat: 42.5167, lon:  1.2500, url: 'https://www.port-aine.com/',                                     elev: [1650, 2440], slopes:  32, park: true,  price: 44 },
+  { name: 'Vall de Núria',       lat: 42.4000, lon:  2.1500, url: 'https://www.valldenuria.cat/',                                   elev: [1960, 2268], slopes:   7, park: false, price: 35 },
+  { name: 'La Molina',           lat: 42.3333, lon:  1.9500, url: 'https://www.lamolina.cat/',                                      elev: [1600, 2537], slopes:  64, park: true,  price: 50 },
+  { name: 'Masella',             lat: 42.3833, lon:  1.9500, url: 'https://www.masella.com/',                                       elev: [1600, 2535], slopes:  74, park: true,  price: 48 },
+  { name: 'Vallter 2000',        lat: 42.4333, lon:  2.2833, url: 'https://www.vallter.cat/',                                       elev: [2000, 2535], slopes:  17, park: false, price: 36 },
+  { name: 'Espot',               lat: 42.5667, lon:  1.0833, url: 'https://www.espotesqui.cat/',                                    elev: [1500, 2500], slopes:  30, park: true,  price: 43 }
+];
+
+function computeSkiHeatData() {
+  return SKI_RESORTS.map(r => [r.lat, r.lon, 1.0]);
+}
+
+// Два режима рендера: 'heat' (blur) и 'zones' (провинции/сетка).
+let renderMode = localStorage.getItem('spainMapRenderMode') || 'heat';
+
+// Кэш загруженных слоёв и самих данных
+const layerCache = {};     // layerCache[key][mode] -> L.Layer
+const layerLoading = {};   // layerLoading[key][mode] -> Promise
+const dataCache = {};      // dataCache[key] -> parsed JSON
+const heatMeta = {};       // heatMeta[key] -> { min, max, sub } (из JSON, не зависит от режима)
+let provincesGeo = null;   // lazy-loaded provinces GeoJSON
+
+async function loadProvincesGeo() {
+  if (provincesGeo) return provincesGeo;
+  const res = await fetch('data/provinces_es.geojson');
+  if (!res.ok) throw new Error('provinces geojson: HTTP ' + res.status);
+  provincesGeo = await res.json();
+  return provincesGeo;
+}
+
+async function loadHeatData(key) {
+  if (dataCache[key]) return dataCache[key];
+  const def = HEAT_DEFS[key];
+  const res = await fetch(def.url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  dataCache[key] = data;
+  heatMeta[key] = {
+    min: data.legend_min ?? '',
+    max: data.legend_max ?? '',
+    sub: data.legend_sub ?? `${data.source} · ${data.period ?? ''}`
+  };
+  return data;
+}
+
+// Градиент, идентичный Leaflet.heat (blue→cyan→lime→yellow→red)
+function heatColor(t) {
+  t = Math.max(0, Math.min(1, t));
+  const stops = [
+    [0.0,  [  0,   0, 255]],
+    [0.25, [  0, 255, 255]],
+    [0.5,  [  0, 255,   0]],
+    [0.75, [255, 255,   0]],
+    [1.0,  [255,   0,   0]],
+  ];
+  for (let i = 1; i < stops.length; i++) {
+    const [t1, c1] = stops[i];
+    if (t <= t1) {
+      const [t0, c0] = stops[i-1];
+      const f = (t - t0) / (t1 - t0);
+      const r = Math.round(c0[0] + (c1[0] - c0[0]) * f);
+      const g = Math.round(c0[1] + (c1[1] - c0[1]) * f);
+      const b = Math.round(c0[2] + (c1[2] - c0[2]) * f);
+      return `rgb(${r},${g},${b})`;
+    }
+  }
+  return 'rgb(255,0,0)';
+}
+
+function buildHeatLayer(data) {
+  const pts = data.points.map(p => [p[0], p[1], p[2]]);
+  return L.heatLayer(pts, {
+    radius: data.render_radius ?? 35,
+    blur: data.render_blur ?? 30,
+    maxZoom: 10,
+    minOpacity: 0.35
+  });
+}
+
+function buildGridLayer(data, unit) {
+  const cell = data.cell_size_deg ?? 0.1;
+  const lg = L.layerGroup();
+  data.points.forEach(([lat, lng, intensity, raw]) => {
+    const color = heatColor(intensity);
+    const rect = L.rectangle(
+      [[lat - cell/2, lng - cell/2], [lat + cell/2, lng + cell/2]],
+      { color, weight: 0, fillColor: color, fillOpacity: 0.55 }
+    );
+    rect.bindTooltip(`${raw}${unit}`, { sticky: true });
+    lg.addLayer(rect);
+  });
+  return lg;
+}
+
+async function buildChoroplethLayer(data, unit) {
+  const geo = await loadProvincesGeo();
+  // Сопоставляем данные провинций по INE-коду
+  const byIne = {};
+  data.provinces.forEach((prov, i) => {
+    const pt = data.points[i] || [];
+    byIne[prov.ine] = { ...prov, intensity: pt[2] ?? null, raw: pt[3] ?? null };
+  });
+  const missingLabel = data.missing_label ?? 'нет данных';
+  return L.geoJSON(geo, {
+    style: feature => {
+      const p = byIne[feature.properties.cod_prov];
+      if (!p || p.intensity == null) {
+        return { fillColor: '#eee', fillOpacity: 0.15, color: '#999', weight: 0.5, dashArray: '2 2' };
+      }
+      return {
+        fillColor: heatColor(p.intensity),
+        fillOpacity: 0.65,
+        color: '#333',
+        weight: 0.5
+      };
+    },
+    onEachFeature: (feature, layer) => {
+      const p = byIne[feature.properties.cod_prov];
+      const name = feature.properties.name;
+      let value;
+      if (!p || p.raw == null) {
+        value = missingLabel;
+      } else if (data.binary) {
+        value = data.legend_max ?? 'да';
+      } else {
+        value = `${p.raw}${unit}`;
+      }
+      layer.bindTooltip(`<b>${name}</b><br>${value}`, { sticky: true });
+    }
+  });
+}
+
+function unitFor(key) {
+  if (key === 'internet_speed') return ' Мбит/с';
+  if (key === 'rent_cost') return ' €/мес';
+  if (key === 'hate_crimes') return ' случаев';
+  return '';
+}
+
+async function ensureLayer(key, mode) {
+  layerCache[key] ??= {};
+  layerLoading[key] ??= {};
+  if (layerCache[key][mode]) return layerCache[key][mode];
+  if (layerLoading[key][mode]) return layerLoading[key][mode];
+
+  const def = HEAT_DEFS[key];
+  if (!def || !def.source) return null;
+
+  layerLoading[key][mode] = (async () => {
+    const data = await loadHeatData(key);
+    const unit = unitFor(key);
+    let layer;
+    if (mode === 'heat') {
+      layer = buildHeatLayer(data);
+    } else if (key === 'internet_speed') {
+      layer = buildGridLayer(data, unit);
+    } else {
+      layer = await buildChoroplethLayer(data, unit);
+    }
+    layerCache[key][mode] = layer;
+    return layer;
+  })();
+  return layerLoading[key][mode];
+}
+
+let activeHeat = null;
+let activeHeatKey = null;
+
+// ================= КРУПНЫЕ ОБЪЕКТЫ =================
+// destinations — приблизительное кол-во прямых направлений по регионам (оценка на основе публичных данных pre-2024).
+// Заполнено только для крупных хабов, где порядок цифр достоверен.
+const AIRPORTS = [
+  { name: 'Madrid-Barajas (MAD)',   coords: [40.4983, -3.5676], url: 'https://www.aena.es/en/madrid-barajas.html',
+    isHub: true, destinations: { europe: 120, americas: 40, africaMe: 25, asia: 10 } },
+  { name: 'Barcelona-El Prat (BCN)',coords: [41.2974,  2.0833], url: 'https://www.aena.es/en/josep-tarradellas-barcelona-el-prat.html',
+    isHub: true, destinations: { europe: 140, americas: 15, africaMe: 30, asia: 10 } },
+  { name: 'Valencia (VLC)',         coords: [39.4893, -0.4816], url: 'https://www.aena.es/en/valencia.html' },
+  { name: 'Málaga-Costa del Sol (AGP)', coords: [36.6749, -4.4991], url: 'https://www.aena.es/en/costa-del-sol-malaga.html' },
+  { name: 'Sevilla (SVQ)',          coords: [37.4180, -5.8931], url: 'https://www.aena.es/en/seville.html' },
+  { name: 'Bilbao (BIO)',           coords: [43.3011, -2.9106], url: 'https://www.aena.es/en/bilbao.html' },
+  { name: 'Palma de Mallorca (PMI)',coords: [39.5517,  2.7388], url: 'https://www.aena.es/en/palma-de-mallorca.html',
+    isHub: true, destinations: { europe: 110, americas: 0, africaMe: 5, asia: 0 } },
+  { name: 'Alicante-Elche (ALC)',   coords: [38.2822, -0.5582], url: 'https://www.aena.es/en/alicante-elche-miguel-hernandez.html' },
+  { name: 'Gibraltar (GIB)',        coords: [36.1511, -5.3497], url: 'https://www.gibraltarairport.gi/' },
+  { name: 'Granada-Jaén (GRX)',     coords: [37.1887, -3.7775], url: 'https://www.aena.es/en/federico-garcia-lorca-granada-jaen.html' },
+  { name: 'Ibiza (IBZ)',            coords: [38.8729,  1.3731], url: 'https://www.aena.es/en/ibiza.html' },
+  { name: 'Tenerife Sur (TFS)',     coords: [28.0445, -16.5725], url: 'https://www.aena.es/en/tenerife-sur.html' },
+  { name: 'Santiago (SCQ)',         coords: [42.8963, -8.4151], url: 'https://www.aena.es/en/santiago-rosalia-de-castro.html' },
+  { name: 'Asturias (OVD)',         coords: [43.5636, -6.0346], url: 'https://www.aena.es/en/asturias.html' }
+];
+
+const airportLayer = L.layerGroup();
+AIRPORTS.forEach(a => {
+  const hub = !!a.isHub;
+  const size = hub ? 36 : 28;
+  const fontSize = hub ? 22 : 16;
+  const html = hub
+    ? `<div style="width:${size}px;height:${size}px;border-radius:50%;background:#fff8dc;
+        border:2px solid #d4a017;box-shadow:0 2px 6px rgba(0,0,0,0.35);
+        display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;line-height:1;">✈️</div>`
+    : `<div style="width:${size}px;height:${size}px;border-radius:50%;background:#fff;
+        border:1.5px solid #7a8a9a;box-shadow:0 1px 3px rgba(0,0,0,0.2);
+        display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;line-height:1;">✈️</div>`;
+  const m = L.marker(a.coords, {
+    icon: L.divIcon({
+      html,
+      className: '',
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2]
+    })
+  });
+  let popupHtml = `✈️ <a href="${a.url}" target="_blank" rel="noopener"><b>${a.name}</b></a>`;
+  if (a.destinations) {
+    const d = a.destinations;
+    popupHtml += `<div style="margin-top:6px;font-size:12px;color:#333;">
+      <div style="color:#777;font-size:11px;margin-bottom:2px;">Прямые направления (~):</div>
+      🇪🇺 Европа: <b>${d.europe}</b> · 🌎 Америка: <b>${d.americas}</b><br>
+      🌍 Африка/Б.Восток: <b>${d.africaMe}</b> · 🌏 Азия: <b>${d.asia}</b>
+    </div>`;
+  }
+  m.bindPopup(popupHtml);
+  airportLayer.addLayer(m);
+});
+
+// Скоростная ж/д — HSR (AVE) + прочие линии с maxspeed ≥ 200. Лениво.
+const railLayer = L.layerGroup();
+const RAIL_STYLE = {
+  hsr:  { color: '#d35400', weight: 2.5, opacity: 0.95 },  // ярко-оранжевый
+  fast: { color: '#8e44ad', weight: 2.0, opacity: 0.85 },  // фиолетовый
+};
+let railLoaded = false;
+let railLoading = null;
+
+async function loadRailLayer() {
+  if (railLoaded) return;
+  if (railLoading) return railLoading;
+  railLoading = (async () => {
+    const res = await fetch('data/osm_highspeed_rail.geojson');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const geo = L.geoJSON(data, {
+      style: feature => RAIL_STYLE[feature.properties?.tier] || RAIL_STYLE.fast,
+      onEachFeature: (feature, layer) => {
+        const p = feature.properties || {};
+        const tierLabel = p.tier === 'hsr' ? 'HSR / AVE' : 'Скоростная линия (≥200 км/ч)';
+        const parts = [
+          p.name ? `<b>${p.name}</b>` : `<b>${tierLabel}</b>`,
+          p.name ? `<small>${tierLabel}</small>` : '',
+          p.ref ? `Линия: ${p.ref}` : '',
+          p.operator ? `Оператор: ${p.operator}` : '',
+          p.maxspeed ? `Макс. скорость: ${p.maxspeed} км/ч` : '',
+          p.gauge ? `Колея: ${p.gauge} мм` : '',
+          p.electrified ? `Электрификация: ${p.electrified}` : '',
+        ].filter(Boolean);
+        if (parts.length) layer.bindPopup(parts.join('<br>'));
+      }
+    });
+    railLayer.addLayer(geo);
+    railLoaded = true;
+  })();
+  return railLoading;
+}
+
+const skiLayer = L.layerGroup();
+const skiElevMin = Math.min(...SKI_RESORTS.map(r => r.elev[1]));
+const skiElevMax = Math.max(...SKI_RESORTS.map(r => r.elev[1]));
+const SKI_SIZE_MIN = 18;
+const SKI_SIZE_MAX = 34;
+SKI_RESORTS.forEach(r => {
+  const t = (r.elev[1] - skiElevMin) / (skiElevMax - skiElevMin || 1);
+  const size = Math.round(SKI_SIZE_MIN + t * (SKI_SIZE_MAX - SKI_SIZE_MIN));
+  const fontSize = Math.max(10, Math.round(size * 0.55));
+  const m = L.marker([r.lat, r.lon], {
+    icon: L.divIcon({
+      html: `<div style="background:#00bcd4;color:#fff;border:2px solid #fff;border-radius:50%;
+        width:${size}px;height:${size}px;font-size:${fontSize}px;line-height:${size - 4}px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.4);">⛷</div>`,
+      className: '',
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2]
+    })
+  });
+  const title = r.url
+    ? `<a href="${r.url}" target="_blank" rel="noopener noreferrer"><b>${r.name}</b></a>`
+    : `<b>${r.name}</b>`;
+  const info = [
+    `⛰ ${r.elev[0]}–${r.elev[1]} м`,
+    `🎿 ${r.slopes} км`,
+    `🏂 ${r.park ? 'есть' : 'нет'}`,
+    `💶 ~${r.price} €/день`
+  ].join(' · ');
+  m.bindPopup(`⛷ ${title}<br><span style="font-size:11px;color:#555;">${info}</span>`);
+  skiLayer.addLayer(m);
+});
+
+// ================= ПАНЕЛЬ: ТОЧКИ (с подгруппами) =================
+const pointContainer = document.getElementById('point-layers');
+
+const BIG_ROWS = {
+  airports: { label: '✈️ Аэропорты',                      count: AIRPORTS.length,    color: null },
+  ski:      { label: '⛷ Горнолыжные курорты',             count: SKI_RESORTS.length, color: '#00bcd4' },
+  rail:     { label: '🚄 Скоростная ж/д (AVE + ≥200 км/ч)', count: null,              color: null }
+};
+
+const TOP_BIG_KEYS = ['airports', 'rail'];
+
+const POINT_SUBGROUPS = [
+  { key: 'general', label: 'General', points: ['spanish', 'hospitals'], bigs: ['ski'] },
+  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'slp', 'speech', 'neurorehab'], bigs: [] },
+  { key: 'adults',  label: 'Взрослые', points: ['yoga', 'enduro'], bigs: [] }
+];
+
+function makePointRow(cat) {
+  const c = POINT_CATEGORIES[cat];
+  const unavailable = !c.source;
+  const row = document.createElement('div');
+  row.className = 'row' + (unavailable ? ' unavailable' : '');
+  row.innerHTML = `
+    <input type="checkbox" data-point="${cat}" ${unavailable ? 'disabled' : ''}>
+    <span class="dot" style="background:${c.color}"></span>
+    <label>${c.icon} ${c.label}${unavailable ? ' <span class="tag-no-data">нет данных</span>' : ''}</label>
+    <span class="status" data-status="${cat}"></span>
+  `;
+  return row;
+}
+
+function makeBigRow(key) {
+  const b = BIG_ROWS[key];
+  const countHtml = b.count != null ? ` <span style="color:#999;">(${b.count})</span>` : '';
+  const dotStyle = b.color ? `background:${b.color};` : 'background:transparent;';
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `
+    <input type="checkbox" data-big="${key}">
+    <span class="dot" style="${dotStyle}"></span>
+    <label>${b.label}${countHtml} <span class="status" data-status-big="${key}"></span></label>
+  `;
+  return row;
+}
+
+TOP_BIG_KEYS.forEach(key => pointContainer.appendChild(makeBigRow(key)));
+
+POINT_SUBGROUPS.forEach(sg => {
+  const sub = document.createElement('details');
+  sub.className = 'subgroup';
+  sub.dataset.subgroup = sg.key;
+  sub.open = true;
+  sub.innerHTML = `<summary><span class="summary-title">${sg.label}</span></summary><div class="subgroup-body"></div>`;
+  const body = sub.querySelector('.subgroup-body');
+  sg.points.forEach(cat => body.appendChild(makePointRow(cat)));
+  (sg.bigs || []).forEach(key => body.appendChild(makeBigRow(key)));
+  pointContainer.appendChild(sub);
+});
+
+// ================= ПАНЕЛЬ: ТЕПЛОВЫЕ =================
+const heatContainer = document.getElementById('heat-layers');
+const offRow = document.createElement('div');
+offRow.className = 'row';
+offRow.innerHTML = `<input type="radio" name="heat" data-heat="" checked><label style="color:#888;">— выкл —</label>`;
+heatContainer.appendChild(offRow);
+
+Object.keys(HEAT_DEFS).forEach(key => {
+  const h = HEAT_DEFS[key];
+  const unavailable = !h.source;
+  const row = document.createElement('div');
+  row.className = 'row' + (unavailable ? ' unavailable' : '');
+  row.innerHTML = `
+    <input type="radio" name="heat" data-heat="${key}" ${unavailable ? 'disabled' : ''}>
+    <label>${h.label}${unavailable ? ' <span class="tag-no-data">нет данных</span>' : ''}</label>
+  `;
+  heatContainer.appendChild(row);
+});
+
+// ================= ОБРАБОТЧИКИ =================
+const bigLayers = { airports: airportLayer, ski: skiLayer, rail: railLayer };
+
+pointContainer.addEventListener('change', async e => {
+  const cat = e.target.dataset.point;
+  const bigKey = e.target.dataset.big;
+  if (cat) {
+    if (e.target.checked) {
+      pointLayers[cat].addTo(map);
+      if (!loadedCats.has(cat)) await loadCategory(cat);
+    } else {
+      map.removeLayer(pointLayers[cat]);
+    }
+  } else if (bigKey) {
+    if (e.target.checked) {
+      bigLayers[bigKey].addTo(map);
+      if (bigKey === 'rail' && !railLoaded) {
+        const statusEl = document.querySelector('[data-status-big="rail"]');
+        if (statusEl) { statusEl.textContent = '...'; statusEl.className = 'status loading'; }
+        try {
+          await loadRailLayer();
+          if (statusEl) { statusEl.textContent = ''; statusEl.className = 'status'; }
+        } catch (err) {
+          console.error('rail load failed', err);
+          if (statusEl) { statusEl.textContent = 'ошибка'; statusEl.className = 'status error'; }
+        }
+      }
+    } else {
+      map.removeLayer(bigLayers[bigKey]);
+    }
+  }
+});
+
+// Master-чекбокс «Включить все слои» — покрывает и точки, и крупные объекты
+const masterCb = document.getElementById('toggle-all-points');
+const masterSelector = 'input[data-point]:not(:disabled), input[data-big]:not(:disabled)';
+function updateMasterState() {
+  const boxes = pointContainer.querySelectorAll(masterSelector);
+  const total = boxes.length;
+  const checked = [...boxes].filter(b => b.checked).length;
+  masterCb.checked = total > 0 && checked === total;
+  masterCb.indeterminate = checked > 0 && checked < total;
+}
+masterCb.addEventListener('change', () => {
+  const enable = masterCb.checked;
+  const boxes = pointContainer.querySelectorAll(masterSelector);
+  for (const cb of boxes) {
+    if (cb.checked !== enable) {
+      cb.checked = enable;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+});
+pointContainer.addEventListener('change', updateMasterState);
+updateMasterState();
+
+async function applyActiveHeat() {
+  if (activeHeat) { map.removeLayer(activeHeat); activeHeat = null; }
+  const legend = document.getElementById('legend');
+  if (!activeHeatKey) {
+    legend.classList.remove('active');
+    return;
+  }
+  try {
+    const layer = await ensureLayer(activeHeatKey, renderMode);
+    if (!layer) {
+      legend.classList.remove('active');
+      return;
+    }
+    activeHeat = layer;
+    activeHeat.addTo(map);
+    const meta = heatMeta[activeHeatKey] || {};
+    document.getElementById('legend-title').textContent = HEAT_DEFS[activeHeatKey].label;
+    document.getElementById('legend-min').textContent = meta.min ?? '';
+    document.getElementById('legend-max').textContent = meta.max ?? '';
+    document.getElementById('legend-sub').textContent = meta.sub ?? '';
+    legend.classList.add('active');
+  } catch (err) {
+    console.error('heat load failed', activeHeatKey, err);
+  }
+}
+
+heatContainer.addEventListener('change', async e => {
+  if (!('heat' in e.target.dataset)) return;
+  activeHeatKey = e.target.dataset.heat || null;
+  await applyActiveHeat();
+});
+
+// Переключение режима отображения (тепловая / зоны)
+function setRenderMode(mode) {
+  renderMode = mode;
+  localStorage.setItem('spainMapRenderMode', mode);
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  if (activeHeatKey) applyActiveHeat();
+}
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => setRenderMode(btn.dataset.mode));
+});
+setRenderMode(renderMode);   // инициализируем подсветку
+
+// ================= СОСТОЯНИЕ СВЁРНУТЫХ ГРУПП =================
+const GROUPS_STORAGE_KEY = 'spainMapGroups_v1';
+(() => {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(GROUPS_STORAGE_KEY) || '{}'); } catch {}
+  document.querySelectorAll('details.group').forEach(d => {
+    const key = d.dataset.group;
+    if (key in saved) d.open = !!saved[key];
+    d.addEventListener('toggle', () => {
+      const current = { ...saved };
+      current[key] = d.open;
+      saved = current;
+      localStorage.setItem(GROUPS_STORAGE_KEY, JSON.stringify(current));
+    });
+  });
+})();
+
+// ================= ФЛАЖКИ (сохраняются между переключениями слоёв) =================
+const FLAG_STORAGE_KEY = 'spainMapFlags_v1';
+let flags = [];
+let addingFlag = false;
+try {
+  flags = JSON.parse(localStorage.getItem(FLAG_STORAGE_KEY) || '[]');
+} catch { flags = []; }
+
+const flagLayer = L.layerGroup().addTo(map);
+const flagMarkers = {};
+
+function makeFlagIcon() {
+  return L.divIcon({
+    html: '<div class="flag-marker">📍</div>',
+    className: '',
+    iconSize: [22, 22],
+    iconAnchor: [11, 22]
+  });
+}
+
+function saveFlags() {
+  localStorage.setItem(FLAG_STORAGE_KEY, JSON.stringify(flags));
+}
+
+function addFlagToMap(flag) {
+  const m = L.marker([flag.lat, flag.lng], { icon: makeFlagIcon(), title: flag.name });
+  m.bindPopup(`<b>${flag.name}</b><br><small>${flag.lat.toFixed(4)}, ${flag.lng.toFixed(4)}</small>`);
+  flagLayer.addLayer(m);
+  flagMarkers[flag.id] = m;
+}
+
+function renderFlagList() {
+  const ul = document.getElementById('flag-list');
+  const countEl = document.getElementById('flag-count');
+  countEl.textContent = flags.length ? `(${flags.length})` : '';
+  ul.innerHTML = '';
+  if (flags.length === 0) return;
+  flags.forEach(f => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span class="flag-pin">📍</span>
+      <span class="flag-name" title="Перейти к метке">${f.name}</span>
+      <span class="flag-coords">${f.lat.toFixed(2)},${f.lng.toFixed(2)}</span>
+      <button class="flag-del" title="Удалить">×</button>
+    `;
+    li.querySelector('.flag-name').addEventListener('click', () => {
+      map.flyTo([f.lat, f.lng], Math.max(map.getZoom(), 11), { duration: 0.8 });
+      flagMarkers[f.id]?.openPopup();
+    });
+    li.querySelector('.flag-del').addEventListener('click', () => deleteFlag(f.id));
+    ul.appendChild(li);
+  });
+}
+
+function addFlag(lat, lng) {
+  const defaultName = `Метка ${flags.length + 1}`;
+  const name = prompt('Название метки:', defaultName);
+  if (name === null) return;   // пользователь нажал Cancel — метку не добавляем
+  const flag = {
+    id: `f${Date.now()}${Math.floor(Math.random()*1000)}`,
+    lat, lng,
+    name: (name || defaultName).trim(),
+    createdAt: new Date().toISOString()
+  };
+  flags.push(flag);
+  addFlagToMap(flag);
+  saveFlags();
+  renderFlagList();
+}
+
+function deleteFlag(id) {
+  const idx = flags.findIndex(f => f.id === id);
+  if (idx < 0) return;
+  flags.splice(idx, 1);
+  if (flagMarkers[id]) {
+    flagLayer.removeLayer(flagMarkers[id]);
+    delete flagMarkers[id];
+  }
+  saveFlags();
+  renderFlagList();
+}
+
+function setAddFlagMode(on) {
+  addingFlag = on;
+  const btn = document.getElementById('add-flag');
+  const banner = document.getElementById('hint-banner');
+  const mapEl = document.getElementById('map');
+  btn.classList.toggle('active', on);
+  btn.textContent = on ? '✕ Отменить' : '📍 Поставить метку';
+  banner.style.display = on ? 'block' : 'none';
+  mapEl.classList.toggle('adding-flag', on);
+}
+
+document.getElementById('add-flag').addEventListener('click', () => {
+  setAddFlagMode(!addingFlag);
+});
+
+map.on('click', e => {
+  if (!addingFlag) return;
+  setAddFlagMode(false);
+  addFlag(e.latlng.lat, e.latlng.lng);
+});
+
+// восстановить сохранённые метки
+flags.forEach(addFlagToMap);
+renderFlagList();
+
+// ================= СТАРТОВОЕ СОСТОЯНИЕ =================
+// «Крупные объекты» по умолчанию выключены — пользователь включает нужное сам.
+// OSM-слои не включаем автоматически — при zoom 6 они таймаутят.
+</script>
+</body>
+</html>

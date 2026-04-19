@@ -1,0 +1,198 @@
+{
+  "source": "Ручная курация: публичные сайты специалистов и каталогов",
+  "license": "Только публично опубликованные контакты специалистов",
+  "period": "2026-04",
+  "category": "speech",
+  "schema": {
+    "name": "string",
+    "city": "string — только для ориентира в данных, на карточке не показывается",
+    "ccaa": "string — только для ориентира в данных",
+    "lat": "number",
+    "lng": "number",
+    "website": "url — подвязывается на название",
+    "focus": "cas | neuro | general — главный тег",
+    "languages": "массив из: ru, uk, es, ca, en, el, it, de, fr, pl, pt, ro, nl, zh, ar, sk",
+    "online": "boolean — работает ли онлайн",
+    "phone": "string — в данных остаётся, на карточке не показывается",
+    "email": "string — в данных остаётся, на карточке не показывается",
+    "note": "string — в данных остаётся, на карточке не показывается",
+    "precision": "exact | approx",
+    "verified": "boolean",
+    "offline": "boolean — принимает ли очно",
+    "priority": "boolean — выделять крупным маркером на карте (топ-выбор)"
+  },
+  "count": 8,
+  "features": [
+    {
+      "name": "Sofia Zelou — Multilingual Neurologopedia",
+      "city": "Barcelona",
+      "ccaa": "Catalunya",
+      "lat": 41.4044,
+      "lng": 2.1345,
+      "website": "https://www.sofiazelou.com/en/",
+      "focus": "neuro",
+      "languages": [
+        "es",
+        "ca",
+        "en",
+        "el",
+        "it"
+      ],
+      "online": true,
+      "phone": "+34 633 700 513",
+      "email": "info@sofiazelou.com",
+      "note": "Нейрологопед в Sant Gervasi. CAS явно не декларируется — уточнять.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true
+    },
+    {
+      "name": "Sinews Multilingual Therapy Institute",
+      "city": "Madrid",
+      "ccaa": "Madrid",
+      "lat": 40.4266,
+      "lng": -3.6992,
+      "website": "https://www.sinews.es/en/speech-therapy/",
+      "focus": "general",
+      "languages": [
+        "es",
+        "en",
+        "de",
+        "fr",
+        "pl",
+        "it",
+        "ro",
+        "nl",
+        "zh",
+        "ar",
+        "sk"
+      ],
+      "online": true,
+      "phone": "+34 91 700 19 79",
+      "email": "info@sinews.es",
+      "note": "Мультиязычный центр, Sagasta 16. Русского нет.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true
+    },
+    {
+      "name": "Jennie Kitaychik, CCC-SLP (Speech Therapy Madrid)",
+      "city": "Madrid",
+      "ccaa": "Madrid",
+      "lat": 40.4168,
+      "lng": -3.7038,
+      "website": "https://www.speechtherapymadrid.com/",
+      "focus": "general",
+      "languages": [
+        "en"
+      ],
+      "online": true,
+      "phone": "+34 623 43 41 38",
+      "email": "JKitaychikSLP@gmail.com",
+      "note": "Американская CCC-SLP в Мадриде (английский). Адрес не публикуется.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true
+    },
+    {
+      "name": "Татьяна Астафьева — русскоязычный логопед",
+      "city": "Barcelona / Marbella / онлайн",
+      "ccaa": "Catalunya",
+      "lat": 41.3879,
+      "lng": 2.17,
+      "website": "http://russianspain.com/journal/diaspora/nasha-russkaya-ispaniya-logoped-tatyana-astafeva_16386.html",
+      "focus": "general",
+      "languages": [
+        "ru"
+      ],
+      "online": true,
+      "phone": "+34 635 24 33 47",
+      "email": "ewora@mail.ru",
+      "note": "20+ лет, онлайн + очно BCN/Marbella. CAS не упомянут.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true,
+      "priority": true
+    },
+    {
+      "name": "Motyva (Grupo Motyva)",
+      "city": "Valencia",
+      "ccaa": "Valenciana",
+      "lat": 39.4721,
+      "lng": -0.3852,
+      "website": "https://www.logopediapsicologia.com/",
+      "focus": "cas",
+      "languages": [
+        "es"
+      ],
+      "online": false,
+      "phone": "+34 960 221 659",
+      "email": "info@motyva.es",
+      "note": "Gran Vía Fernando el Católico 7. Публикуют про apraxia del habla infantil. Филиалы: Castellón, Palmera.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true
+    },
+    {
+      "name": "Centro Creciendo — Unidad de Logopedia Infantil (Madrid)",
+      "city": "Madrid",
+      "ccaa": "Madrid",
+      "lat": 40.43,
+      "lng": -3.7,
+      "website": "https://centrocreciendo.com/especialidades/unidad-de-logopedia-infantil/",
+      "focus": "cas",
+      "languages": [
+        "es"
+      ],
+      "online": false,
+      "phone": "+34 695 647 737",
+      "email": "",
+      "note": "«apraxia del habla» в списке услуг. Адрес не опубликован.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true
+    },
+    {
+      "name": "Centro Creciendo — Alicante",
+      "city": "Alicante",
+      "ccaa": "Valenciana",
+      "lat": 38.3452,
+      "lng": -0.481,
+      "website": "https://centrocreciendo.com/especialidades/unidad-de-logopedia-infantil/",
+      "focus": "cas",
+      "languages": [
+        "es"
+      ],
+      "online": false,
+      "phone": "+34 669 585 637",
+      "email": "",
+      "note": "Аликантский филиал Centro Creciendo.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true
+    },
+    {
+      "name": "Hellerhofkidz — русскоязычный детский центр",
+      "city": "Marbella",
+      "ccaa": "Andalucía",
+      "lat": 36.4985,
+      "lng": -4.9527,
+      "website": "https://www.hellerhofkidz.com/",
+      "focus": "general",
+      "languages": [
+        "ru",
+        "uk",
+        "en",
+        "es"
+      ],
+      "online": false,
+      "phone": "+34 711 003 231",
+      "email": "clinic@hellerhof.eu",
+      "note": "Nueva Andalucía. Лицензия Andalucía N°13359. WhatsApp/Telegram.",
+      "precision": "approx",
+      "verified": false,
+      "offline": true,
+      "priority": true
+    }
+  ]
+}

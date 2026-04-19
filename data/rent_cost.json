@@ -1,0 +1,877 @@
+{
+ "source": "SERPAVI 2025 (Ministerio de Vivienda)",
+ "source_url": "https://publicaciones.transportes.gob.es/sistema-estatal-referencia-precio-alquiler-vivienda-serpavi-2025",
+ "period": "2023 (declaraciones tributarias)",
+ "metric": "renta media mensual del arrendamiento (€/mes)",
+ "granularity": "provincia",
+ "count": 50,
+ "legend_min": "371 €/мес",
+ "legend_max": "716 €/мес",
+ "legend_sub": "SERPAVI 2023 · 50/52 провинций (Страна Басков н.д.)",
+ "render_radius": 55,
+ "render_blur": 45,
+ "stats": {
+  "min_eur": 350.0,
+  "max_eur": 759.0,
+  "p5_eur": 371.0,
+  "p95_eur": 716.0
+ },
+ "missing_provinces": [
+  "Araba/Álava",
+  "Bizkaia"
+ ],
+ "provinces": [
+  {
+   "ine": "04",
+   "province_ru": "Альмерия",
+   "province_es": "Almería",
+   "lat": 37.16,
+   "lng": -2.33,
+   "rent_eur_month_median": 425.0,
+   "rent_eur_m2_median": 5.6,
+   "size_m2_median": 82.0,
+   "sample_size": 19666
+  },
+  {
+   "ine": "11",
+   "province_ru": "Кадис",
+   "province_es": "Cádiz",
+   "lat": 36.5,
+   "lng": -5.8,
+   "rent_eur_month_median": 500.0,
+   "rent_eur_m2_median": 6.8,
+   "size_m2_median": 78.0,
+   "sample_size": 26536
+  },
+  {
+   "ine": "14",
+   "province_ru": "Кордова",
+   "province_es": "Córdoba",
+   "lat": 37.9,
+   "lng": -4.85,
+   "rent_eur_month_median": 462.0,
+   "rent_eur_m2_median": 6.1,
+   "size_m2_median": 82.0,
+   "sample_size": 16482
+  },
+  {
+   "ine": "18",
+   "province_ru": "Гранада",
+   "province_es": "Granada",
+   "lat": 37.3,
+   "lng": -3.1,
+   "rent_eur_month_median": 459.0,
+   "rent_eur_m2_median": 5.9,
+   "size_m2_median": 85.0,
+   "sample_size": 32674
+  },
+  {
+   "ine": "21",
+   "province_ru": "Уэльва",
+   "province_es": "Huelva",
+   "lat": 37.55,
+   "lng": -6.95,
+   "rent_eur_month_median": 450.0,
+   "rent_eur_m2_median": 5.9,
+   "size_m2_median": 82.0,
+   "sample_size": 7709
+  },
+  {
+   "ine": "23",
+   "province_ru": "Хаэн",
+   "province_es": "Jaén",
+   "lat": 38.0,
+   "lng": -3.5,
+   "rent_eur_month_median": 390.0,
+   "rent_eur_m2_median": 4.3,
+   "size_m2_median": 96.0,
+   "sample_size": 11201
+  },
+  {
+   "ine": "29",
+   "province_ru": "Малага",
+   "province_es": "Málaga",
+   "lat": 36.75,
+   "lng": -4.7,
+   "rent_eur_month_median": 630.0,
+   "rent_eur_m2_median": 8.4,
+   "size_m2_median": 83.0,
+   "sample_size": 60685
+  },
+  {
+   "ine": "41",
+   "province_ru": "Севилья",
+   "province_es": "Sevilla",
+   "lat": 37.4,
+   "lng": -5.6,
+   "rent_eur_month_median": 595.0,
+   "rent_eur_m2_median": 8.0,
+   "size_m2_median": 77.0,
+   "sample_size": 48955
+  },
+  {
+   "ine": "22",
+   "province_ru": "Уэска",
+   "province_es": "Huesca",
+   "lat": 42.2,
+   "lng": -0.1,
+   "rent_eur_month_median": 442.0,
+   "rent_eur_m2_median": 5.6,
+   "size_m2_median": 80.0,
+   "sample_size": 11914
+  },
+  {
+   "ine": "44",
+   "province_ru": "Теруэль",
+   "province_es": "Teruel",
+   "lat": 40.6,
+   "lng": -0.8,
+   "rent_eur_month_median": 383.0,
+   "rent_eur_m2_median": 4.6,
+   "size_m2_median": 91.0,
+   "sample_size": 4922
+  },
+  {
+   "ine": "50",
+   "province_ru": "Сарагоса",
+   "province_es": "Zaragoza",
+   "lat": 41.65,
+   "lng": -0.9,
+   "rent_eur_month_median": 500.0,
+   "rent_eur_m2_median": 7.1,
+   "size_m2_median": 73.0,
+   "sample_size": 60772
+  },
+  {
+   "ine": "33",
+   "province_ru": "Астурия",
+   "province_es": "Asturias",
+   "lat": 43.35,
+   "lng": -6.0,
+   "rent_eur_month_median": 450.0,
+   "rent_eur_m2_median": 6.4,
+   "size_m2_median": 76.0,
+   "sample_size": 54839
+  },
+  {
+   "ine": "07",
+   "province_ru": "Балеары",
+   "province_es": "Illes Balears",
+   "lat": 39.5,
+   "lng": 2.8,
+   "rent_eur_month_median": 700.0,
+   "rent_eur_m2_median": 9.1,
+   "size_m2_median": 84.0,
+   "sample_size": 66013
+  },
+  {
+   "ine": "35",
+   "province_ru": "Лас-Пальмас",
+   "province_es": "Las Palmas",
+   "lat": 28.2,
+   "lng": -15.45,
+   "rent_eur_month_median": 500.0,
+   "rent_eur_m2_median": 7.2,
+   "size_m2_median": 76.0,
+   "sample_size": 46464
+  },
+  {
+   "ine": "38",
+   "province_ru": "Санта-Крус",
+   "province_es": "Santa Cruz de Tenerife",
+   "lat": 28.5,
+   "lng": -16.9,
+   "rent_eur_month_median": 520.0,
+   "rent_eur_m2_median": 7.5,
+   "size_m2_median": 75.0,
+   "sample_size": 45762
+  },
+  {
+   "ine": "39",
+   "province_ru": "Кантабрия",
+   "province_es": "Cantabria",
+   "lat": 43.2,
+   "lng": -4.03,
+   "rent_eur_month_median": 500.0,
+   "rent_eur_m2_median": 6.9,
+   "size_m2_median": 76.0,
+   "sample_size": 26170
+  },
+  {
+   "ine": "05",
+   "province_ru": "Авила",
+   "province_es": "Ávila",
+   "lat": 40.57,
+   "lng": -4.95,
+   "rent_eur_month_median": 400.0,
+   "rent_eur_m2_median": 5.0,
+   "size_m2_median": 85.0,
+   "sample_size": 6107
+  },
+  {
+   "ine": "09",
+   "province_ru": "Бургос",
+   "province_es": "Burgos",
+   "lat": 42.35,
+   "lng": -3.6,
+   "rent_eur_month_median": 490.0,
+   "rent_eur_m2_median": 6.4,
+   "size_m2_median": 78.0,
+   "sample_size": 15252
+  },
+  {
+   "ine": "24",
+   "province_ru": "Леон",
+   "province_es": "León",
+   "lat": 42.67,
+   "lng": -6.0,
+   "rent_eur_month_median": 404.0,
+   "rent_eur_m2_median": 5.0,
+   "size_m2_median": 89.0,
+   "sample_size": 19810
+  },
+  {
+   "ine": "34",
+   "province_ru": "Паленсия",
+   "province_es": "Palencia",
+   "lat": 42.3,
+   "lng": -4.55,
+   "rent_eur_month_median": 412.0,
+   "rent_eur_m2_median": 5.3,
+   "size_m2_median": 84.0,
+   "sample_size": 6128
+  },
+  {
+   "ine": "37",
+   "province_ru": "Саламанка",
+   "province_es": "Salamanca",
+   "lat": 40.8,
+   "lng": -6.0,
+   "rent_eur_month_median": 451.0,
+   "rent_eur_m2_median": 5.6,
+   "size_m2_median": 86.0,
+   "sample_size": 17540
+  },
+  {
+   "ine": "40",
+   "province_ru": "Сеговия",
+   "province_es": "Segovia",
+   "lat": 41.05,
+   "lng": -4.1,
+   "rent_eur_month_median": 450.0,
+   "rent_eur_m2_median": 5.9,
+   "size_m2_median": 83.0,
+   "sample_size": 6803
+  },
+  {
+   "ine": "42",
+   "province_ru": "Сория",
+   "province_es": "Soria",
+   "lat": 41.7,
+   "lng": -2.7,
+   "rent_eur_month_median": 456.0,
+   "rent_eur_m2_median": 5.8,
+   "size_m2_median": 85.0,
+   "sample_size": 3974
+  },
+  {
+   "ine": "47",
+   "province_ru": "Вальядолид",
+   "province_es": "Valladolid",
+   "lat": 41.7,
+   "lng": -4.8,
+   "rent_eur_month_median": 491.0,
+   "rent_eur_m2_median": 6.2,
+   "size_m2_median": 83.0,
+   "sample_size": 26442
+  },
+  {
+   "ine": "49",
+   "province_ru": "Самора",
+   "province_es": "Zamora",
+   "lat": 41.7,
+   "lng": -6.0,
+   "rent_eur_month_median": 375.0,
+   "rent_eur_m2_median": 4.4,
+   "size_m2_median": 91.0,
+   "sample_size": 5025
+  },
+  {
+   "ine": "02",
+   "province_ru": "Альбасете",
+   "province_es": "Albacete",
+   "lat": 38.83,
+   "lng": -1.86,
+   "rent_eur_month_median": 456.0,
+   "rent_eur_m2_median": 5.1,
+   "size_m2_median": 95.0,
+   "sample_size": 12697
+  },
+  {
+   "ine": "13",
+   "province_ru": "Сьюдад-Реаль",
+   "province_es": "Ciudad Real",
+   "lat": 39.0,
+   "lng": -3.9,
+   "rent_eur_month_median": 371.0,
+   "rent_eur_m2_median": 4.8,
+   "size_m2_median": 84.0,
+   "sample_size": 11728
+  },
+  {
+   "ine": "16",
+   "province_ru": "Куэнка",
+   "province_es": "Cuenca",
+   "lat": 40.0,
+   "lng": -2.2,
+   "rent_eur_month_median": 447.0,
+   "rent_eur_m2_median": 5.0,
+   "size_m2_median": 101.0,
+   "sample_size": 4364
+  },
+  {
+   "ine": "19",
+   "province_ru": "Гвадалахара",
+   "province_es": "Guadalajara",
+   "lat": 40.8,
+   "lng": -2.3,
+   "rent_eur_month_median": 525.0,
+   "rent_eur_m2_median": 6.7,
+   "size_m2_median": 84.0,
+   "sample_size": 12185
+  },
+  {
+   "ine": "45",
+   "province_ru": "Толедо",
+   "province_es": "Toledo",
+   "lat": 39.8,
+   "lng": -4.1,
+   "rent_eur_month_median": 450.0,
+   "rent_eur_m2_median": 5.7,
+   "size_m2_median": 86.0,
+   "sample_size": 22186
+  },
+  {
+   "ine": "08",
+   "province_ru": "Барселона",
+   "province_es": "Barcelona",
+   "lat": 41.6,
+   "lng": 2.0,
+   "rent_eur_month_median": 729.0,
+   "rent_eur_m2_median": 10.6,
+   "size_m2_median": 72.0,
+   "sample_size": 353110
+  },
+  {
+   "ine": "17",
+   "province_ru": "Жирона",
+   "province_es": "Girona",
+   "lat": 42.15,
+   "lng": 2.55,
+   "rent_eur_month_median": 530.0,
+   "rent_eur_m2_median": 7.1,
+   "size_m2_median": 78.0,
+   "sample_size": 43082
+  },
+  {
+   "ine": "25",
+   "province_ru": "Льейда",
+   "province_es": "Lleida",
+   "lat": 42.0,
+   "lng": 1.0,
+   "rent_eur_month_median": 433.0,
+   "rent_eur_m2_median": 5.5,
+   "size_m2_median": 85.0,
+   "sample_size": 22903
+  },
+  {
+   "ine": "43",
+   "province_ru": "Таррагона",
+   "province_es": "Tarragona",
+   "lat": 41.2,
+   "lng": 1.1,
+   "rent_eur_month_median": 489.0,
+   "rent_eur_m2_median": 6.5,
+   "size_m2_median": 78.0,
+   "sample_size": 42842
+  },
+  {
+   "ine": "03",
+   "province_ru": "Аликанте",
+   "province_es": "Alicante",
+   "lat": 38.48,
+   "lng": -0.54,
+   "rent_eur_month_median": 479.0,
+   "rent_eur_m2_median": 5.8,
+   "size_m2_median": 88.0,
+   "sample_size": 72375
+  },
+  {
+   "ine": "12",
+   "province_ru": "Кастельон",
+   "province_es": "Castellón",
+   "lat": 40.08,
+   "lng": -0.11,
+   "rent_eur_month_median": 400.0,
+   "rent_eur_m2_median": 4.8,
+   "size_m2_median": 90.0,
+   "sample_size": 28467
+  },
+  {
+   "ine": "46",
+   "province_ru": "Валенсия",
+   "province_es": "Valencia",
+   "lat": 39.5,
+   "lng": -0.85,
+   "rent_eur_month_median": 525.0,
+   "rent_eur_m2_median": 6.2,
+   "size_m2_median": 90.0,
+   "sample_size": 131518
+  },
+  {
+   "ine": "06",
+   "province_ru": "Бадахос",
+   "province_es": "Badajoz",
+   "lat": 38.8,
+   "lng": -6.0,
+   "rent_eur_month_median": 400.0,
+   "rent_eur_m2_median": 4.9,
+   "size_m2_median": 91.0,
+   "sample_size": 15065
+  },
+  {
+   "ine": "10",
+   "province_ru": "Касерес",
+   "province_es": "Cáceres",
+   "lat": 39.7,
+   "lng": -6.3,
+   "rent_eur_month_median": 400.0,
+   "rent_eur_m2_median": 4.5,
+   "size_m2_median": 93.0,
+   "sample_size": 10401
+  },
+  {
+   "ine": "15",
+   "province_ru": "Ла-Корунья",
+   "province_es": "A Coruña",
+   "lat": 43.17,
+   "lng": -8.4,
+   "rent_eur_month_median": 430.0,
+   "rent_eur_m2_median": 5.7,
+   "size_m2_median": 84.0,
+   "sample_size": 63507
+  },
+  {
+   "ine": "27",
+   "province_ru": "Луго",
+   "province_es": "Lugo",
+   "lat": 43.0,
+   "lng": -7.5,
+   "rent_eur_month_median": 350.0,
+   "rent_eur_m2_median": 4.0,
+   "size_m2_median": 97.0,
+   "sample_size": 12263
+  },
+  {
+   "ine": "32",
+   "province_ru": "Оренсе",
+   "province_es": "Ourense",
+   "lat": 42.2,
+   "lng": -7.6,
+   "rent_eur_month_median": 374.0,
+   "rent_eur_m2_median": 4.4,
+   "size_m2_median": 91.0,
+   "sample_size": 13078
+  },
+  {
+   "ine": "36",
+   "province_ru": "Понтеведра",
+   "province_es": "Pontevedra",
+   "lat": 42.5,
+   "lng": -8.5,
+   "rent_eur_month_median": 452.0,
+   "rent_eur_m2_median": 6.0,
+   "size_m2_median": 86.0,
+   "sample_size": 41420
+  },
+  {
+   "ine": "28",
+   "province_ru": "Мадрид",
+   "province_es": "Madrid",
+   "lat": 40.45,
+   "lng": -3.7,
+   "rent_eur_month_median": 759.0,
+   "rent_eur_m2_median": 11.5,
+   "size_m2_median": 70.0,
+   "sample_size": 460317
+  },
+  {
+   "ine": "30",
+   "province_ru": "Мурсия",
+   "province_es": "Murcia",
+   "lat": 38.05,
+   "lng": -1.6,
+   "rent_eur_month_median": 439.0,
+   "rent_eur_m2_median": 5.1,
+   "size_m2_median": 95.0,
+   "sample_size": 45591
+  },
+  {
+   "ine": "31",
+   "province_ru": "Наварра",
+   "province_es": "Navarra",
+   "lat": 42.7,
+   "lng": -1.65,
+   "rent_eur_month_median": 573.0,
+   "rent_eur_m2_median": 6.6,
+   "size_m2_median": 88.0,
+   "sample_size": 23696
+  },
+  {
+   "ine": "20",
+   "province_ru": "Гипускоа",
+   "province_es": "Gipuzkoa",
+   "lat": 43.17,
+   "lng": -2.2,
+   "rent_eur_month_median": 716.0,
+   "rent_eur_m2_median": 10.1,
+   "size_m2_median": 72.0,
+   "sample_size": 36967
+  },
+  {
+   "ine": "26",
+   "province_ru": "Ла-Риоха",
+   "province_es": "La Rioja",
+   "lat": 42.3,
+   "lng": -2.5,
+   "rent_eur_month_median": 453.0,
+   "rent_eur_m2_median": 5.6,
+   "size_m2_median": 86.0,
+   "sample_size": 15524
+  },
+  {
+   "ine": "51",
+   "province_ru": "Сеута",
+   "province_es": "Ceuta",
+   "lat": 35.89,
+   "lng": -5.31,
+   "rent_eur_month_median": 650.0,
+   "rent_eur_m2_median": 9.2,
+   "size_m2_median": 73.0,
+   "sample_size": 2191
+  },
+  {
+   "ine": "52",
+   "province_ru": "Мелилья",
+   "province_es": "Melilla",
+   "lat": 35.29,
+   "lng": -2.94,
+   "rent_eur_month_median": 600.0,
+   "rent_eur_m2_median": 8.8,
+   "size_m2_median": 70.0,
+   "sample_size": 2467
+  }
+ ],
+ "points": [
+  [
+   37.16,
+   -2.33,
+   0.157,
+   425.0
+  ],
+  [
+   36.5,
+   -5.8,
+   0.374,
+   500.0
+  ],
+  [
+   37.9,
+   -4.85,
+   0.264,
+   462.0
+  ],
+  [
+   37.3,
+   -3.1,
+   0.255,
+   459.0
+  ],
+  [
+   37.55,
+   -6.95,
+   0.229,
+   450.0
+  ],
+  [
+   38.0,
+   -3.5,
+   0.055,
+   390.0
+  ],
+  [
+   36.75,
+   -4.7,
+   0.751,
+   630.0
+  ],
+  [
+   37.4,
+   -5.6,
+   0.649,
+   595.0
+  ],
+  [
+   42.2,
+   -0.1,
+   0.206,
+   442.0
+  ],
+  [
+   40.6,
+   -0.8,
+   0.035,
+   383.0
+  ],
+  [
+   41.65,
+   -0.9,
+   0.374,
+   500.0
+  ],
+  [
+   43.35,
+   -6.0,
+   0.229,
+   450.0
+  ],
+  [
+   39.5,
+   2.8,
+   0.954,
+   700.0
+  ],
+  [
+   28.2,
+   -15.45,
+   0.374,
+   500.0
+  ],
+  [
+   28.5,
+   -16.9,
+   0.432,
+   520.0
+  ],
+  [
+   43.2,
+   -4.03,
+   0.374,
+   500.0
+  ],
+  [
+   40.57,
+   -4.95,
+   0.084,
+   400.0
+  ],
+  [
+   42.35,
+   -3.6,
+   0.345,
+   490.0
+  ],
+  [
+   42.67,
+   -6.0,
+   0.096,
+   404.0
+  ],
+  [
+   42.3,
+   -4.55,
+   0.119,
+   412.0
+  ],
+  [
+   40.8,
+   -6.0,
+   0.232,
+   451.0
+  ],
+  [
+   41.05,
+   -4.1,
+   0.229,
+   450.0
+  ],
+  [
+   41.7,
+   -2.7,
+   0.246,
+   456.0
+  ],
+  [
+   41.7,
+   -4.8,
+   0.348,
+   491.0
+  ],
+  [
+   41.7,
+   -6.0,
+   0.012,
+   375.0
+  ],
+  [
+   38.83,
+   -1.86,
+   0.246,
+   456.0
+  ],
+  [
+   39.0,
+   -3.9,
+   0.0,
+   371.0
+  ],
+  [
+   40.0,
+   -2.2,
+   0.22,
+   447.0
+  ],
+  [
+   40.8,
+   -2.3,
+   0.446,
+   525.0
+  ],
+  [
+   39.8,
+   -4.1,
+   0.229,
+   450.0
+  ],
+  [
+   41.6,
+   2.0,
+   1.0,
+   729.0
+  ],
+  [
+   42.15,
+   2.55,
+   0.461,
+   530.0
+  ],
+  [
+   42.0,
+   1.0,
+   0.18,
+   433.0
+  ],
+  [
+   41.2,
+   1.1,
+   0.342,
+   489.0
+  ],
+  [
+   38.48,
+   -0.54,
+   0.313,
+   479.0
+  ],
+  [
+   40.08,
+   -0.11,
+   0.084,
+   400.0
+  ],
+  [
+   39.5,
+   -0.85,
+   0.446,
+   525.0
+  ],
+  [
+   38.8,
+   -6.0,
+   0.084,
+   400.0
+  ],
+  [
+   39.7,
+   -6.3,
+   0.084,
+   400.0
+  ],
+  [
+   43.17,
+   -8.4,
+   0.171,
+   430.0
+  ],
+  [
+   43.0,
+   -7.5,
+   0.0,
+   350.0
+  ],
+  [
+   42.2,
+   -7.6,
+   0.009,
+   374.0
+  ],
+  [
+   42.5,
+   -8.5,
+   0.235,
+   452.0
+  ],
+  [
+   40.45,
+   -3.7,
+   1.0,
+   759.0
+  ],
+  [
+   38.05,
+   -1.6,
+   0.197,
+   439.0
+  ],
+  [
+   42.7,
+   -1.65,
+   0.586,
+   573.0
+  ],
+  [
+   43.17,
+   -2.2,
+   1.0,
+   716.0
+  ],
+  [
+   42.3,
+   -2.5,
+   0.238,
+   453.0
+  ],
+  [
+   35.89,
+   -5.31,
+   0.809,
+   650.0
+  ],
+  [
+   35.29,
+   -2.94,
+   0.664,
+   600.0
+  ]
+ ]
+}

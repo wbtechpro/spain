@@ -1,0 +1,684 @@
+{
+  "source": "ENTSO-E Expert Panel Final Report — 28 April 2025 Iberian Blackout + es.wikipedia",
+  "source_url": "https://www.entsoe.eu/publications/blackout/28-april-2025-iberian-blackout/",
+  "period": "28 апреля 2025",
+  "metric": "затронута апрельским блэкаутом 2025 (да/нет)",
+  "granularity": "provincia",
+  "binary": true,
+  "count": 47,
+  "legend_min": "не затронуто",
+  "legend_max": "затронуто",
+  "legend_sub": "ENTSO-E · 28.04.2025 · 47 провинций полуострова",
+  "render_radius": 55,
+  "render_blur": 45,
+  "missing_label": "не затронуто",
+  "missing_provinces": [
+    "Балеарские острова",
+    "Лас-Пальмас",
+    "Санта-Крус-де-Тенерифе",
+    "Сеута",
+    "Мелилья"
+  ],
+  "provinces": [
+    {
+      "ine": "33",
+      "province_ru": "Астурия",
+      "province_es": "Asturias",
+      "lat": 43.292,
+      "lng": -5.992,
+      "affected": 1
+    },
+    {
+      "ine": "15",
+      "province_ru": "Ла-Корунья",
+      "province_es": "A Coruña",
+      "lat": 43.127,
+      "lng": -8.463,
+      "affected": 1
+    },
+    {
+      "ine": "17",
+      "province_ru": "Жирона",
+      "province_es": "Girona",
+      "lat": 42.128,
+      "lng": 2.674,
+      "affected": 1
+    },
+    {
+      "ine": "36",
+      "province_ru": "Понтеведра",
+      "province_es": "Pontevedra",
+      "lat": 42.436,
+      "lng": -8.462,
+      "affected": 1
+    },
+    {
+      "ine": "39",
+      "province_ru": "Кантабрия",
+      "province_es": "Cantabria",
+      "lat": 43.197,
+      "lng": -4.031,
+      "affected": 1
+    },
+    {
+      "ine": "29",
+      "province_ru": "Малага",
+      "province_es": "Málaga",
+      "lat": 36.814,
+      "lng": -4.725,
+      "affected": 1
+    },
+    {
+      "ine": "04",
+      "province_ru": "Альмерия",
+      "province_es": "Almería",
+      "lat": 37.194,
+      "lng": -2.346,
+      "affected": 1
+    },
+    {
+      "ine": "30",
+      "province_ru": "Мурсия",
+      "province_es": "Murcia",
+      "lat": 38.001,
+      "lng": -1.484,
+      "affected": 1
+    },
+    {
+      "ine": "02",
+      "province_ru": "Альбасете",
+      "province_es": "Albacete",
+      "lat": 38.826,
+      "lng": -1.98,
+      "affected": 1
+    },
+    {
+      "ine": "05",
+      "province_ru": "Авила",
+      "province_es": "Ávila",
+      "lat": 40.571,
+      "lng": -4.946,
+      "affected": 1
+    },
+    {
+      "ine": "01",
+      "province_ru": "Алава",
+      "province_es": "Araba/Álava",
+      "lat": 42.825,
+      "lng": -2.716,
+      "affected": 1
+    },
+    {
+      "ine": "06",
+      "province_ru": "Бадахос",
+      "province_es": "Badajoz",
+      "lat": 38.709,
+      "lng": -6.142,
+      "affected": 1
+    },
+    {
+      "ine": "03",
+      "province_ru": "Аликанте",
+      "province_es": "Alacant/Alicante",
+      "lat": 38.477,
+      "lng": -0.568,
+      "affected": 1
+    },
+    {
+      "ine": "32",
+      "province_ru": "Оренсе",
+      "province_es": "Ourense",
+      "lat": 42.197,
+      "lng": -7.592,
+      "affected": 1
+    },
+    {
+      "ine": "08",
+      "province_ru": "Барселона",
+      "province_es": "Barcelona",
+      "lat": 41.731,
+      "lng": 1.984,
+      "affected": 1
+    },
+    {
+      "ine": "09",
+      "province_ru": "Бургос",
+      "province_es": "Burgos",
+      "lat": 42.369,
+      "lng": -3.586,
+      "affected": 1
+    },
+    {
+      "ine": "10",
+      "province_ru": "Касерес",
+      "province_es": "Cáceres",
+      "lat": 39.711,
+      "lng": -6.16,
+      "affected": 1
+    },
+    {
+      "ine": "11",
+      "province_ru": "Кадис",
+      "province_es": "Cádiz",
+      "lat": 36.553,
+      "lng": -5.761,
+      "affected": 1
+    },
+    {
+      "ine": "12",
+      "province_ru": "Кастельон",
+      "province_es": "Castelló/Castellón",
+      "lat": 40.24,
+      "lng": -0.146,
+      "affected": 1
+    },
+    {
+      "ine": "13",
+      "province_ru": "Сьюдад-Реаль",
+      "province_es": "Ciudad Real",
+      "lat": 38.925,
+      "lng": -3.829,
+      "affected": 1
+    },
+    {
+      "ine": "23",
+      "province_ru": "Хаэн",
+      "province_es": "Jaén",
+      "lat": 38.017,
+      "lng": -3.442,
+      "affected": 1
+    },
+    {
+      "ine": "14",
+      "province_ru": "Кордова",
+      "province_es": "Córdoba",
+      "lat": 37.992,
+      "lng": -4.809,
+      "affected": 1
+    },
+    {
+      "ine": "16",
+      "province_ru": "Куэнка",
+      "province_es": "Cuenca",
+      "lat": 39.897,
+      "lng": -2.197,
+      "affected": 1
+    },
+    {
+      "ine": "18",
+      "province_ru": "Гранада",
+      "province_es": "Granada",
+      "lat": 37.314,
+      "lng": -3.267,
+      "affected": 1
+    },
+    {
+      "ine": "19",
+      "province_ru": "Гвадалахара",
+      "province_es": "Guadalajara",
+      "lat": 40.814,
+      "lng": -2.623,
+      "affected": 1
+    },
+    {
+      "ine": "20",
+      "province_ru": "Гипускоа",
+      "province_es": "Gipuzkoa/Guipúzcoa",
+      "lat": 43.145,
+      "lng": -2.193,
+      "affected": 1
+    },
+    {
+      "ine": "21",
+      "province_ru": "Уэльва",
+      "province_es": "Huelva",
+      "lat": 37.576,
+      "lng": -6.829,
+      "affected": 1
+    },
+    {
+      "ine": "22",
+      "province_ru": "Уэска",
+      "province_es": "Huesca",
+      "lat": 42.202,
+      "lng": -0.073,
+      "affected": 1
+    },
+    {
+      "ine": "24",
+      "province_ru": "Леон",
+      "province_es": "León",
+      "lat": 42.619,
+      "lng": -5.84,
+      "affected": 1
+    },
+    {
+      "ine": "25",
+      "province_ru": "Лерида",
+      "province_es": "Lleida",
+      "lat": 42.043,
+      "lng": 1.048,
+      "affected": 1
+    },
+    {
+      "ine": "26",
+      "province_ru": "Ла-Риоха",
+      "province_es": "La Rioja",
+      "lat": 42.275,
+      "lng": -2.519,
+      "affected": 1
+    },
+    {
+      "ine": "42",
+      "province_ru": "Сория",
+      "province_es": "Soria",
+      "lat": 41.62,
+      "lng": -2.588,
+      "affected": 1
+    },
+    {
+      "ine": "31",
+      "province_ru": "Наварра",
+      "province_es": "Navarra",
+      "lat": 42.667,
+      "lng": -1.646,
+      "affected": 1
+    },
+    {
+      "ine": "27",
+      "province_ru": "Луго",
+      "province_es": "Lugo",
+      "lat": 43.013,
+      "lng": -7.446,
+      "affected": 1
+    },
+    {
+      "ine": "28",
+      "province_ru": "Мадрид",
+      "province_es": "Madrid",
+      "lat": 40.494,
+      "lng": -3.716,
+      "affected": 1
+    },
+    {
+      "ine": "34",
+      "province_ru": "Паленсия",
+      "province_es": "Palencia",
+      "lat": 42.371,
+      "lng": -4.536,
+      "affected": 1
+    },
+    {
+      "ine": "37",
+      "province_ru": "Саламанка",
+      "province_es": "Salamanca",
+      "lat": 40.805,
+      "lng": -6.066,
+      "affected": 1
+    },
+    {
+      "ine": "40",
+      "province_ru": "Сеговия",
+      "province_es": "Segovia",
+      "lat": 41.171,
+      "lng": -4.053,
+      "affected": 1
+    },
+    {
+      "ine": "41",
+      "province_ru": "Севилья",
+      "province_es": "Sevilla",
+      "lat": 37.435,
+      "lng": -5.682,
+      "affected": 1
+    },
+    {
+      "ine": "45",
+      "province_ru": "Толедо",
+      "province_es": "Toledo",
+      "lat": 39.794,
+      "lng": -4.148,
+      "affected": 1
+    },
+    {
+      "ine": "43",
+      "province_ru": "Таррагона",
+      "province_es": "Tarragona",
+      "lat": 41.087,
+      "lng": 0.819,
+      "affected": 1
+    },
+    {
+      "ine": "44",
+      "province_ru": "Теруэль",
+      "province_es": "Teruel",
+      "lat": 40.661,
+      "lng": -0.815,
+      "affected": 1
+    },
+    {
+      "ine": "46",
+      "province_ru": "Валенсия",
+      "province_es": "València/Valencia",
+      "lat": 39.37,
+      "lng": -0.8,
+      "affected": 1
+    },
+    {
+      "ine": "47",
+      "province_ru": "Вальядолид",
+      "province_es": "Valladolid",
+      "lat": 41.634,
+      "lng": -4.847,
+      "affected": 1
+    },
+    {
+      "ine": "48",
+      "province_ru": "Бискайя",
+      "province_es": "Bizkaia/Vizcaya",
+      "lat": 43.238,
+      "lng": -2.857,
+      "affected": 1
+    },
+    {
+      "ine": "49",
+      "province_ru": "Самора",
+      "province_es": "Zamora",
+      "lat": 41.727,
+      "lng": -5.98,
+      "affected": 1
+    },
+    {
+      "ine": "50",
+      "province_ru": "Сарагоса",
+      "province_es": "Zaragoza",
+      "lat": 41.622,
+      "lng": -1.066,
+      "affected": 1
+    }
+  ],
+  "points": [
+    [
+      43.292,
+      -5.992,
+      1.0,
+      1
+    ],
+    [
+      43.127,
+      -8.463,
+      1.0,
+      1
+    ],
+    [
+      42.128,
+      2.674,
+      1.0,
+      1
+    ],
+    [
+      42.436,
+      -8.462,
+      1.0,
+      1
+    ],
+    [
+      43.197,
+      -4.031,
+      1.0,
+      1
+    ],
+    [
+      36.814,
+      -4.725,
+      1.0,
+      1
+    ],
+    [
+      37.194,
+      -2.346,
+      1.0,
+      1
+    ],
+    [
+      38.001,
+      -1.484,
+      1.0,
+      1
+    ],
+    [
+      38.826,
+      -1.98,
+      1.0,
+      1
+    ],
+    [
+      40.571,
+      -4.946,
+      1.0,
+      1
+    ],
+    [
+      42.825,
+      -2.716,
+      1.0,
+      1
+    ],
+    [
+      38.709,
+      -6.142,
+      1.0,
+      1
+    ],
+    [
+      38.477,
+      -0.568,
+      1.0,
+      1
+    ],
+    [
+      42.197,
+      -7.592,
+      1.0,
+      1
+    ],
+    [
+      41.731,
+      1.984,
+      1.0,
+      1
+    ],
+    [
+      42.369,
+      -3.586,
+      1.0,
+      1
+    ],
+    [
+      39.711,
+      -6.16,
+      1.0,
+      1
+    ],
+    [
+      36.553,
+      -5.761,
+      1.0,
+      1
+    ],
+    [
+      40.24,
+      -0.146,
+      1.0,
+      1
+    ],
+    [
+      38.925,
+      -3.829,
+      1.0,
+      1
+    ],
+    [
+      38.017,
+      -3.442,
+      1.0,
+      1
+    ],
+    [
+      37.992,
+      -4.809,
+      1.0,
+      1
+    ],
+    [
+      39.897,
+      -2.197,
+      1.0,
+      1
+    ],
+    [
+      37.314,
+      -3.267,
+      1.0,
+      1
+    ],
+    [
+      40.814,
+      -2.623,
+      1.0,
+      1
+    ],
+    [
+      43.145,
+      -2.193,
+      1.0,
+      1
+    ],
+    [
+      37.576,
+      -6.829,
+      1.0,
+      1
+    ],
+    [
+      42.202,
+      -0.073,
+      1.0,
+      1
+    ],
+    [
+      42.619,
+      -5.84,
+      1.0,
+      1
+    ],
+    [
+      42.043,
+      1.048,
+      1.0,
+      1
+    ],
+    [
+      42.275,
+      -2.519,
+      1.0,
+      1
+    ],
+    [
+      41.62,
+      -2.588,
+      1.0,
+      1
+    ],
+    [
+      42.667,
+      -1.646,
+      1.0,
+      1
+    ],
+    [
+      43.013,
+      -7.446,
+      1.0,
+      1
+    ],
+    [
+      40.494,
+      -3.716,
+      1.0,
+      1
+    ],
+    [
+      42.371,
+      -4.536,
+      1.0,
+      1
+    ],
+    [
+      40.805,
+      -6.066,
+      1.0,
+      1
+    ],
+    [
+      41.171,
+      -4.053,
+      1.0,
+      1
+    ],
+    [
+      37.435,
+      -5.682,
+      1.0,
+      1
+    ],
+    [
+      39.794,
+      -4.148,
+      1.0,
+      1
+    ],
+    [
+      41.087,
+      0.819,
+      1.0,
+      1
+    ],
+    [
+      40.661,
+      -0.815,
+      1.0,
+      1
+    ],
+    [
+      39.37,
+      -0.8,
+      1.0,
+      1
+    ],
+    [
+      41.634,
+      -4.847,
+      1.0,
+      1
+    ],
+    [
+      43.238,
+      -2.857,
+      1.0,
+      1
+    ],
+    [
+      41.727,
+      -5.98,
+      1.0,
+      1
+    ],
+    [
+      41.622,
+      -1.066,
+      1.0,
+      1
+    ]
+  ]
+}

@@ -1,0 +1,144 @@
+{
+ "source": "Ручная курация с публичных сайтов MTB bike-парков и EWS-этапов в Испании",
+ "period": "2026-04",
+ "metric": "MTB bike-парки и зоны вело-эндуро",
+ "count": 15,
+ "license": "Собрано вручную из общедоступных списков bike-парков и результатов Enduro World Series",
+ "features": [
+  {
+   "name": "Zona Zero Pirineos",
+   "region": "Huesca (Aínsa-Sobrarbe)",
+   "lat": 42.413,
+   "lng": 0.143,
+   "url": "https://zonazeropirineos.com/",
+   "note": "Флагман вело-эндуро в Испании; этапы Enduro World Series 2016, 2018",
+   "precision": "exact"
+  },
+  {
+   "name": "La Pinilla Bike Park",
+   "region": "Segovia (Cerezo de Arriba)",
+   "lat": 41.253,
+   "lng": -3.515,
+   "url": "https://www.lapinilla.es/bike-park",
+   "note": "18 трасс DH/enduro, 30-60 мин от Мадрида",
+   "precision": "exact"
+  },
+  {
+   "name": "La Molina Bike Park",
+   "region": "Girona (Alp, Cerdanya)",
+   "lat": 42.340,
+   "lng": 1.950,
+   "url": "https://lamolina.cat/en/summer/bike-park",
+   "note": "13 трасс DH/enduro ~27 км + cross-country 11 км",
+   "precision": "exact"
+  },
+  {
+   "name": "Sierra Nevada Bike Park",
+   "region": "Granada (Pradollano)",
+   "lat": 37.095,
+   "lng": -3.395,
+   "url": "https://sierranevada.es/en/summer/bike-park",
+   "note": "Высотный bike park, трассы всех уровней",
+   "precision": "exact"
+  },
+  {
+   "name": "Panticosa Bike Park",
+   "region": "Huesca (Panticosa)",
+   "lat": 42.751,
+   "lng": -0.234,
+   "url": "https://www.panticosa-formigal.com/bike-park",
+   "note": "Технические спуски в арагонских Пиренеях",
+   "precision": "exact"
+  },
+  {
+   "name": "Irrisarri Land",
+   "region": "Navarra (Igantzi)",
+   "lat": 43.232,
+   "lng": -1.700,
+   "url": "https://irrisarriland.es/",
+   "note": "MTB + zipline + hiking, семейный формат",
+   "precision": "exact"
+  },
+  {
+   "name": "Manzaneda Bike Park",
+   "region": "Ourense (A Pobra de Trives)",
+   "lat": 42.266,
+   "lng": -7.162,
+   "url": "https://www.manzaneda.com/bike-park",
+   "note": "Летние трассы на горнолыжной станции Галисии",
+   "precision": "exact"
+  },
+  {
+   "name": "La Fenasosa Bike Park",
+   "region": "Alicante (Onil)",
+   "lat": 38.634,
+   "lng": -0.669,
+   "url": "https://www.lafenasosabikepark.com/",
+   "note": "Первый частный bike-парк в Испании, трассы всех уровней",
+   "precision": "exact"
+  },
+  {
+   "name": "La Poma Bike Park",
+   "region": "Barcelona (Premià de Dalt)",
+   "lat": 41.500,
+   "lng": 2.360,
+   "url": "https://www.lapomabikepark.com/",
+   "note": "Pump track и freestyle/BMX, европейского уровня",
+   "precision": "exact"
+  },
+  {
+   "name": "Aran Bike Parks (Baqueira)",
+   "region": "Lleida (Val d'Aran)",
+   "lat": 42.700,
+   "lng": 0.796,
+   "url": "https://www.baqueira.com/bike-park",
+   "note": "Enduro и downhill в пиренейской долине",
+   "precision": "exact"
+  },
+  {
+   "name": "BTT Malagón",
+   "region": "Ciudad Real (Malagón)",
+   "lat": 39.170,
+   "lng": -3.860,
+   "url": "https://bttmalagon.com/",
+   "note": "Трассы XC/enduro в Кастилии-Ла-Манча",
+   "precision": "approx"
+  },
+  {
+   "name": "Bike Park Peña Cabarga",
+   "region": "Cantabria",
+   "lat": 43.350,
+   "lng": -3.770,
+   "url": "",
+   "note": "Enduro-тропы на горе Peña Cabarga",
+   "precision": "approx"
+  },
+  {
+   "name": "Alto Campoo Bike",
+   "region": "Cantabria",
+   "lat": 43.033,
+   "lng": -4.400,
+   "url": "https://www.altocampoo.com/",
+   "note": "Bike-парк на горнолыжной станции летом",
+   "precision": "approx"
+  },
+  {
+   "name": "Sierra Espuña Enduro Zone",
+   "region": "Murcia",
+   "lat": 37.867,
+   "lng": -1.570,
+   "url": "",
+   "note": "Зона регулярных enduro-заездов в Мурсии",
+   "precision": "approx"
+  },
+  {
+   "name": "Terrabike Trails / BikePark Marbella",
+   "region": "Málaga (Marbella)",
+   "lat": 36.562,
+   "lng": -4.890,
+   "url": "https://www.terrabiketrails.com/",
+   "note": "Enduro-трассы в Сьерра-Бланка над Марбельей",
+   "precision": "approx"
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+[project]
+name = "spain-map"
+version = "0.1.0"
+description = "Interactive map of Spain with real data layers"
+requires-python = ">=3.11"
+dependencies = [
+    "duckdb>=1.1.0",
+    "requests>=2.31.0",
+    "pdfplumber>=0.11.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",
+]
+
+[tool.uv]
+package = false

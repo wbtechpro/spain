@@ -1,0 +1,752 @@
+{
+ "source": "Informe delitos de odio 2024 — Ministerio del Interior",
+ "source_url": "https://interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/INFORME_Evolucion_delitos_de_odio_2024.pdf",
+ "period": "2024",
+ "metric": "infracciones penales e incidentes de odio (hechos conocidos)",
+ "granularity": "provincia",
+ "count": 52,
+ "legend_min": "2 случаев",
+ "legend_max": "145+ случаев",
+ "legend_sub": "Мин-во внутренних дел · 2024 · 52 провинций",
+ "render_radius": 55,
+ "render_blur": 45,
+ "stats": {
+  "min_count": 1,
+  "max_count": 272,
+  "p5": 2,
+  "p95": 145
+ },
+ "missing_provinces": [],
+ "provinces": [
+  {
+   "ine": "02",
+   "province_ru": "Альбасете",
+   "province_es": "Albacete",
+   "lat": 38.83,
+   "lng": -1.86,
+   "hechos_conocidos": 10
+  },
+  {
+   "ine": "03",
+   "province_ru": "Аликанте",
+   "province_es": "Alicante",
+   "lat": 38.48,
+   "lng": -0.54,
+   "hechos_conocidos": 82
+  },
+  {
+   "ine": "04",
+   "province_ru": "Альмерия",
+   "province_es": "Almería",
+   "lat": 37.16,
+   "lng": -2.33,
+   "hechos_conocidos": 19
+  },
+  {
+   "ine": "01",
+   "province_ru": "Алава",
+   "province_es": "Araba/Álava",
+   "lat": 42.84,
+   "lng": -2.71,
+   "hechos_conocidos": 22
+  },
+  {
+   "ine": "33",
+   "province_ru": "Астурия",
+   "province_es": "Asturias",
+   "lat": 43.35,
+   "lng": -6.0,
+   "hechos_conocidos": 45
+  },
+  {
+   "ine": "05",
+   "province_ru": "Авила",
+   "province_es": "Ávila",
+   "lat": 40.57,
+   "lng": -4.95,
+   "hechos_conocidos": 5
+  },
+  {
+   "ine": "06",
+   "province_ru": "Бадахос",
+   "province_es": "Badajoz",
+   "lat": 38.8,
+   "lng": -6.0,
+   "hechos_conocidos": 7
+  },
+  {
+   "ine": "07",
+   "province_ru": "Балеары",
+   "province_es": "Illes Balears",
+   "lat": 39.5,
+   "lng": 2.8,
+   "hechos_conocidos": 51
+  },
+  {
+   "ine": "08",
+   "province_ru": "Барселона",
+   "province_es": "Barcelona",
+   "lat": 41.6,
+   "lng": 2.0,
+   "hechos_conocidos": 205
+  },
+  {
+   "ine": "48",
+   "province_ru": "Бискайя",
+   "province_es": "Bizkaia",
+   "lat": 43.25,
+   "lng": -2.9,
+   "hechos_conocidos": 122
+  },
+  {
+   "ine": "09",
+   "province_ru": "Бургос",
+   "province_es": "Burgos",
+   "lat": 42.35,
+   "lng": -3.6,
+   "hechos_conocidos": 30
+  },
+  {
+   "ine": "10",
+   "province_ru": "Касерес",
+   "province_es": "Cáceres",
+   "lat": 39.7,
+   "lng": -6.3,
+   "hechos_conocidos": 15
+  },
+  {
+   "ine": "11",
+   "province_ru": "Кадис",
+   "province_es": "Cádiz",
+   "lat": 36.5,
+   "lng": -5.8,
+   "hechos_conocidos": 18
+  },
+  {
+   "ine": "39",
+   "province_ru": "Кантабрия",
+   "province_es": "Cantabria",
+   "lat": 43.2,
+   "lng": -4.03,
+   "hechos_conocidos": 22
+  },
+  {
+   "ine": "12",
+   "province_ru": "Кастельон",
+   "province_es": "Castellón",
+   "lat": 40.08,
+   "lng": -0.11,
+   "hechos_conocidos": 27
+  },
+  {
+   "ine": "13",
+   "province_ru": "Сьюдад-Реаль",
+   "province_es": "Ciudad Real",
+   "lat": 39.0,
+   "lng": -3.9,
+   "hechos_conocidos": 14
+  },
+  {
+   "ine": "14",
+   "province_ru": "Кордова",
+   "province_es": "Córdoba",
+   "lat": 37.9,
+   "lng": -4.85,
+   "hechos_conocidos": 17
+  },
+  {
+   "ine": "15",
+   "province_ru": "Ла-Корунья",
+   "province_es": "A Coruña",
+   "lat": 43.17,
+   "lng": -8.4,
+   "hechos_conocidos": 37
+  },
+  {
+   "ine": "16",
+   "province_ru": "Куэнка",
+   "province_es": "Cuenca",
+   "lat": 40.0,
+   "lng": -2.2,
+   "hechos_conocidos": 4
+  },
+  {
+   "ine": "20",
+   "province_ru": "Гипускоа",
+   "province_es": "Gipuzkoa",
+   "lat": 43.17,
+   "lng": -2.2,
+   "hechos_conocidos": 97
+  },
+  {
+   "ine": "17",
+   "province_ru": "Жирона",
+   "province_es": "Girona",
+   "lat": 42.15,
+   "lng": 2.55,
+   "hechos_conocidos": 33
+  },
+  {
+   "ine": "18",
+   "province_ru": "Гранада",
+   "province_es": "Granada",
+   "lat": 37.3,
+   "lng": -3.1,
+   "hechos_conocidos": 18
+  },
+  {
+   "ine": "19",
+   "province_ru": "Гвадалахара",
+   "province_es": "Guadalajara",
+   "lat": 40.8,
+   "lng": -2.3,
+   "hechos_conocidos": 4
+  },
+  {
+   "ine": "21",
+   "province_ru": "Уэльва",
+   "province_es": "Huelva",
+   "lat": 37.55,
+   "lng": -6.95,
+   "hechos_conocidos": 11
+  },
+  {
+   "ine": "22",
+   "province_ru": "Уэска",
+   "province_es": "Huesca",
+   "lat": 42.2,
+   "lng": -0.1,
+   "hechos_conocidos": 11
+  },
+  {
+   "ine": "23",
+   "province_ru": "Хаэн",
+   "province_es": "Jaén",
+   "lat": 38.0,
+   "lng": -3.5,
+   "hechos_conocidos": 23
+  },
+  {
+   "ine": "24",
+   "province_ru": "Леон",
+   "province_es": "León",
+   "lat": 42.67,
+   "lng": -6.0,
+   "hechos_conocidos": 12
+  },
+  {
+   "ine": "25",
+   "province_ru": "Льейда",
+   "province_es": "Lleida",
+   "lat": 42.0,
+   "lng": 1.0,
+   "hechos_conocidos": 25
+  },
+  {
+   "ine": "27",
+   "province_ru": "Луго",
+   "province_es": "Lugo",
+   "lat": 43.0,
+   "lng": -7.5,
+   "hechos_conocidos": 4
+  },
+  {
+   "ine": "28",
+   "province_ru": "Мадрид",
+   "province_es": "Madrid",
+   "lat": 40.45,
+   "lng": -3.7,
+   "hechos_conocidos": 272
+  },
+  {
+   "ine": "29",
+   "province_ru": "Малага",
+   "province_es": "Málaga",
+   "lat": 36.75,
+   "lng": -4.7,
+   "hechos_conocidos": 43
+  },
+  {
+   "ine": "30",
+   "province_ru": "Мурсия",
+   "province_es": "Murcia",
+   "lat": 38.05,
+   "lng": -1.6,
+   "hechos_conocidos": 48
+  },
+  {
+   "ine": "31",
+   "province_ru": "Наварра",
+   "province_es": "Navarra",
+   "lat": 42.7,
+   "lng": -1.65,
+   "hechos_conocidos": 95
+  },
+  {
+   "ine": "32",
+   "province_ru": "Оренсе",
+   "province_es": "Ourense",
+   "lat": 42.2,
+   "lng": -7.6,
+   "hechos_conocidos": 11
+  },
+  {
+   "ine": "34",
+   "province_ru": "Паленсия",
+   "province_es": "Palencia",
+   "lat": 42.3,
+   "lng": -4.55,
+   "hechos_conocidos": 8
+  },
+  {
+   "ine": "35",
+   "province_ru": "Лас-Пальмас",
+   "province_es": "Las Palmas",
+   "lat": 28.2,
+   "lng": -15.45,
+   "hechos_conocidos": 46
+  },
+  {
+   "ine": "36",
+   "province_ru": "Понтеведра",
+   "province_es": "Pontevedra",
+   "lat": 42.5,
+   "lng": -8.5,
+   "hechos_conocidos": 25
+  },
+  {
+   "ine": "26",
+   "province_ru": "Ла-Риоха",
+   "province_es": "La Rioja",
+   "lat": 42.3,
+   "lng": -2.5,
+   "hechos_conocidos": 13
+  },
+  {
+   "ine": "37",
+   "province_ru": "Саламанка",
+   "province_es": "Salamanca",
+   "lat": 40.8,
+   "lng": -6.0,
+   "hechos_conocidos": 2
+  },
+  {
+   "ine": "38",
+   "province_ru": "Санта-Крус",
+   "province_es": "Santa Cruz de Tenerife",
+   "lat": 28.5,
+   "lng": -16.9,
+   "hechos_conocidos": 32
+  },
+  {
+   "ine": "40",
+   "province_ru": "Сеговия",
+   "province_es": "Segovia",
+   "lat": 41.05,
+   "lng": -4.1,
+   "hechos_conocidos": 6
+  },
+  {
+   "ine": "41",
+   "province_ru": "Севилья",
+   "province_es": "Sevilla",
+   "lat": 37.4,
+   "lng": -5.6,
+   "hechos_conocidos": 74
+  },
+  {
+   "ine": "42",
+   "province_ru": "Сория",
+   "province_es": "Soria",
+   "lat": 41.7,
+   "lng": -2.7,
+   "hechos_conocidos": 1
+  },
+  {
+   "ine": "43",
+   "province_ru": "Таррагона",
+   "province_es": "Tarragona",
+   "lat": 41.2,
+   "lng": 1.1,
+   "hechos_conocidos": 28
+  },
+  {
+   "ine": "44",
+   "province_ru": "Теруэль",
+   "province_es": "Teruel",
+   "lat": 40.6,
+   "lng": -0.8,
+   "hechos_conocidos": 2
+  },
+  {
+   "ine": "45",
+   "province_ru": "Толедо",
+   "province_es": "Toledo",
+   "lat": 39.8,
+   "lng": -4.1,
+   "hechos_conocidos": 31
+  },
+  {
+   "ine": "46",
+   "province_ru": "Валенсия",
+   "province_es": "Valencia",
+   "lat": 39.5,
+   "lng": -0.85,
+   "hechos_conocidos": 145
+  },
+  {
+   "ine": "47",
+   "province_ru": "Вальядолид",
+   "province_es": "Valladolid",
+   "lat": 41.7,
+   "lng": -4.8,
+   "hechos_conocidos": 17
+  },
+  {
+   "ine": "49",
+   "province_ru": "Самора",
+   "province_es": "Zamora",
+   "lat": 41.7,
+   "lng": -6.0,
+   "hechos_conocidos": 12
+  },
+  {
+   "ine": "50",
+   "province_ru": "Сарагоса",
+   "province_es": "Zaragoza",
+   "lat": 41.65,
+   "lng": -0.9,
+   "hechos_conocidos": 39
+  },
+  {
+   "ine": "51",
+   "province_ru": "Сеута",
+   "province_es": "Ceuta",
+   "lat": 35.89,
+   "lng": -5.31,
+   "hechos_conocidos": 7
+  },
+  {
+   "ine": "52",
+   "province_ru": "Мелилья",
+   "province_es": "Melilla",
+   "lat": 35.29,
+   "lng": -2.94,
+   "hechos_conocidos": 7
+  }
+ ],
+ "points": [
+  [
+   38.83,
+   -1.86,
+   0.056,
+   10
+  ],
+  [
+   38.48,
+   -0.54,
+   0.559,
+   82
+  ],
+  [
+   37.16,
+   -2.33,
+   0.119,
+   19
+  ],
+  [
+   42.84,
+   -2.71,
+   0.14,
+   22
+  ],
+  [
+   43.35,
+   -6.0,
+   0.301,
+   45
+  ],
+  [
+   40.57,
+   -4.95,
+   0.021,
+   5
+  ],
+  [
+   38.8,
+   -6.0,
+   0.035,
+   7
+  ],
+  [
+   39.5,
+   2.8,
+   0.343,
+   51
+  ],
+  [
+   41.6,
+   2.0,
+   1.0,
+   205
+  ],
+  [
+   43.25,
+   -2.9,
+   0.839,
+   122
+  ],
+  [
+   42.35,
+   -3.6,
+   0.196,
+   30
+  ],
+  [
+   39.7,
+   -6.3,
+   0.091,
+   15
+  ],
+  [
+   36.5,
+   -5.8,
+   0.112,
+   18
+  ],
+  [
+   43.2,
+   -4.03,
+   0.14,
+   22
+  ],
+  [
+   40.08,
+   -0.11,
+   0.175,
+   27
+  ],
+  [
+   39.0,
+   -3.9,
+   0.084,
+   14
+  ],
+  [
+   37.9,
+   -4.85,
+   0.105,
+   17
+  ],
+  [
+   43.17,
+   -8.4,
+   0.245,
+   37
+  ],
+  [
+   40.0,
+   -2.2,
+   0.014,
+   4
+  ],
+  [
+   43.17,
+   -2.2,
+   0.664,
+   97
+  ],
+  [
+   42.15,
+   2.55,
+   0.217,
+   33
+  ],
+  [
+   37.3,
+   -3.1,
+   0.112,
+   18
+  ],
+  [
+   40.8,
+   -2.3,
+   0.014,
+   4
+  ],
+  [
+   37.55,
+   -6.95,
+   0.063,
+   11
+  ],
+  [
+   42.2,
+   -0.1,
+   0.063,
+   11
+  ],
+  [
+   38.0,
+   -3.5,
+   0.147,
+   23
+  ],
+  [
+   42.67,
+   -6.0,
+   0.07,
+   12
+  ],
+  [
+   42.0,
+   1.0,
+   0.161,
+   25
+  ],
+  [
+   43.0,
+   -7.5,
+   0.014,
+   4
+  ],
+  [
+   40.45,
+   -3.7,
+   1.0,
+   272
+  ],
+  [
+   36.75,
+   -4.7,
+   0.287,
+   43
+  ],
+  [
+   38.05,
+   -1.6,
+   0.322,
+   48
+  ],
+  [
+   42.7,
+   -1.65,
+   0.65,
+   95
+  ],
+  [
+   42.2,
+   -7.6,
+   0.063,
+   11
+  ],
+  [
+   42.3,
+   -4.55,
+   0.042,
+   8
+  ],
+  [
+   28.2,
+   -15.45,
+   0.308,
+   46
+  ],
+  [
+   42.5,
+   -8.5,
+   0.161,
+   25
+  ],
+  [
+   42.3,
+   -2.5,
+   0.077,
+   13
+  ],
+  [
+   40.8,
+   -6.0,
+   0.0,
+   2
+  ],
+  [
+   28.5,
+   -16.9,
+   0.21,
+   32
+  ],
+  [
+   41.05,
+   -4.1,
+   0.028,
+   6
+  ],
+  [
+   37.4,
+   -5.6,
+   0.503,
+   74
+  ],
+  [
+   41.7,
+   -2.7,
+   0.0,
+   1
+  ],
+  [
+   41.2,
+   1.1,
+   0.182,
+   28
+  ],
+  [
+   40.6,
+   -0.8,
+   0.0,
+   2
+  ],
+  [
+   39.8,
+   -4.1,
+   0.203,
+   31
+  ],
+  [
+   39.5,
+   -0.85,
+   1.0,
+   145
+  ],
+  [
+   41.7,
+   -4.8,
+   0.105,
+   17
+  ],
+  [
+   41.7,
+   -6.0,
+   0.07,
+   12
+  ],
+  [
+   41.65,
+   -0.9,
+   0.259,
+   39
+  ],
+  [
+   35.89,
+   -5.31,
+   0.035,
+   7
+  ],
+  [
+   35.29,
+   -2.94,
+   0.035,
+   7
+  ]
+ ]
+}
