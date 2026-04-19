@@ -277,9 +277,10 @@
   /* ===== Spanish language school chips ===== */
   .nrh-card .sp-kind-eoi       { background: #e1f5ef; color: #117864; font-weight: 600; }
   .nrh-card .sp-kind-cervantes { background: #fef0e5; color: #c0651c; font-weight: 600; }
-  .nrh-card .sp-kind-academia  { background: #e4eefc; color: #1e4a86; }
-  .nrh-card .sp-kind-uni       { background: #f3e9f8; color: #6c3483; }
-  .nrh-card .sp-kind-other     { background: #ececec; color: #555; }
+  .nrh-card .sp-kind-uni       { background: #f3e9f8; color: #6c3483; font-weight: 600; }
+  .nrh-card .sp-kind-ele       { background: #e8f5e9; color: #1e6b32; font-weight: 600; }
+  .nrh-card .sp-kind-coof      { background: #fff8e1; color: #8a6d10; }
+  .nrh-card .sp-kind-generic   { background: #eef1f5; color: #5d6d7e; }
 
   /* ===== Флажки ===== */
   .btn {
@@ -714,22 +715,20 @@ function hippoPopup(f) {
 }
 
 // ================= SPANISH LANGUAGE SCHOOL =================
-// Классификатор по названию. Главное различие для релоканта —
-// EOI (государственная, доступная) vs частная академия.
-function spanishKind(name) {
-  const n = (name || '').toLowerCase();
-  if (/escuela oficial de idiomas|\beoi\b/.test(n))
-    return { label: '🏛 EOI гос.',       cls: 'sp-kind-eoi' };
-  if (/cervantes/.test(n))
-    return { label: '🎓 Cervantes',      cls: 'sp-kind-cervantes' };
-  if (/universidad|universitat|university/.test(n))
-    return { label: '🎓 университет',    cls: 'sp-kind-uni' };
-  if (/\bacademia\b|\bacadèmia\b|\bacademy\b/.test(n))
-    return { label: '🏫 академия',       cls: 'sp-kind-academia' };
-  if (/euskaltegi/.test(n))
-    return { label: '🟢 euskaltegi',     cls: 'sp-kind-other' };
-  return null;
-}
+// Классификатор сидит в etl/to_parquet.py:classify_spanish — там же фильтруется
+// мусор (английские/прочие иноязычные академии). Сюда приходит только
+// релевантное: EOI, Cervantes, университет, ELE-академия, соофиц. язык,
+// либо "generic" (многопрофильный центр идиомов без привязки к языку).
+const SPANISH_KIND_TAGS = {
+  eoi:        { label: '🏛 EOI гос.',          cls: 'sp-kind-eoi' },
+  cervantes:  { label: '🎓 Cervantes',         cls: 'sp-kind-cervantes' },
+  university: { label: '🎓 университет',       cls: 'sp-kind-uni' },
+  ele:        { label: '🇪🇸 испанский (ELE)',   cls: 'sp-kind-ele' },
+  euskaltegi: { label: '🟡 баскский',          cls: 'sp-kind-coof' },
+  catalan:    { label: '🟡 каталанский',       cls: 'sp-kind-coof' },
+  galician:   { label: '🟡 галисийский',       cls: 'sp-kind-coof' },
+  generic:    { label: '🌐 многопрофильный',   cls: 'sp-kind-generic' },
+};
 
 function spanishPopup(f) {
   const name = esc(f.name || '(без названия)');
@@ -737,9 +736,9 @@ function spanishPopup(f) {
     ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
     : `<span class="nrh-name plain">${name}</span>`;
 
-  const kind = spanishKind(f.name);
-  const chips = kind
-    ? `<div class="nrh-chips"><span class="nrh-chip ${kind.cls}">${kind.label}</span></div>`
+  const meta = SPANISH_KIND_TAGS[f.kind];
+  const chips = meta
+    ? `<div class="nrh-chips"><span class="nrh-chip ${meta.cls}">${meta.label}</span></div>`
     : '';
 
   return `<div class="nrh-card">${nameHtml}${chips}</div>`;

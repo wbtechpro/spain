@@ -15,6 +15,7 @@ Idempotent. Safe to re-run. Skips layers whose source file is missing or empty.
 from __future__ import annotations
 
 import json
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -49,6 +50,60 @@ HEATMAP_LAYERS: dict[str, str] = {
 POINT_COLUMNS = ("name", "city", "address", "website", "phone", "kind")
 
 
+# ---------- spanish-language layer: classify & filter ----------
+# Источник `osm_spanish.json` — это всё `amenity=language_school` по Испании.
+# Сырьё на 76% — академии английского и прочих ин.языков, не релевантные для
+# релоканта, ищущего испанский. Здесь оставляем только то, что учит испанскому
+# (или соофициальным), и проставляем `kind` — короткий код для чипа на карточке.
+_SP_EOI       = re.compile(r"escuela oficial de idiomas|escola oficial de idiomas|hizkuntza eskola ofiziala|\beoi\b")
+_SP_EUSK      = re.compile(r"euskaltegi|euskaltegui")
+_SP_CATALAN   = re.compile(r"consorci.*ling|\bcpnl\b|\bcnl\b|catal[aà]")
+_SP_GALICIAN  = re.compile(r"galego|galician")
+_SP_DROP      = re.compile(
+    r"english|ingl[eé]s|british|\bamerican\b|cambridge|oxford|wall street|"
+    r"kumon|berlitz|\bwsi\b|international house|kings.*school|trinity college|"
+    r"helen doron|hellen doron|kids\s*&?\s*us|kids\.us|teens\s*&?\s*us|"
+    r"alliance fran|fran[cç]ais|french|goethe|deutsch|alem[aá]n|"
+    r"italiano|italian|chinese|chino|mandarin|confucius|algorithmics|"
+    r"direct language|one to one|talk talk|bristol|hamilton idiomas|"
+    r"royal school|royal college|queen.?s|robinson|number 16|"
+    r"your world|your english|english wonderland|english connection|"
+    r"englisch tutor|anglia|oakland|william.?s school|williams? academy|"
+    r"\bboston\b|educa[cs]hild|masterclass|aprending|maxus formaci|"
+    r"novalinguae|second language acquisition|feedback institute|"
+    r"a casa das linguas|escola de l[ií]nguas anglophil|"
+    r"escuela de ingl[eé]s|escola d.?angl[eé]s|the unique english|"
+    r"centro de apoio educativo|interlanguage|abc school"
+)
+_SP_CERVANTES = re.compile(r"instituto cervantes|cervantes")
+_SP_UNI       = re.compile(r"universidad|universitat|university|\buned\b")
+_SP_ELE       = re.compile(r"espa[ñn]ol|spanish|\bele\b|castellano")
+# "Многопрофильный" языковой центр — оставляем только если в имени явно указан
+# идиоматический маркер на испанском/каталанском/галисийском/баскском.
+# Чисто английское "Academy"/"Coulsdon Academy" без слова "idiomas" → отброс.
+_SP_GENERIC   = re.compile(
+    r"\bidiomas?\b|\blenguas?\b|\bl[ií]nguas?\b|hizkuntza|lleng[uü]es"
+)
+
+
+def classify_spanish(name: str | None) -> str | None:
+    """Return short kind code for the spanish layer, or None to drop the row."""
+    n = (name or "").lower().strip()
+    if not n:
+        return None
+    # Соофициальные/публичные ловим до DROP — у euskaltegi в названии бывает "english".
+    if _SP_EOI.search(n):       return "eoi"
+    if _SP_EUSK.search(n):      return "euskaltegi"
+    if _SP_CATALAN.search(n):   return "catalan"
+    if _SP_GALICIAN.search(n):  return "galician"
+    if _SP_DROP.search(n):      return None
+    if _SP_CERVANTES.search(n): return "cervantes"
+    if _SP_UNI.search(n):       return "university"
+    if _SP_ELE.search(n):       return "ele"
+    if _SP_GENERIC.search(n):   return "generic"
+    return None
+
+
 def _lon(feat: dict) -> float | None:
     v = feat.get("lng", feat.get("lon"))
     return float(v) if v is not None else None
@@ -71,6 +126,11 @@ def convert_points(layer_id: str, src: Path, con: duckdb.DuckDBPyConnection) -> 
         if lat is None or lon is None:
             continue
         promoted = {k: f.get(k) for k in POINT_COLUMNS}
+        if layer_id == "spanish":
+            kind = classify_spanish(promoted.get("name"))
+            if kind is None:
+                continue
+            promoted["kind"] = kind
         extras = {k: v for k, v in f.items() if k not in (*POINT_COLUMNS, "lat", "lng", "lon")}
         rows.append({
             "lat": lat,
