@@ -19,7 +19,8 @@ MAX_RESPONSE_POINTS = 5000
 CACHE_SECONDS = 60
 
 # Viewport-area cap (deg²). Requests spanning more are rejected — the world isn't relevant.
-MAX_BBOX_AREA_DEG2 = 20.0 * 20.0  # ~covers Iberia + margin
+# 40°×40° covers Iberia + Europe-wide overview on wide monitors at zoom 6.
+MAX_BBOX_AREA_DEG2 = 40.0 * 40.0
 
 
 # Cluster cell size (degrees) per Leaflet zoom level. Tuned so ~64 clusters fit a viewport.
