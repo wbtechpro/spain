@@ -467,7 +467,7 @@
 
 <script>
 // ================= КАРТА =================
-const map = L.map('map', { zoomControl: true }).setView([40.2, -3.7], 6);
+const map = L.map('map', { zoomControl: true }).setView([40.0, -3.7], 7);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap',
@@ -483,19 +483,21 @@ map.on('zoomend', updateZoomLevel);
 updateZoomLevel();
 
 // ================= КАТЕГОРИИ ТОЧЕК =================
-// source: 'osm' = подтягиваем через Overpass API; null = данных пока нет
+// Данные отдаёт бэкенд (/api/points?layer=X&bbox=&zoom=). `available` — из /api/meta.
 const POINT_CATEGORIES = {
-  schools:    { label: 'Школы для детей',                      color: '#e74c3c', icon: '🎒', source: 'json', url: 'data/osm_schools.json' },
-  neae:       { label: 'Школы с поддержкой NEAE',              color: '#2980b9', icon: '🧩', source: 'json', url: 'data/schools_neae.json' },
-  hospitals:  { label: 'Больницы',                             color: '#c2185b', icon: '🏥', source: 'json', url: 'data/osm_hospitals.json' },
-  slp:        { label: 'Логопеды / речевая терапия',           color: '#1abc9c', icon: '🗣️', source: null },
-  spanish:    { label: 'Центры испанского языка',              color: '#27ae60', icon: '📚', source: 'json', url: 'data/osm_spanish.json' },
-  yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘', source: 'json', url: 'data/osm_yoga.json' },
-  hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴', source: 'json', url: 'data/hippo.json' },
-  enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵', source: 'json', url: 'data/enduro.json' },
-  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#9b59b6', icon: '🧠', source: 'json', url: 'data/neurorehab.json' },
-  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬', source: 'json', url: 'data/speech_ru.json' }
+  schools:    { label: 'Школы для детей',                      color: '#e74c3c', icon: '🎒' },
+  neae:       { label: 'Школы с поддержкой NEAE',              color: '#2980b9', icon: '🧩' },
+  hospitals:  { label: 'Больницы',                             color: '#c2185b', icon: '🏥' },
+  slp:        { label: 'Логопеды / речевая терапия',           color: '#1abc9c', icon: '🗣️' },
+  spanish:    { label: 'Центры испанского языка',              color: '#27ae60', icon: '📚' },
+  yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘' },
+  hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴' },
+  enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵' },
+  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#9b59b6', icon: '🧠' },
+  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬' }
 };
+// Доступность слоя (есть ли parquet на бэкенде) — заполняется из /api/meta.
+const layerAvailable = {};
 
 // ================= СЛОИ ТОЧЕК =================
 function hexToRgb(hex) {
@@ -507,31 +509,25 @@ function hexToRgb(hex) {
   };
 }
 
-function makeClusterIconFn(color) {
+function clusterIcon(color, count) {
   const { r, g, b } = hexToRgb(color);
   const outer = `rgba(${r},${g},${b},0.35)`;
   const inner = `rgba(${r},${g},${b},0.92)`;
-  return function (cluster) {
-    const count = cluster.getChildCount();
-    const size  = count < 10 ? 34 : count < 100 ? 40 : 48;
-    const inSz  = size - 12;
-    const fontSz = count < 100 ? 12 : 11;
-    return L.divIcon({
-      html: `<div class="cc-outer" style="background:${outer};"><div class="cc-inner" style="background:${inner};width:${inSz}px;height:${inSz}px;font-size:${fontSz}px;">${count}</div></div>`,
-      className: 'cat-cluster',
-      iconSize: L.point(size, size)
-    });
-  };
+  const size  = count < 10 ? 34 : count < 100 ? 40 : count < 1000 ? 48 : 54;
+  const inSz  = size - 12;
+  const fontSz = count < 100 ? 12 : count < 1000 ? 11 : 10;
+  return L.divIcon({
+    html: `<div class="cc-outer" style="background:${outer};"><div class="cc-inner" style="background:${inner};width:${inSz}px;height:${inSz}px;font-size:${fontSz}px;">${count}</div></div>`,
+    className: 'cat-cluster',
+    iconSize: L.point(size, size)
+  });
 }
 
+// Кластеризация — серверная: бэкенд смотрит на bbox+zoom и решает, отдавать сырые точки или
+// группы [{lat,lng,count}]. Поэтому клиенту достаточно обычного layerGroup — без markercluster.
 const pointLayers = {};
 Object.keys(POINT_CATEGORIES).forEach(cat => {
-  pointLayers[cat] = L.markerClusterGroup({
-    maxClusterRadius: 45,
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    iconCreateFunction: makeClusterIconFn(POINT_CATEGORIES[cat].color)
-  });
+  pointLayers[cat] = L.layerGroup();
 });
 
 function makeIcon(cat, f) {
@@ -549,14 +545,36 @@ function makeIcon(cat, f) {
   });
 }
 
-const loadedCats = new Set();
+// ================= API-КЛИЕНТ =================
+// Один AbortController на «поколение» запросов: при каждом moveend предыдущие запросы отменяем.
+let apiGen = 0;
+const apiCtrl = new Map();   // key='counts' | 'points:<cat>' | 'heatmap:<key>' → AbortController
 
-async function fetchJsonPoints(cat) {
-  const def = POINT_CATEGORIES[cat];
-  const res = await fetch(def.url);
+function abortApi(key) {
+  const prev = apiCtrl.get(key);
+  if (prev) { try { prev.abort(); } catch {} }
+  const c = new AbortController();
+  apiCtrl.set(key, c);
+  return c;
+}
+
+function bboxStr() {
+  const b = map.getBounds();
+  return `${b.getWest()},${b.getSouth()},${b.getEast()},${b.getNorth()}`;
+}
+
+async function apiGet(path, key) {
+  const c = abortApi(key);
+  const res = await fetch(path, { signal: c.signal });
   if (!res.ok) throw new Error('HTTP ' + res.status);
-  const data = await res.json();
-  return data.features || [];
+  return res.json();
+}
+
+function formatCount(n) {
+  if (n == null) return '';
+  if (n < 1000) return `(${n})`;
+  if (n < 10000) return `(${(n/1000).toFixed(1)}k)`;
+  return `(${Math.round(n/1000)}k)`;
 }
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -817,40 +835,53 @@ function plainPopup(cat, f) {
     `</div>`;
 }
 
-function renderStaticPoints(cat, features) {
-  const layer = pointLayers[cat];
-  layer.clearLayers();
-  const markers = features.map(f => {
-    let popup;
-    if (cat === 'neurorehab')    popup = neurorehabPopup(f);
-    else if (cat === 'speech')   popup = speechPopup(f);
-    else if (cat === 'hippo')    popup = hippoPopup(f);
-    else if (cat === 'neae')     popup = neaePopup(f);
-    else if (cat === 'spanish')  popup = spanishPopup(f);
-    else                         popup = plainPopup(cat, f);
-    const m = L.marker([f.lat, f.lng], { icon: makeIcon(cat, f) });
-    m.bindPopup(popup);
-    return m;
-  });
-  layer.addLayers(markers);
-  return markers.length;
+function popupFor(cat, f) {
+  if (cat === 'neurorehab') return neurorehabPopup(f);
+  if (cat === 'speech')     return speechPopup(f);
+  if (cat === 'hippo')      return hippoPopup(f);
+  if (cat === 'neae')       return neaePopup(f);
+  if (cat === 'spanish')    return spanishPopup(f);
+  return plainPopup(cat, f);
 }
 
-async function loadCategory(cat) {
+function renderApiPoints(cat, payload) {
+  const layer = pointLayers[cat];
+  layer.clearLayers();
+  const color = POINT_CATEGORIES[cat].color;
+  if (payload.clustered) {
+    // Серверные кластеры: по одному маркеру-кружку на группу с числом внутри.
+    payload.points.forEach(c => {
+      const m = L.marker([c.lat, c.lng], { icon: clusterIcon(color, c.count) });
+      m.on('click', () => {
+        // Клик по кластеру — зумим внутрь, новый moveend вытянет более детальные данные.
+        map.flyTo([c.lat, c.lng], Math.min(map.getZoom() + 2, 15), { duration: 0.4 });
+      });
+      layer.addLayer(m);
+    });
+  } else {
+    payload.points.forEach(f => {
+      const m = L.marker([f.lat, f.lng], { icon: makeIcon(cat, f) });
+      m.bindPopup(popupFor(cat, f));
+      layer.addLayer(m);
+    });
+  }
+}
+
+// Обновить один слой точек под текущий viewport. Возвращает total для статус-бейджа.
+async function refreshPointLayer(cat) {
   const statusEl = document.querySelector(`.status[data-status="${cat}"]`);
-  statusEl.textContent = '...';
-  statusEl.className = 'status loading';
+  if (statusEl) { statusEl.textContent = '...'; statusEl.className = 'status loading'; }
   try {
-    const features = await fetchJsonPoints(cat);
-    const count = renderStaticPoints(cat, features);
-    statusEl.textContent = `(${count})`;
-    statusEl.className = 'status';
-    loadedCats.add(cat);
+    const url = `/api/points?layer=${encodeURIComponent(cat)}&bbox=${bboxStr()}&zoom=${map.getZoom()}`;
+    const data = await apiGet(url, `points:${cat}`);
+    renderApiPoints(cat, data);
+    if (statusEl) { statusEl.textContent = formatCount(data.total); statusEl.className = 'status'; }
+    return data.total;
   } catch (e) {
-    console.error('load failed for', cat, e);
-    statusEl.textContent = 'ошибка';
-    statusEl.className = 'status error';
-    statusEl.title = e.message || '';
+    if (e.name === 'AbortError') return null;
+    console.error('points load failed for', cat, e);
+    if (statusEl) { statusEl.textContent = 'ошибка'; statusEl.className = 'status error'; statusEl.title = e.message || ''; }
+    return null;
   }
 }
 
@@ -919,10 +950,7 @@ async function loadProvincesGeo() {
 
 async function loadHeatData(key) {
   if (dataCache[key]) return dataCache[key];
-  const def = HEAT_DEFS[key];
-  const res = await fetch(def.url);
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const data = await res.json();
+  const data = await apiGet(`/api/heatmap?layer=${encodeURIComponent(key)}`, `heatmap:${key}`);
   dataCache[key] = data;
   heatMeta[key] = {
     min: data.legend_min ?? '',
@@ -1200,13 +1228,14 @@ const POINT_SUBGROUPS = [
 
 function makePointRow(cat) {
   const c = POINT_CATEGORIES[cat];
-  const unavailable = !c.source;
+  // Availability проставляется позже, когда вернётся /api/meta (см. applyMeta).
   const row = document.createElement('div');
-  row.className = 'row' + (unavailable ? ' unavailable' : '');
+  row.className = 'row';
+  row.dataset.row = cat;
   row.innerHTML = `
-    <input type="checkbox" data-point="${cat}" ${unavailable ? 'disabled' : ''}>
+    <input type="checkbox" data-point="${cat}">
     <span class="dot" style="background:${c.color}"></span>
-    <label>${c.icon} ${c.label}${unavailable ? ' <span class="tag-no-data">нет данных</span>' : ''}</label>
+    <label>${c.icon} ${c.label}</label>
     <span class="status" data-status="${cat}"></span>
   `;
   return row;
@@ -1249,12 +1278,13 @@ heatContainer.appendChild(offRow);
 
 Object.keys(HEAT_DEFS).forEach(key => {
   const h = HEAT_DEFS[key];
-  const unavailable = !h.source;
   const row = document.createElement('div');
-  row.className = 'row' + (unavailable ? ' unavailable' : '');
+  row.className = 'row';
+  row.dataset.row = key;
   row.innerHTML = `
-    <input type="radio" name="heat" data-heat="${key}" ${unavailable ? 'disabled' : ''}>
-    <label>${h.label}${unavailable ? ' <span class="tag-no-data">нет данных</span>' : ''}</label>
+    <input type="radio" name="heat" data-heat="${key}">
+    <label>${h.label}</label>
+    <span class="status" data-status-heat="${key}"></span>
   `;
   heatContainer.appendChild(row);
 });
@@ -1262,15 +1292,22 @@ Object.keys(HEAT_DEFS).forEach(key => {
 // ================= ОБРАБОТЧИКИ =================
 const bigLayers = { airports: airportLayer, ski: skiLayer, rail: railLayer };
 
+// Какие point-слои пользователь включил (чекбоксы). Используется moveend-обходом для
+// рефреша данных под текущий viewport.
+const enabledPointCats = new Set();
+
 pointContainer.addEventListener('change', async e => {
   const cat = e.target.dataset.point;
   const bigKey = e.target.dataset.big;
   if (cat) {
     if (e.target.checked) {
+      enabledPointCats.add(cat);
       pointLayers[cat].addTo(map);
-      if (!loadedCats.has(cat)) await loadCategory(cat);
+      await refreshPointLayer(cat);
     } else {
+      enabledPointCats.delete(cat);
       map.removeLayer(pointLayers[cat]);
+      pointLayers[cat].clearLayers();
     }
   } else if (bigKey) {
     if (e.target.checked) {
@@ -1485,9 +1522,84 @@ map.on('click', e => {
 flags.forEach(addFlagToMap);
 renderFlagList();
 
+// ================= VIEWPORT-ПОДГРУЗКА =================
+// Главный цикл: на каждый moveend (пан/зум) тянем /api/counts → подписываем все бейджи, и
+// параллельно обновляем включённые точечные слои. AbortController гарантирует, что
+// устаревший ответ не перезапишет свежий (если пользователь дёргает карту быстро).
+
+function debounce(fn, ms) {
+  let t = null;
+  return (...args) => {
+    if (t) clearTimeout(t);
+    t = setTimeout(() => { t = null; fn(...args); }, ms);
+  };
+}
+
+async function refreshCounts() {
+  try {
+    const data = await apiGet(`/api/counts?bbox=${bboxStr()}`, 'counts');
+    for (const [cat, n] of Object.entries(data.counts)) {
+      const pointEl = document.querySelector(`.status[data-status="${cat}"]`);
+      if (pointEl && !pointEl.classList.contains('loading')) {
+        pointEl.textContent = formatCount(n);
+        pointEl.className = 'status';
+      }
+      const heatEl = document.querySelector(`.status[data-status-heat="${cat}"]`);
+      if (heatEl) {
+        heatEl.textContent = formatCount(n);
+        heatEl.className = 'status';
+      }
+    }
+  } catch (e) {
+    if (e.name !== 'AbortError') console.error('counts failed', e);
+  }
+}
+
+async function refreshEnabledLayers() {
+  await Promise.all([...enabledPointCats].map(cat => refreshPointLayer(cat)));
+}
+
+const onViewportChange = debounce(() => {
+  apiGen++;
+  refreshCounts();
+  refreshEnabledLayers();
+}, 300);
+
+map.on('moveend', onViewportChange);
+
+// ================= /api/meta + START =================
+async function applyMeta() {
+  try {
+    const meta = await fetch('/api/meta').then(r => r.json());
+    for (const l of meta.layers) {
+      layerAvailable[l.id] = !!l.available;
+      // Зачеркнуть строку, если слой отключён (нет данных или 0 точек).
+      const row = document.querySelector(`.row[data-row="${l.id}"]`);
+      if (!row) continue;
+      if (!l.available) {
+        row.classList.add('unavailable');
+        const input = row.querySelector('input');
+        if (input) input.disabled = true;
+        const label = row.querySelector('label');
+        if (label && !label.querySelector('.tag-no-data')) {
+          label.insertAdjacentHTML('beforeend', ' <span class="tag-no-data">нет данных</span>');
+        }
+      }
+    }
+    updateMasterState();
+  } catch (e) {
+    console.error('meta failed', e);
+  }
+}
+
+applyMeta().then(() => {
+  // Первый рендер счётчиков — как только DOM готов.
+  onViewportChange();
+});
+
 // ================= СТАРТОВОЕ СОСТОЯНИЕ =================
 // «Крупные объекты» по умолчанию выключены — пользователь включает нужное сам.
-// OSM-слои не включаем автоматически — при zoom 6 они таймаутят.
+// Точечные слои при включении автоматически подгружаются под текущий viewport.
 </script>
 </body>
 </html>

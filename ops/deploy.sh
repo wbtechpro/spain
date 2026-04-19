@@ -8,6 +8,9 @@ APP_DIR="/opt/spain-map"
 FRONT_DIR="/var/www/spain-map"
 UV="/root/.local/bin/uv"
 
+# 0. git trusts the caddy-owned tree (deploy runs as root)
+git config --global --add safe.directory "$APP_DIR"
+
 # 1. pull repo (clone on first run)
 if [[ ! -d "$APP_DIR/.git" ]]; then
     git clone "$REPO_URL" "$APP_DIR"

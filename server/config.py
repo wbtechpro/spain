@@ -30,6 +30,16 @@ def cluster_cell_deg(zoom: int) -> float:
     return max(0.008, 40.0 / (2 ** zoom))
 
 
+# Source JSON filenames for heatmap layers (served as-is via /api/heatmap, since provinces[]
+# and render hints are easier to keep in the original shape).
+HEATMAP_JSON_FILES: dict[str, str] = {
+    "internet_speed": "internet_speed.json",
+    "rent_cost": "rent_cost.json",
+    "hate_crimes": "hate_crimes.json",
+    "power_outages": "power_outages.json",
+}
+
+
 # Layer metadata — exposed via /api/meta. zoom_min: below this, we just return cluster counts (no raw).
 LAYER_CATALOGUE: dict[str, dict] = {
     # points

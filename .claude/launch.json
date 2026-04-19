@@ -3,9 +3,22 @@
   "configurations": [
     {
       "name": "map",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "serve", "-l", "5173", "."],
-      "port": 5173
+      "runtimeExecutable": "/Users/cyrildubson/Desktop/spain-map/server/.venv/bin/uvicorn",
+      "runtimeArgs": [
+        "server.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5173",
+        "--log-level",
+        "warning"
+      ],
+      "port": 5173,
+      "env": {
+        "SPAIN_MAP_STATIC": "/Users/cyrildubson/Desktop/spain-map",
+        "SPAIN_MAP_DATA": "/Users/cyrildubson/Desktop/spain-map/data",
+        "PYTHONPATH": "/Users/cyrildubson/Desktop/spain-map"
+      }
     }
   ]
 }

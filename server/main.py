@@ -15,8 +15,12 @@ Response shape for /api/points:
 """
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from . import config, storage
 
@@ -71,14 +75,11 @@ def meta() -> JSONResponse:
 
 @app.get("/api/counts")
 def counts(bbox: str = Query(..., description="west,south,east,north")) -> JSONResponse:
-    """Per-layer counts for current viewport. Cheap: single query per layer, COUNT only."""
+    """Per-layer counts for current viewport. Two multi-file queries (points + heatmap)."""
     w, s, e, n = _parse_bbox(bbox)
-    out: dict[str, int] = {}
-    for lid, meta in config.LAYER_CATALOGUE.items():
-        if meta["type"] == "points":
-            out[lid] = storage.count_points_in_bbox(lid, w, s, e, n)
-        else:
-            out[lid] = storage.count_heatmap_in_bbox(lid, w, s, e, n)
+    raw = storage.counts_all_in_bbox(w, s, e, n)
+    # normalize: every catalogue layer gets an entry (0 if no parquet / no points in bbox)
+    out = {lid: int(raw.get(lid, 0)) for lid in config.LAYER_CATALOGUE}
     return JSONResponse({"bbox": [w, s, e, n], "counts": out}, headers=_cache_headers())
 
 
@@ -116,25 +117,29 @@ def points(
 
 
 @app.get("/api/heatmap")
-def heatmap(
-    layer: str,
-    bbox: str = Query(..., description="west,south,east,north"),
-    limit: int = Query(config.MAX_RESPONSE_POINTS, ge=1, le=config.MAX_RESPONSE_POINTS),
-) -> JSONResponse:
-    """Returns [lat, lon, weight, value] cells within viewport plus layer metadata."""
+def heatmap(layer: str) -> JSONResponse:
+    """
+    Heatmap layers are small (≤5k cells) and need provinces[] + legend metadata for choropleth
+    rendering. We serve the original JSON untouched — simpler than reconstructing from parquet.
+    """
     meta = config.LAYER_CATALOGUE.get(layer)
     if not meta or meta["type"] != "heatmap":
         raise HTTPException(404, f"unknown heatmap layer '{layer}'")
-    w, s, e, n = _parse_bbox(bbox)
-    cells = storage.fetch_heatmap_in_bbox(layer, w, s, e, n, limit)
-    total = storage.count_heatmap_in_bbox(layer, w, s, e, n)
-    return JSONResponse(
-        {
-            "layer": layer,
-            "bbox": [w, s, e, n],
-            "total": total,
-            "points": cells,
-            "meta": storage.heatmap_meta(layer),
-        },
-        headers=_cache_headers(),
-    )
+    filename = config.HEATMAP_JSON_FILES.get(layer)
+    if not filename:
+        raise HTTPException(404, f"no source file mapped for '{layer}'")
+    path = config.DATA_DIR / filename
+    if not path.exists():
+        raise HTTPException(404, f"source file {filename} not found")
+    import json as _json
+    payload = _json.loads(path.read_text(encoding="utf-8"))
+    return JSONResponse(payload, headers=_cache_headers(300))
+
+
+# Optional static mount for dev: when SPAIN_MAP_STATIC is set to a directory containing
+# index.html, FastAPI also serves the frontend so dev == prod (no separate Caddy needed).
+# In production Caddy handles static files; this path stays unused. Must be declared LAST —
+# a root-mount catches any path not already matched by an /api/* route above.
+_static_dir = os.environ.get("SPAIN_MAP_STATIC")
+if _static_dir and Path(_static_dir).is_dir():
+    app.mount("/", StaticFiles(directory=_static_dir, html=True), name="static")

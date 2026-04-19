@@ -68,32 +68,41 @@ def count_points_in_bbox(layer: str, w: float, s: float, e: float, n: float) -> 
 def fetch_points_in_bbox(
     layer: str, w: float, s: float, e: float, n: float, limit: int
 ) -> list[dict]:
-    """Return raw point rows for a bbox, capped at `limit`."""
+    """Return raw point rows for a bbox. `lng` key (not `lon`) + merged props_json."""
     path = points_parquet(layer)
     if path is None:
         return []
     rows = _cursor().execute(
         """
-        SELECT lat, lon, name, city, address, website, phone, kind
+        SELECT lat, lon, name, city, address, website, phone, kind, props_json
         FROM read_parquet(?)
         WHERE lat BETWEEN ? AND ? AND lon BETWEEN ? AND ?
         LIMIT ?
         """,
         [str(path), s, n, w, e, limit],
     ).fetchall()
-    return [
-        {
-            "lat": r[0],
-            "lon": r[1],
-            "name": r[2],
-            "city": r[3],
-            "address": r[4],
-            "website": r[5],
-            "phone": r[6],
-            "kind": r[7],
+    out: list[dict] = []
+    for lat, lon, name, city, address, website, phone, kind, props_json in rows:
+        d = {
+            "lat": lat,
+            "lng": lon,
+            "name": name,
+            "city": city,
+            "address": address,
+            "website": website,
+            "phone": phone,
+            "kind": kind,
         }
-        for r in rows
-    ]
+        if props_json:
+            try:
+                extras = json.loads(props_json)
+                for k, v in extras.items():
+                    if k not in d or d[k] is None:
+                        d[k] = v
+            except (json.JSONDecodeError, TypeError):
+                pass
+        out.append(d)
+    return out
 
 
 def cluster_points_in_bbox(
@@ -114,7 +123,7 @@ def cluster_points_in_bbox(
         """,
         [str(path), s, n, w, e, cell_deg, cell_deg, limit],
     ).fetchall()
-    return [{"lat": r[0], "lon": r[1], "count": int(r[2])} for r in rows]
+    return [{"lat": r[0], "lng": r[1], "count": int(r[2])} for r in rows]
 
 
 def fetch_heatmap_in_bbox(
@@ -145,3 +154,33 @@ def count_heatmap_in_bbox(layer: str, w: float, s: float, e: float, n: float) ->
         [str(path), s, n, w, e],
     ).fetchone()
     return int(row[0]) if row else 0
+
+
+def counts_all_in_bbox(w: float, s: float, e: float, n: float) -> dict[str, int]:
+    """
+    One-shot: scan every parquet under parquet/{points,heatmap} with a single query each,
+    grouping by filename. Much faster than 14 sequential COUNTs.
+    """
+    out: dict[str, int] = {}
+    for folder in (config.PARQUET_POINTS, config.PARQUET_HEATMAP):
+        if not folder.exists():
+            continue
+        glob = str(folder / "*.parquet")
+        try:
+            rows = _cursor().execute(
+                """
+                SELECT
+                    regexp_extract(filename, '([^/]+)\\.parquet$', 1) AS lid,
+                    count(*) AS n
+                FROM read_parquet(?, filename = true)
+                WHERE lat BETWEEN ? AND ? AND lon BETWEEN ? AND ?
+                GROUP BY lid
+                """,
+                [glob, s, n, w, e],
+            ).fetchall()
+        except duckdb.Error:
+            # folder empty or no matching files — fall through with zeros
+            continue
+        for lid, cnt in rows:
+            out[lid] = int(cnt)
+    return out
