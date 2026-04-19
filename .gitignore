@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .DS_Store
 data/raw/
+data/parquet/
 .claude/settings.local.json
 .claude/memory/
 .claude/scheduled_tasks.lock

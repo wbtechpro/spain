@@ -10,7 +10,10 @@
 # 1. Установить Python-зависимости (DuckDB + pdfplumber)
 uv sync
 
-# 2. Сгенерировать данные (можно параллельно)
+# 2a. Собрать parquet из текущих JSON'ов (нужно перед первым запуском backend)
+uv run etl/to_parquet.py
+
+# 2b. Сгенерировать данные (можно параллельно)
 uv run python scripts/fetch_internet_speed.py   # ~2-3 мин (скачивает Ookla parquet ~600 МБ)
 uv run python scripts/fetch_rent.py             # ~5 сек
 uv run python scripts/fetch_hate_crimes.py      # ~10 сек
