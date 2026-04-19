@@ -900,7 +900,8 @@ const HEAT_DEFS = {
   power_outages:  { label: 'Зона блэкаута 28.04.2025',      source: 'json', url: 'data/power_outages.json' },
   yoga_price:     { label: 'Средняя цена часа йоги',       source: 'json', url: 'data/yoga_price.json' },
   cita_previa:    { label: 'Срок ожидания cita previa',    source: 'json', url: 'data/cita_previa.json' },
-  salary_net_median: { label: 'Медианный доход семьи (ADRH 2023)', source: 'json', url: 'data/salary_net_median.json' }
+  salary_net_median: { label: 'Медианный доход семьи (ADRH 2023)', source: 'json', url: 'data/salary_net_median.json' },
+  russian_share:     { label: 'Русские и украинцы, % (2022)', source: 'json', url: 'data/russian_share.json' }
 };
 
 // Список испанских горнолыжных курортов (открытая инфа)
@@ -1093,28 +1094,64 @@ function unitFor(key) {
 }
 
 // Normalize a muni value to [0..1] via p5/p95 from data.stats.
+// Accepts whichever {min,max,p5,p95} keys are present — salary uses *_eur,
+// share layers use *_pct. Falls back gracefully so new metrics can ship
+// without touching this helper.
 function muniIntensity(value, stats) {
   if (value == null || !stats) return null;
-  const lo = stats.p5_eur ?? stats.p5 ?? stats.min;
-  const hi = stats.p95_eur ?? stats.p95 ?? stats.max;
+  const lo = stats.p5_eur ?? stats.p5_pct ?? stats.p5 ?? stats.min;
+  const hi = stats.p95_eur ?? stats.p95_pct ?? stats.p95 ?? stats.max;
   if (lo == null || hi == null || hi === lo) return 0.5;
   return Math.max(0, Math.min(1, (value - lo) / (hi - lo)));
 }
 
-function formatMuniValue(key, value) {
-  if (value == null) return 'н.д.';
-  if (key === 'salary_net_median') {
-    return `${Math.round(value).toLocaleString('ru-RU').replace(/,/g, ' ')} €/год`;
-  }
-  return `${value}${unitFor(key)}`;
+// Single-hue encoding for the Russophone-diaspora layer — the user explicitly
+// asked for saturation-driven contours, not the rainbow-gradient heatColor.
+// t=0 → near-white, t=1 → saturated crimson.
+function saturationColor(t, hue = 350) {
+  t = Math.max(0, Math.min(1, t));
+  const s = Math.round(10 + 80 * t);
+  const l = Math.round(95 - 40 * t);
+  return `hsl(${hue}, ${s}%, ${l}%)`;
 }
 
-// Muni choropleth: 8k+ polygons → canvas renderer for perf. Saturation/hue via heatColor().
+function muniColorFor(key, t) {
+  if (key === 'russian_share') return saturationColor(t);
+  return heatColor(t);
+}
+
+function muniValueFor(m) {
+  // Unified accessor across layers: salary stores value_eur, share stores share_pct.
+  return m.value_eur ?? m.share_pct ?? m.value;
+}
+
+function muniTooltip(key, name, m) {
+  if (!m) return `<b>${name}</b><br>нет данных`;
+  if (key === 'salary_net_median') {
+    const eur = Math.round(m.value_eur).toLocaleString('ru-RU').replace(/,/g, ' ');
+    return `<b>${name}</b><br>${eur} €/год`;
+  }
+  if (key === 'russian_share') {
+    const pop = (m.population || 0).toLocaleString('ru-RU').replace(/,/g, ' ');
+    const abs = (m.ru_uk || 0).toLocaleString('ru-RU').replace(/,/g, ' ');
+    const pct = (m.share_pct ?? 0).toFixed(2);
+    return (
+      `<b>${name}</b>` +
+      `<br>Население: ${pop}` +
+      `<br>РУ+УК: ${abs} (${pct}%)`
+    );
+  }
+  return `<b>${name}</b><br>${muniValueFor(m)}${unitFor(key)}`;
+}
+
+// Muni choropleth: 8k+ polygons → canvas renderer for perf.
+// Color function and tooltip format are picked per-layer so new muni metrics
+// can plug in without touching the rendering core.
 async function buildMuniChoroplethLayer(data, key) {
   const geo = await loadMunicipiosGeo();
   const byIne = {};
   (data.municipios || []).forEach(m => {
-    byIne[m.ine] = { ...m, intensity: muniIntensity(m.value_eur ?? m.value, data.stats) };
+    byIne[m.ine] = { ...m, intensity: muniIntensity(muniValueFor(m), data.stats) };
   });
   return L.geoJSON(geo, {
     renderer: L.canvas({ padding: 0.5 }),
@@ -1124,7 +1161,7 @@ async function buildMuniChoroplethLayer(data, key) {
         return { fillColor: '#eee', fillOpacity: 0.15, color: '#bbb', weight: 0.3 };
       }
       return {
-        fillColor: heatColor(m.intensity),
+        fillColor: muniColorFor(key, m.intensity),
         fillOpacity: 0.70,
         color: '#333',
         weight: 0.25
@@ -1133,8 +1170,7 @@ async function buildMuniChoroplethLayer(data, key) {
     onEachFeature: (feature, layer) => {
       const m = byIne[feature.id];
       const name = (feature.properties && feature.properties.name) || feature.id;
-      const val = m ? formatMuniValue(key, m.value_eur ?? m.value) : 'нет данных';
-      layer.bindTooltip(`<b>${name}</b><br>${val}`, { sticky: true });
+      layer.bindTooltip(muniTooltip(key, name, m), { sticky: true });
     }
   });
 }
@@ -1145,7 +1181,7 @@ async function buildMuniHeatLayer(data) {
   const pts = [];
   (data.municipios || []).forEach(m => {
     const c = municipioCentroids[m.ine];
-    const intensity = muniIntensity(m.value_eur ?? m.value, data.stats);
+    const intensity = muniIntensity(muniValueFor(m), data.stats);
     if (!c || intensity == null) return;
     pts.push([c[0], c[1], intensity]);
   });
