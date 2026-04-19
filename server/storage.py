@@ -34,7 +34,15 @@ def available_point_layers() -> list[str]:
 
 
 def available_heatmap_layers() -> list[str]:
-    return sorted(p.stem for p in config.PARQUET_HEATMAP.glob("*.parquet"))
+    """
+    Heatmap layers are served from their source JSON (see /api/heatmap), so
+    availability is determined by the JSON file existing — parquet is only
+    maintained for point layers.
+    """
+    return sorted(
+        lid for lid, fn in config.HEATMAP_JSON_FILES.items()
+        if (config.DATA_DIR / fn).exists()
+    )
 
 
 def points_parquet(layer: str) -> Path | None:
@@ -47,11 +55,25 @@ def heatmap_parquet(layer: str) -> Path | None:
     return p if p.exists() else None
 
 
+_META_KEYS = (
+    "source", "source_url", "license", "period", "metric", "granularity",
+    "legend_min", "legend_max", "legend_sub", "render_radius", "render_blur",
+)
+
+
 def heatmap_meta(layer: str) -> dict:
-    p = config.PARQUET_HEATMAP / f"{layer}.meta.json"
-    if not p.exists():
-        return {}
-    return json.loads(p.read_text(encoding="utf-8"))
+    # Prefer ETL-derived parquet sidecar; fall back to the source JSON so layers
+    # that skip the ETL (muni-level choropleths) still surface metadata.
+    sidecar = config.PARQUET_HEATMAP / f"{layer}.meta.json"
+    if sidecar.exists():
+        return json.loads(sidecar.read_text(encoding="utf-8"))
+    fn = config.HEATMAP_JSON_FILES.get(layer)
+    if fn:
+        path = config.DATA_DIR / fn
+        if path.exists():
+            doc = json.loads(path.read_text(encoding="utf-8"))
+            return {k: doc[k] for k in _META_KEYS if k in doc}
+    return {}
 
 
 def count_points_in_bbox(layer: str, w: float, s: float, e: float, n: float) -> int:
