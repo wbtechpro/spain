@@ -37,6 +37,7 @@ POINT_LAYERS: dict[str, str] = {
     "neurorehab": "neurorehab.json",
     "speech": "speech_ru.json",
     "psych": "psych.json",
+    "neuro": "neuro.json",
 }
 
 HEATMAP_LAYERS: dict[str, str] = {

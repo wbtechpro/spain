@@ -1,0 +1,432 @@
+{
+ "source": "Курация: публичные сайты госпиталей SNS (отделения Neurología Pediátrica) + крупные частные клиники с явно указанной услугой",
+ "license": "Только публично опубликованные данные учреждений",
+ "period": "2026-04",
+ "category": "neuro",
+ "schema": {
+  "name": "string",
+  "city": "string",
+  "ccaa": "string",
+  "lat": "number",
+  "lng": "number",
+  "website": "url",
+  "kind": "departamento | consulta_privada",
+  "focus": "массив из: cas | epilepsia | desarrollo | tea | general",
+  "languages": "массив языковых кодов",
+  "public": "boolean — true: бесплатно через SNS",
+  "online": "boolean",
+  "offline": "boolean",
+  "ages": "child | adolescent | both",
+  "priority": "boolean — крупный маркер на карте",
+  "verified": "boolean",
+  "precision": "exact | approx"
+ },
+ "count": 16,
+ "features": [
+  {
+   "name": "Niño Jesús — Sección de Neurología Pediátrica",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4117,
+   "lng": -3.673,
+   "website": "https://www.comunidad.madrid/hospital/ninojesus/profesionales/cartera-servicios/seccion-neurologia",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "cas",
+    "epilepsia",
+    "desarrollo",
+    "tea"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": "Референсный детский госпиталь Мадрида. Полный спектр: эпилепсия, нейроразвитие, генетика.",
+   "precision": "exact",
+   "verified": true,
+   "priority": true
+  },
+  {
+   "name": "Sant Joan de Déu — Servicio de Neurología Pediátrica",
+   "city": "Esplugues de Llobregat",
+   "ccaa": "Catalunya",
+   "lat": 41.374,
+   "lng": 2.0878,
+   "website": "https://www.sjdhospitalbarcelona.org/es/neurologia",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "cas",
+    "epilepsia",
+    "desarrollo",
+    "tea"
+   ],
+   "languages": [
+    "es",
+    "ca"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": "Одно из сильнейших отделений детской неврологии в Европе.",
+   "precision": "exact",
+   "verified": true,
+   "priority": true
+  },
+  {
+   "name": "Vall d'Hebron — Neurología Pediátrica",
+   "city": "Barcelona",
+   "ccaa": "Catalunya",
+   "lat": 41.4271,
+   "lng": 2.149,
+   "website": "https://www.vallhebron.com/es/asistencia/cartera-de-servicios/neurologia-pediatrica",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia",
+    "desarrollo"
+   ],
+   "languages": [
+    "es",
+    "ca"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "La Paz — Servicio de Neurología Pediátrica",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4796,
+   "lng": -3.6913,
+   "website": "https://www.comunidad.madrid/hospital/lapaz/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia",
+    "desarrollo"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "12 de Octubre — Neurología Pediátrica",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.3722,
+   "lng": -3.6991,
+   "website": "https://www.comunidad.madrid/hospital/12octubre/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Gregorio Marañón — Neuropediatría",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4205,
+   "lng": -3.6675,
+   "website": "https://www.comunidad.madrid/hospital/gregoriomaranon/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Hospital La Fe — Neuropediatría",
+   "city": "Valencia",
+   "ccaa": "Valenciana",
+   "lat": 39.4427,
+   "lng": -0.3784,
+   "website": "https://www.lafe.san.gva.es/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia",
+    "desarrollo"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Virgen del Rocío — Neuropediatría",
+   "city": "Sevilla",
+   "ccaa": "Andalucía",
+   "lat": 37.358,
+   "lng": -5.9846,
+   "website": "https://www.hospitalesvirgendelrocio.es/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Hospital Regional de Málaga — Neuropediatría",
+   "city": "Málaga",
+   "ccaa": "Andalucía",
+   "lat": 36.7155,
+   "lng": -4.447,
+   "website": "https://www.hospitalregionaldemalaga.es/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Cruces — Neuropediatría",
+   "city": "Barakaldo",
+   "ccaa": "País Vasco",
+   "lat": 43.2891,
+   "lng": -2.9939,
+   "website": "https://www.osakidetza.euskadi.eus/hospital-universitario-cruces/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es",
+    "eu"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Son Espases — Neuropediatría",
+   "city": "Palma de Mallorca",
+   "ccaa": "Illes Balears",
+   "lat": 39.5959,
+   "lng": 2.6359,
+   "website": "https://www.hsll.es/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es",
+    "ca"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "CHUAC (A Coruña) — Neuropediatría",
+   "city": "A Coruña",
+   "ccaa": "Galicia",
+   "lat": 43.338,
+   "lng": -8.4115,
+   "website": "https://xxiacoruna.sergas.gal/",
+   "kind": "departamento",
+   "focus": [
+    "general",
+    "epilepsia"
+   ],
+   "languages": [
+    "es",
+    "gl"
+   ],
+   "public": true,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": true,
+   "priority": false
+  },
+  {
+   "name": "Hospital Ruber Internacional — Neurología Pediátrica",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4709,
+   "lng": -3.6781,
+   "website": "https://www.ruberinternacional.es/",
+   "kind": "consulta_privada",
+   "focus": [
+    "general",
+    "epilepsia",
+    "desarrollo"
+   ],
+   "languages": [
+    "es",
+    "en"
+   ],
+   "public": false,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": "Частный референсный госпиталь, есть сильное отделение детской неврологии.",
+   "precision": "exact",
+   "verified": false,
+   "priority": false
+  },
+  {
+   "name": "Quirónsalud Madrid — Unidad de Neuropediatría",
+   "city": "Pozuelo de Alarcón",
+   "ccaa": "Madrid",
+   "lat": 40.4385,
+   "lng": -3.7969,
+   "website": "https://www.quironsalud.com/madrid/",
+   "kind": "consulta_privada",
+   "focus": [
+    "general",
+    "epilepsia",
+    "desarrollo"
+   ],
+   "languages": [
+    "es",
+    "en"
+   ],
+   "public": false,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": false,
+   "priority": false
+  },
+  {
+   "name": "HM Montepríncipe — Neurología Infantil",
+   "city": "Boadilla del Monte",
+   "ccaa": "Madrid",
+   "lat": 40.4027,
+   "lng": -3.8732,
+   "website": "https://www.hmhospitales.com/montepríncipe",
+   "kind": "consulta_privada",
+   "focus": [
+    "general",
+    "desarrollo"
+   ],
+   "languages": [
+    "es"
+   ],
+   "public": false,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": false,
+   "priority": false
+  },
+  {
+   "name": "Hospital Quirónsalud Barcelona — Neuropediatría",
+   "city": "Barcelona",
+   "ccaa": "Catalunya",
+   "lat": 41.4015,
+   "lng": 2.1339,
+   "website": "https://www.quironsalud.com/barcelona/",
+   "kind": "consulta_privada",
+   "focus": [
+    "general",
+    "epilepsia",
+    "desarrollo"
+   ],
+   "languages": [
+    "es",
+    "ca",
+    "en"
+   ],
+   "public": false,
+   "online": false,
+   "offline": true,
+   "ages": "both",
+   "note": null,
+   "precision": "exact",
+   "verified": false,
+   "priority": false
+  }
+ ]
+}
