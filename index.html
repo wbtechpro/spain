@@ -528,8 +528,9 @@ const POINT_CATEGORIES = {
   yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘' },
   hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴' },
   enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵' },
-  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#9b59b6', icon: '🧠' },
-  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬' }
+  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#34495e', icon: '🦽' },
+  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬' },
+  psych:      { label: 'Детский психолог / психиатр',          color: '#9b59b6', icon: '🧠' }
 };
 // Доступность слоя (есть ли parquet на бэкенде) — заполняется из /api/meta.
 const layerAvailable = {};
@@ -713,6 +714,51 @@ function speechPopup(f) {
     `</div>`;
 }
 
+const PSYCH_KIND_CHIP = {
+  psicologo:    { label: '🧑‍⚕️ психолог',    cls: 'sp-focus sp-focus-general' },
+  neuropsicologo:{ label: '🧠 нейропсихолог', cls: 'sp-focus sp-focus-neuro' },
+  psiquiatra:   { label: '💊 психиатр',     cls: 'sp-focus sp-focus-cas' },
+  usmij:        { label: '🏥 USMIJ (SNS)',  cls: 'sp-focus sp-focus-neuro' },
+};
+const PSYCH_FOCUS_CHIP = {
+  cas:        '🎯 CAS',
+  tea:        '🧩 TEA',
+  tdah:       '⚡ TDAH',
+  ansiedad:   '😟 тревожность',
+  general:    '👶 общий',
+};
+
+function psychPopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+  const kind = PSYCH_KIND_CHIP[f.kind]
+    ? `<span class="sp-chip ${PSYCH_KIND_CHIP[f.kind].cls}">${PSYCH_KIND_CHIP[f.kind].label}</span>`
+    : '';
+  const access = f.public === true
+    ? '<span class="sp-chip sp-mode-online">🆓 публичный (SNS)</span>'
+    : f.public === false ? '<span class="sp-chip sp-mode-offline">💶 частный</span>' : '';
+  const focusChips = (f.focus || [])
+    .map(t => PSYCH_FOCUS_CHIP[t])
+    .filter(Boolean)
+    .map(s => `<span class="sp-chip sp-focus sp-focus-general">${s}</span>`)
+    .join('');
+  const langChips = (f.languages || [])
+    .map(l => `<span class="sp-chip sp-lang">${esc(LANG_CHIP[l] || l)}</span>`)
+    .join('');
+  const modeChips = [
+    f.offline ? '<span class="sp-chip sp-mode-offline">🏢 офлайн</span>' : '',
+    f.online  ? '<span class="sp-chip sp-mode-online">🌐 онлайн</span>'  : '',
+  ].filter(Boolean).join('');
+  return `<div class="nrh-card">${nameHtml}` +
+    speechSection('Тип:', `${kind}${access}`) +
+    speechSection('Профиль:', focusChips) +
+    speechSection('Языки приёма:', langChips) +
+    speechSection('Формат приёма:', modeChips) +
+    `</div>`;
+}
+
 function neurorehabPopup(f) {
   const name = esc(f.name || '(без названия)');
   const nameHtml = f.website
@@ -875,6 +921,7 @@ function plainPopup(cat, f) {
 }
 
 function popupFor(cat, f) {
+  if (cat === 'psych')      return psychPopup(f);
   if (cat === 'neurorehab') return neurorehabPopup(f);
   if (cat === 'speech')     return speechPopup(f);
   if (cat === 'hippo')      return hippoPopup(f);
@@ -1436,7 +1483,7 @@ const TOP_BIG_KEYS = ['airports', 'rail'];
 
 const POINT_SUBGROUPS = [
   { key: 'general', label: 'General', points: ['spanish', 'hospitals'], bigs: ['ski'] },
-  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'speech', 'neurorehab'], bigs: [] },
+  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'speech', 'psych', 'neurorehab'], bigs: [] },
   { key: 'adults',  label: 'Взрослые', points: ['yoga', 'enduro'], bigs: [] }
 ];
 
