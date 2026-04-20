@@ -1,0 +1,371 @@
+{
+ "source": "Ручная курация: сайты публичных госпиталей, FEDACE, ASPACE, Instituto Guttmann и известных специализированных центров",
+ "period": "2026-04",
+ "metric": "детская нейрореабилитация и специализированные центры неврологической помощи",
+ "count": 24,
+ "license": "Публичные данные с официальных сайтов учреждений",
+ "features": [
+  {
+   "name": "Instituto Guttmann",
+   "city": "Badalona",
+   "ccaa": "Catalunya",
+   "lat": 41.478707,
+   "lng": 2.237036,
+   "website": "https://www.guttmann.com/",
+   "services": [
+    "neuro",
+    "spinal cord",
+    "brain injury",
+    "pediátrico"
+   ],
+   "note": "Референсный центр по нейрореабилитации; детское отделение",
+   "precision": "exact",
+   "osm_match": "Institut Guttmann, Camí de Can Ruti, Canyet, Districte 3, Badalona, Barcelonés, "
+  },
+  {
+   "name": "Hospital Beata María Ana",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.418137,
+   "lng": -3.668026,
+   "website": "https://www.hospitalbeatamariaana.es/",
+   "services": [
+    "neurorehabilitación",
+    "pediátrico"
+   ],
+   "note": "Частный госпиталь, сильная неврологическая реабилитация",
+   "precision": "exact",
+   "osm_match": "Hospital Beata María Ana, Calle de Vaquerías, Estrella, Retiro, Madrid, Comunida"
+  },
+  {
+   "name": "Centro Lescer",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4168,
+   "lng": -3.7038,
+   "website": "https://www.lescer.com/",
+   "services": [
+    "daño cerebral adquirido",
+    "pediátrico"
+   ],
+   "note": "Специализированный центр по ДЦП и приобретённому поражению мозга",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "Fundación NIPACE",
+   "city": "Guadalajara",
+   "ccaa": "Castilla-La Mancha",
+   "lat": 40.642675,
+   "lng": -3.155171,
+   "website": "https://www.nipace.com/",
+   "services": [
+    "parálisis cerebral",
+    "pediátrico",
+    "neurorehabilitación"
+   ],
+   "note": "Фонд специализирован на ДЦП и детской нейрореабилитации",
+   "precision": "exact",
+   "osm_match": "Futuro Centro Internacional de Rehabilitación Neurológica de Fundación NIPACE, L"
+  },
+  {
+   "name": "Centro de Rehabilitación Neurológica Nebrija",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4168,
+   "lng": -3.7038,
+   "website": "https://www.nebrija.com/",
+   "services": [
+    "neurorehabilitación"
+   ],
+   "note": "Университетский центр нейрореабилитации",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "Fundación Aprocor",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4168,
+   "lng": -3.7038,
+   "website": "https://www.aprocor.org/",
+   "services": [
+    "discapacidad intelectual",
+    "apoyo infantil"
+   ],
+   "note": "Поддержка детей с интеллектуальными нарушениями",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "NeuroFisio (Clínica Neurofisiológica Valencia)",
+   "city": "Valencia",
+   "ccaa": "Valenciana",
+   "lat": 39.4699,
+   "lng": -0.3763,
+   "website": "https://www.neurofisio.es/",
+   "services": [
+    "neurofisioterapia",
+    "pediátrico"
+   ],
+   "note": "Частная клиника детской нейрофизиотерапии",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "ASPACE Madrid (Asoc. Parálisis Cerebral)",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.4168,
+   "lng": -3.7038,
+   "website": "https://www.aspacemadrid.org/",
+   "services": [
+    "parálisis cerebral",
+    "infantil"
+   ],
+   "note": "Региональный центр ASPACE — ДЦП",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "ASPACE Catalunya",
+   "city": "Barcelona",
+   "ccaa": "Catalunya",
+   "lat": 41.366642,
+   "lng": 2.159746,
+   "website": "https://www.aspace.cat/",
+   "services": [
+    "parálisis cerebral",
+    "infantil"
+   ],
+   "note": "Каталонское отделение ASPACE",
+   "precision": "exact",
+   "osm_match": "Aspace Barcelona, Carrer dels Tres Pins, Montjuïc, el Poble-sec, Sants-Montjuïc,"
+  },
+  {
+   "name": "ASPACE Andalucía (Sevilla)",
+   "city": "Sevilla",
+   "ccaa": "Andalucía",
+   "lat": 37.3891,
+   "lng": -5.9845,
+   "website": "https://www.aspaceandalucia.org/",
+   "services": [
+    "parálisis cerebral",
+    "infantil"
+   ],
+   "note": "Региональное отделение ASPACE",
+   "precision": "approx (city centroid)",
+   "osm_match": null
+  },
+  {
+   "name": "Hospital Universitario La Paz — Rehab. Pediátrica",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.48147,
+   "lng": -3.687285,
+   "website": "https://www.comunidad.madrid/hospital/lapaz/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": "Крупнейший госпиталь Мадрида с детской нейро",
+   "precision": "exact",
+   "osm_match": "Ciudad Sanitaria La Paz, 261, Paseo de la Castellana, La Paz, Fuencarral, Fuenca"
+  },
+  {
+   "name": "Hospital Infantil Universitario Niño Jesús",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.414336,
+   "lng": -3.677548,
+   "website": "https://www.comunidad.madrid/hospital/ninojesus/",
+   "services": [
+    "hospital infantil",
+    "neuro pediátrica"
+   ],
+   "note": "Детский госпиталь с сильным neuro unit",
+   "precision": "exact",
+   "osm_match": "Hospital Niño Jesús, Avenida de Menéndez Pelayo, Jerónimos, Retiro, Madrid, Comu"
+  },
+  {
+   "name": "Hospital Universitario 12 de Octubre — Pediatría",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.37546,
+   "lng": -3.695906,
+   "website": "https://www.comunidad.madrid/hospital/12octubre/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital 12 de Octubre, Complejo Ciudad Sanitaria Doce de Octubre, Orcasur, User"
+  },
+  {
+   "name": "Hospital General Universitario Gregorio Marañón — Pediatría",
+   "city": "Madrid",
+   "ccaa": "Madrid",
+   "lat": 40.418241,
+   "lng": -3.669053,
+   "website": "https://www.comunidad.madrid/hospital/gregoriomaranon/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital Gregorio Marañón, Calle del Doctor Esquerdo, Estrella, Retiro, Madrid, "
+  },
+  {
+   "name": "Hospital Sant Joan de Déu",
+   "city": "Esplugues de Llobregat",
+   "ccaa": "Catalunya",
+   "lat": 41.384378,
+   "lng": 2.101939,
+   "website": "https://www.sjdhospitalbarcelona.org/",
+   "services": [
+    "hospital pediátrico",
+    "neuro"
+   ],
+   "note": "Один из главных детских госпиталей Испании",
+   "precision": "exact",
+   "osm_match": "Hospital Sant Joan de Déu, 2, Passeig de Sant Joan de Déu, Pedralbes, les Corts,"
+  },
+  {
+   "name": "Hospital Clínic de Barcelona — Pediatría",
+   "city": "Barcelona",
+   "ccaa": "Catalunya",
+   "lat": 41.389446,
+   "lng": 2.152276,
+   "website": "https://www.clinicbarcelona.org/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital Clínic, Carrer de Provença, l'Antiga Esquerra de l'Eixample, l'Eixample"
+  },
+  {
+   "name": "Hospital Universitari Vall d'Hebron — Pediatría",
+   "city": "Barcelona",
+   "ccaa": "Catalunya",
+   "lat": 41.426936,
+   "lng": 2.143012,
+   "website": "https://www.vallhebron.com/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital Vall d'Hebron, Passeig de la Vall d'Hebron, Montbau, Horta-Guinardó, Ba"
+  },
+  {
+   "name": "Hospital La Fe — Unidad Neuro Pediátrica",
+   "city": "Valencia",
+   "ccaa": "Valenciana",
+   "lat": 39.443654,
+   "lng": -0.376102,
+   "website": "https://www.lafe.san.gva.es/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital Universitario y Politécnico La Fe, Camino Azagador del Morro, Malilla, "
+  },
+  {
+   "name": "Hospital Universitario Virgen del Rocío — Pediatría",
+   "city": "Sevilla",
+   "ccaa": "Andalucía",
+   "lat": 37.36295,
+   "lng": -5.97893,
+   "website": "https://www.hospitalesvirgendelrocio.es/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "University Hospital Virgen del Rocio, Calle Castillo de Aroche, Bami, Distrito S"
+  },
+  {
+   "name": "Hospital Universitario Virgen de las Nieves — Pediatría",
+   "city": "Granada",
+   "ccaa": "Andalucía",
+   "lat": 37.18831,
+   "lng": -3.609664,
+   "website": "https://huvn.es/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital General del Hospital Universitario Virgen de las Nieves, 2, Avenida de "
+  },
+  {
+   "name": "Hospital Universitario Regional de Málaga — Pediatría",
+   "city": "Málaga",
+   "ccaa": "Andalucía",
+   "lat": 36.723124,
+   "lng": -4.449655,
+   "website": "https://www.hospitalregionaldemalaga.es/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "University Regional Hospital of Málaga, Avenida Carlos de Haya, Carlos Haya, Bai"
+  },
+  {
+   "name": "Hospital Universitario Cruces — Pediatría",
+   "city": "Barakaldo",
+   "ccaa": "País Vasco",
+   "lat": 43.2825,
+   "lng": -2.984312,
+   "website": "https://www.osakidetza.euskadi.eus/hospital-universitario-cruces/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital Universitario de Cruces, Calle Horacio Etxebarrieta, La Paz, Bengolea, "
+  },
+  {
+   "name": "Hospital Universitari Son Espases — Pediatría",
+   "city": "Palma de Mallorca",
+   "ccaa": "Illes Balears",
+   "lat": 39.605191,
+   "lng": 2.646542,
+   "website": "https://www.hsll.es/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Hospital Son Espases, Aparcamiento solo trabajadores, Nord, es Secar de la Real,"
+  },
+  {
+   "name": "Complejo Hospitalario Universitario A Coruña — Pediatría",
+   "city": "A Coruña",
+   "ccaa": "Galicia",
+   "lat": 43.344263,
+   "lng": -8.389146,
+   "website": "https://xxiacoruna.sergas.gal/",
+   "services": [
+    "hospital público",
+    "neuro pediátrica"
+   ],
+   "note": null,
+   "precision": "exact",
+   "osm_match": "Complejo Hospitalario Universitario de A Coruña, 84, Lugar As Xubias de Arriba, "
+  }
+ ]
+}

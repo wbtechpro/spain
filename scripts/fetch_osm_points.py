@@ -64,7 +64,7 @@ QUERIES = {
     # В OSM чистого тега нет, а конные клубы почти не помечают
     # терапевтическую функцию. Полнотекстовый поиск по name/description/
     # operator даёт лишь горсть совпадений — этот слой лучше дополнять
-    # курируемым списком (см. data/speech_ru.json как образец).
+    # курируемым списком (см. data/neurorehab.json как образец).
     "hippo": """
         nwr["healthcare"="hippotherapy"]({bbox});
         nwr["name"~"hipoterap|equinoterap",i]({bbox});
