@@ -411,12 +411,46 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     pointer-events: none;
   }
+  .layer-toast {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    background: rgba(42, 113, 208, 0.92);
+    color: #fff;
+    padding: 6px 14px 6px 30px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+  .layer-toast.visible { opacity: 1; }
+  .layer-toast::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: layer-toast-spin 0.7s linear infinite;
+  }
+  @keyframes layer-toast-spin {
+    to { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
 <div id="app">
   <div id="map">
     <div id="hint-banner" class="hint-banner" style="display:none;">Кликните на карте, чтобы поставить метку</div>
+    <div id="layer-toast" class="layer-toast" role="status" aria-live="polite">Загружаю слой…</div>
     <div id="legend" class="legend">
       <div id="legend-title" style="font-weight: 600; margin-bottom: 4px;"></div>
       <div class="gradient"></div>
@@ -944,6 +978,7 @@ let renderMode = localStorage.getItem('spainMapRenderMode') || 'heat';
 const layerCache = {};     // layerCache[key][mode] -> L.Layer
 const layerLoading = {};   // layerLoading[key][mode] -> Promise
 const dataCache = {};      // dataCache[key] -> parsed JSON
+const dataLoading = {};    // dataLoading[key] -> Promise (дедупим гонку prefetch↔клик)
 const heatMeta = {};       // heatMeta[key] -> { min, max, sub } (из JSON, не зависит от режима)
 let provincesGeo = null;   // lazy-loaded provinces GeoJSON
 let municipiosGeo = null;  // lazy-loaded municipalities GeoJSON (decoded from topojson)
@@ -985,14 +1020,22 @@ async function loadMunicipiosGeo() {
 
 async function loadHeatData(key) {
   if (dataCache[key]) return dataCache[key];
-  const data = await apiGet(`/api/heatmap?layer=${encodeURIComponent(key)}`, `heatmap:${key}`);
-  dataCache[key] = data;
-  heatMeta[key] = {
-    min: data.legend_min ?? '',
-    max: data.legend_max ?? '',
-    sub: data.legend_sub ?? `${data.source} · ${data.period ?? ''}`
-  };
-  return data;
+  if (dataLoading[key]) return dataLoading[key];
+  dataLoading[key] = (async () => {
+    try {
+      const data = await apiGet(`/api/heatmap?layer=${encodeURIComponent(key)}`, `heatmap:${key}`);
+      dataCache[key] = data;
+      heatMeta[key] = {
+        min: data.legend_min ?? '',
+        max: data.legend_max ?? '',
+        sub: data.legend_sub ?? `${data.source} · ${data.period ?? ''}`
+      };
+      return data;
+    } finally {
+      delete dataLoading[key];
+    }
+  })();
+  return dataLoading[key];
 }
 
 // Градиент, идентичный Leaflet.heat (blue→cyan→lime→yellow→red)
@@ -1189,6 +1232,27 @@ async function ensureLayer(key, mode) {
 
 let activeHeat = null;
 let activeHeatKey = null;
+
+// ---- Тост «Загружаю слой…» поверх карты ----
+// Показываем только если слой ещё не готов: при кэш-хите ensureLayer резолвится мгновенно,
+// таймер в 150 мс не успевает сработать — флика нет.
+let _toastTimer = null;
+let _toastDepth = 0;  // на случай параллельных вызовов (режим + слой)
+function showLayerToast(text = 'Загружаю слой…') {
+  const el = document.getElementById('layer-toast');
+  if (!el) return;
+  el.textContent = text;
+  _toastDepth++;
+  if (_toastTimer) return;
+  _toastTimer = setTimeout(() => { el.classList.add('visible'); }, 150);
+}
+function hideLayerToast() {
+  _toastDepth = Math.max(0, _toastDepth - 1);
+  if (_toastDepth > 0) return;
+  const el = document.getElementById('layer-toast');
+  if (_toastTimer) { clearTimeout(_toastTimer); _toastTimer = null; }
+  if (el) el.classList.remove('visible');
+}
 
 // ================= КРУПНЫЕ ОБЪЕКТЫ =================
 // destinations — приблизительное кол-во прямых направлений по регионам (оценка на основе публичных данных pre-2024).
@@ -1466,8 +1530,14 @@ async function applyActiveHeat() {
     legend.classList.remove('active');
     return;
   }
+  const requestedKey = activeHeatKey;
+  const requestedMode = renderMode;
+  const cached = layerCache[requestedKey]?.[requestedMode];
+  if (!cached) showLayerToast();
   try {
-    const layer = await ensureLayer(activeHeatKey, renderMode);
+    const layer = await ensureLayer(requestedKey, requestedMode);
+    // Пользователь мог переключиться, пока мы ждали — не подсовываем устаревший слой.
+    if (activeHeatKey !== requestedKey || renderMode !== requestedMode) return;
     if (!layer) {
       legend.classList.remove('active');
       return;
@@ -1481,7 +1551,9 @@ async function applyActiveHeat() {
     document.getElementById('legend-sub').textContent = meta.sub ?? '';
     legend.classList.add('active');
   } catch (err) {
-    console.error('heat load failed', activeHeatKey, err);
+    if (err?.name !== 'AbortError') console.error('heat load failed', requestedKey, err);
+  } finally {
+    if (!cached) hideLayerToast();
   }
 }
 
@@ -1702,7 +1774,43 @@ async function applyMeta() {
 applyMeta().then(() => {
   // Первый рендер счётчиков — как только DOM готов.
   onViewportChange();
+  // Прогреваем тяжёлые слои в фоне, от самого большого к маленьким.
+  prefetchHeatmapsInBackground();
 });
+
+// ================= ФОНОВЫЙ ПРОГРЕВ ТЕПЛОВЫХ СЛОЁВ =================
+// Задача: убрать ожидание при первом клике по слою. Грузим последовательно, heavy→light,
+// с паузами, чтобы не конкурировать с интерактивным /api/counts и /api/points.
+// Важное: loadHeatData дедуплен (dataLoading), поэтому если пользователь кликнет слой, который
+// ещё в очереди prefetch, это не создаст второго запроса — оба await'а дождутся одного промиса.
+const HEAT_PREFETCH_ORDER = [
+  'salary_net_median',   // 522K JSON + municipios topojson 1.7M
+  'internet_speed',      // 143K
+  'rent_cost',           // 15K
+  'cita_previa',         // 12K
+  'hate_crimes',         // 11K
+  'power_outages',       // 11K
+  'yoga_price',          // 3.1K
+];
+
+async function prefetchHeatmapsInBackground() {
+  // Даём первичному рендеру и /api/counts отработать.
+  await new Promise(r => setTimeout(r, 1500));
+  // Тяжёлая гео-геометрия нужна для municipio/province choropleth — грузим её первой.
+  try { await loadMunicipiosGeo(); } catch (e) { console.warn('prefetch municipios failed', e); }
+  await new Promise(r => setTimeout(r, 250));
+  try { await loadProvincesGeo(); } catch (e) { console.warn('prefetch provinces failed', e); }
+  for (const key of HEAT_PREFETCH_ORDER) {
+    if (layerAvailable[key] === false) continue;   // /api/meta сказал «нет данных»
+    if (dataCache[key]) continue;                  // юзер уже открыл — кэш прогрет
+    try {
+      await loadHeatData(key);
+    } catch (e) {
+      if (e?.name !== 'AbortError') console.warn('prefetch', key, 'failed', e);
+    }
+    await new Promise(r => setTimeout(r, 250));
+  }
+}
 
 // ================= СТАРТОВОЕ СОСТОЯНИЕ =================
 // «Крупные объекты» по умолчанию выключены — пользователь включает нужное сам.
