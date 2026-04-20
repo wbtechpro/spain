@@ -73,17 +73,6 @@ QUERIES = {
         nwr["leisure"="horse_riding"]["name"~"terap|adaptad",i]({bbox});
         nwr["sport"="equestrian"]["name"~"terap|adaptad",i]({bbox});
     """,
-    "slp": """
-        node["healthcare"="speech_therapist"]({bbox});
-        way["healthcare"="speech_therapist"]({bbox});
-        node["healthcare:speciality"="speech_therapy"]({bbox});
-        way["healthcare:speciality"="speech_therapy"]({bbox});
-        node["healthcare:speciality"="speech-language_pathology"]({bbox});
-        node["practice"="speech_therapy"]({bbox});
-        node["amenity"="clinic"]["name"~"logoped",i]({bbox});
-        node["office"~"therapist",i]["name"~"logoped",i]({bbox});
-        node["healthcare"~"clinic|centre",i]["name"~"logoped",i]({bbox});
-    """,
 }
 
 

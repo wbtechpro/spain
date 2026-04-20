@@ -490,7 +490,6 @@ const POINT_CATEGORIES = {
   schools:    { label: 'Школы для детей',                      color: '#e74c3c', icon: '🎒' },
   neae:       { label: 'Школы с поддержкой NEAE',              color: '#2980b9', icon: '🧩' },
   hospitals:  { label: 'Больницы',                             color: '#c2185b', icon: '🏥' },
-  slp:        { label: 'Логопеды / речевая терапия',           color: '#1abc9c', icon: '🗣️' },
   spanish:    { label: 'Центры испанского языка',              color: '#27ae60', icon: '📚' },
   yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘' },
   hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴' },
@@ -912,7 +911,7 @@ const HEAT_DEFS = {
   yoga_price:     { label: 'Средняя цена часа йоги',       source: 'json', url: 'data/yoga_price.json' },
   cita_previa:    { label: 'Срок ожидания cita previa',    source: 'json', url: 'data/cita_previa.json' },
   salary_net_median: { label: 'Медианный доход семьи (ADRH 2023)', source: 'json', url: 'data/salary_net_median.json' },
-  russian_share:     { label: 'Русские и украинцы, % (2022)', source: 'json', url: 'data/russian_share.json' }
+  russian_share:     { label: 'Русскоговорящие', source: 'json', url: 'data/russian_share.json' }
 };
 
 // Список испанских горнолыжных курортов (открытая инфа)
@@ -1376,7 +1375,7 @@ const TOP_BIG_KEYS = ['airports', 'rail'];
 
 const POINT_SUBGROUPS = [
   { key: 'general', label: 'General', points: ['spanish', 'hospitals'], bigs: ['ski'] },
-  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'slp', 'speech', 'psych'], bigs: [] },
+  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'speech', 'psych'], bigs: [] },
   { key: 'adults',  label: 'Взрослые', points: ['yoga', 'enduro'], bigs: [] }
 ];
 
