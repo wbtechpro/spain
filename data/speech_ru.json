@@ -21,7 +21,7 @@
     "offline": "boolean — принимает ли очно",
     "priority": "boolean — выделять крупным маркером на карте (топ-выбор)"
   },
-  "count": 8,
+  "count": 9,
   "features": [
     {
       "name": "Sofia Zelou — Multilingual Neurologopedia",
@@ -192,6 +192,27 @@
       "precision": "approx",
       "verified": false,
       "offline": true,
+      "priority": true
+    },
+    {
+      "name": "Instituto Ruso Pushkin — Logopedia",
+      "city": "Madrid",
+      "ccaa": "Madrid",
+      "lat": 40.4348,
+      "lng": -3.7104,
+      "website": "https://institutorusopushkin.com/servicios-de-logopedia",
+      "focus": "general",
+      "languages": [
+        "ru",
+        "es"
+      ],
+      "online": false,
+      "offline": true,
+      "phone": "+34 91 448 33 00",
+      "email": "",
+      "note": "C/ Galileo 26, 28015 Madrid (Chamberí). Логопед Алёна Цимерман — диплом Института мозга им. Бехтеревой (Минск). Приём вт/сб. €35–40/ч. CAS явно не заявлен.",
+      "precision": "approx",
+      "verified": false,
       "priority": true
     }
   ]

@@ -32,7 +32,6 @@ POINT_LAYERS: dict[str, str] = {
     "hospitals": "osm_hospitals.json",
     "spanish": "osm_spanish.json",
     "yoga": "osm_yoga.json",
-    "slp": "osm_slp.json",
     "hippo": "hippo.json",
     "enduro": "enduro.json",
     "neurorehab": "neurorehab.json",

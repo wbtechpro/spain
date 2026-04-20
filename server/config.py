@@ -51,7 +51,6 @@ LAYER_CATALOGUE: dict[str, dict] = {
     "schools":    {"type": "points", "label": "Школы для детей",                 "icon": "🎒", "color": "#e74c3c", "zoom_min": 0},
     "neae":       {"type": "points", "label": "Школы с поддержкой NEAE",         "icon": "🧩", "color": "#2980b9", "zoom_min": 0},
     "hospitals":  {"type": "points", "label": "Больницы",                        "icon": "🏥", "color": "#c2185b", "zoom_min": 0},
-    "slp":        {"type": "points", "label": "Логопеды / речевая терапия",      "icon": "🗣️", "color": "#1abc9c", "zoom_min": 0},
     "spanish":    {"type": "points", "label": "Центры испанского языка",         "icon": "📚", "color": "#27ae60", "zoom_min": 0},
     "yoga":       {"type": "points", "label": "Йога-студии",                     "icon": "🧘", "color": "#16a085", "zoom_min": 0},
     "hippo":      {"type": "points", "label": "Лечение лошадьми",                "icon": "🐴", "color": "#8e6a3f", "zoom_min": 0},
