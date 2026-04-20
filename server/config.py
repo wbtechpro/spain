@@ -57,6 +57,7 @@ LAYER_CATALOGUE: dict[str, dict] = {
     "enduro":     {"type": "points", "label": "Вело-эндуро (MTB)",               "icon": "🚵", "color": "#7f8c8d", "zoom_min": 0},
     "neurorehab": {"type": "points", "label": "Нейрореабилитационные центры",    "icon": "🧠", "color": "#9b59b6", "zoom_min": 0},
     "speech":     {"type": "points", "label": "Логопеды: CAS / диспраксия",      "icon": "💬", "color": "#f39c12", "zoom_min": 0},
+    "neuro":      {"type": "points", "label": "Детский невролог",                "icon": "🩺", "color": "#d35400", "zoom_min": 0},
     # heatmaps
     "internet_speed":    {"type": "heatmap", "label": "Скорость интернета"},
     "rent_cost":         {"type": "heatmap", "label": "Стоимость аренды"},
