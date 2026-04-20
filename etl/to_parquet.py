@@ -36,6 +36,7 @@ POINT_LAYERS: dict[str, str] = {
     "enduro": "enduro.json",
     "neurorehab": "neurorehab.json",
     "speech": "speech_ru.json",
+    "psych": "psych.json",
     "neuro": "neuro.json",
 }
 

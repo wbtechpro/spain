@@ -411,12 +411,46 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     pointer-events: none;
   }
+  .layer-toast {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    background: rgba(42, 113, 208, 0.92);
+    color: #fff;
+    padding: 6px 14px 6px 30px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+  .layer-toast.visible { opacity: 1; }
+  .layer-toast::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: layer-toast-spin 0.7s linear infinite;
+  }
+  @keyframes layer-toast-spin {
+    to { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
 <div id="app">
   <div id="map">
     <div id="hint-banner" class="hint-banner" style="display:none;">Кликните на карте, чтобы поставить метку</div>
+    <div id="layer-toast" class="layer-toast" role="status" aria-live="polite">Загружаю слой…</div>
     <div id="legend" class="legend">
       <div id="legend-title" style="font-weight: 600; margin-bottom: 4px;"></div>
       <div class="gradient"></div>
@@ -494,8 +528,9 @@ const POINT_CATEGORIES = {
   yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘' },
   hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴' },
   enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵' },
-  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#9b59b6', icon: '🧠' },
+  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#34495e', icon: '🦽' },
   speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬' },
+  psych:      { label: 'Детский психолог / психиатр',          color: '#9b59b6', icon: '🧠' },
   neuro:      { label: 'Детский невролог',                     color: '#d35400', icon: '🩺' }
 };
 // Доступность слоя (есть ли parquet на бэкенде) — заполняется из /api/meta.
@@ -675,6 +710,51 @@ function speechPopup(f) {
 
   return `<div class="nrh-card">${nameHtml}` +
     speechSection('Услуги:', focusChip) +
+    speechSection('Языки приёма:', langChips) +
+    speechSection('Формат приёма:', modeChips) +
+    `</div>`;
+}
+
+const PSYCH_KIND_CHIP = {
+  psicologo:    { label: '🧑‍⚕️ психолог',    cls: 'sp-focus sp-focus-general' },
+  neuropsicologo:{ label: '🧠 нейропсихолог', cls: 'sp-focus sp-focus-neuro' },
+  psiquiatra:   { label: '💊 психиатр',     cls: 'sp-focus sp-focus-cas' },
+  usmij:        { label: '🏥 USMIJ (SNS)',  cls: 'sp-focus sp-focus-neuro' },
+};
+const PSYCH_FOCUS_CHIP = {
+  cas:        '🎯 CAS',
+  tea:        '🧩 TEA',
+  tdah:       '⚡ TDAH',
+  ansiedad:   '😟 тревожность',
+  general:    '👶 общий',
+};
+
+function psychPopup(f) {
+  const name = esc(f.name || '(без названия)');
+  const nameHtml = f.website
+    ? `<a class="nrh-name" href="${esc(f.website)}" target="_blank" rel="noopener">${name}<span class="ext">↗</span></a>`
+    : `<span class="nrh-name plain">${name}</span>`;
+  const kind = PSYCH_KIND_CHIP[f.kind]
+    ? `<span class="sp-chip ${PSYCH_KIND_CHIP[f.kind].cls}">${PSYCH_KIND_CHIP[f.kind].label}</span>`
+    : '';
+  const access = f.public === true
+    ? '<span class="sp-chip sp-mode-online">🆓 публичный (SNS)</span>'
+    : f.public === false ? '<span class="sp-chip sp-mode-offline">💶 частный</span>' : '';
+  const focusChips = (f.focus || [])
+    .map(t => PSYCH_FOCUS_CHIP[t])
+    .filter(Boolean)
+    .map(s => `<span class="sp-chip sp-focus sp-focus-general">${s}</span>`)
+    .join('');
+  const langChips = (f.languages || [])
+    .map(l => `<span class="sp-chip sp-lang">${esc(LANG_CHIP[l] || l)}</span>`)
+    .join('');
+  const modeChips = [
+    f.offline ? '<span class="sp-chip sp-mode-offline">🏢 офлайн</span>' : '',
+    f.online  ? '<span class="sp-chip sp-mode-online">🌐 онлайн</span>'  : '',
+  ].filter(Boolean).join('');
+  return `<div class="nrh-card">${nameHtml}` +
+    speechSection('Тип:', `${kind}${access}`) +
+    speechSection('Профиль:', focusChips) +
     speechSection('Языки приёма:', langChips) +
     speechSection('Формат приёма:', modeChips) +
     `</div>`;
@@ -877,6 +957,7 @@ function plainPopup(cat, f) {
 }
 
 function popupFor(cat, f) {
+  if (cat === 'psych')      return psychPopup(f);
   if (cat === 'neurorehab') return neurorehabPopup(f);
   if (cat === 'speech')     return speechPopup(f);
   if (cat === 'neuro')      return neuroPopup(f);
@@ -981,6 +1062,7 @@ let renderMode = localStorage.getItem('spainMapRenderMode') || 'heat';
 const layerCache = {};     // layerCache[key][mode] -> L.Layer
 const layerLoading = {};   // layerLoading[key][mode] -> Promise
 const dataCache = {};      // dataCache[key] -> parsed JSON
+const dataLoading = {};    // dataLoading[key] -> Promise (дедупим гонку prefetch↔клик)
 const heatMeta = {};       // heatMeta[key] -> { min, max, sub } (из JSON, не зависит от режима)
 let provincesGeo = null;   // lazy-loaded provinces GeoJSON
 let municipiosGeo = null;  // lazy-loaded municipalities GeoJSON (decoded from topojson)
@@ -1022,14 +1104,22 @@ async function loadMunicipiosGeo() {
 
 async function loadHeatData(key) {
   if (dataCache[key]) return dataCache[key];
-  const data = await apiGet(`/api/heatmap?layer=${encodeURIComponent(key)}`, `heatmap:${key}`);
-  dataCache[key] = data;
-  heatMeta[key] = {
-    min: data.legend_min ?? '',
-    max: data.legend_max ?? '',
-    sub: data.legend_sub ?? `${data.source} · ${data.period ?? ''}`
-  };
-  return data;
+  if (dataLoading[key]) return dataLoading[key];
+  dataLoading[key] = (async () => {
+    try {
+      const data = await apiGet(`/api/heatmap?layer=${encodeURIComponent(key)}`, `heatmap:${key}`);
+      dataCache[key] = data;
+      heatMeta[key] = {
+        min: data.legend_min ?? '',
+        max: data.legend_max ?? '',
+        sub: data.legend_sub ?? `${data.source} · ${data.period ?? ''}`
+      };
+      return data;
+    } finally {
+      delete dataLoading[key];
+    }
+  })();
+  return dataLoading[key];
 }
 
 // Градиент, идентичный Leaflet.heat (blue→cyan→lime→yellow→red)
@@ -1230,22 +1320,30 @@ async function buildMuniHeatLayer(data) {
 }
 
 async function ensureLayer(key, mode) {
+  const def = HEAT_DEFS[key];
+  if (!def || !def.source) return null;
+
+  const data = await loadHeatData(key);
+
+  // Muni choropleth must rebuild on every activation. Leaflet 1.9.4's canvas
+  // renderer loses mouse hit-testing when a cached canvas-rendered GeoJSON is
+  // re-added after another canvas layer was interposed — repro: russian_share
+  // → salary_net_median → russian_share, hover stops firing tooltips. Data and
+  // geometry are already cached, so the rebuild is cheap.
+  if (data.granularity === 'municipio' && mode === 'zones') {
+    return buildMuniChoroplethLayer(data, key);
+  }
+
   layerCache[key] ??= {};
   layerLoading[key] ??= {};
   if (layerCache[key][mode]) return layerCache[key][mode];
   if (layerLoading[key][mode]) return layerLoading[key][mode];
 
-  const def = HEAT_DEFS[key];
-  if (!def || !def.source) return null;
-
   layerLoading[key][mode] = (async () => {
-    const data = await loadHeatData(key);
     const unit = unitFor(key);
     let layer;
     if (data.granularity === 'municipio') {
-      layer = mode === 'heat'
-        ? await buildMuniHeatLayer(data)
-        : await buildMuniChoroplethLayer(data, key);
+      layer = await buildMuniHeatLayer(data);
     } else if (mode === 'heat') {
       layer = buildHeatLayer(data);
     } else if (key === 'internet_speed') {
@@ -1261,6 +1359,27 @@ async function ensureLayer(key, mode) {
 
 let activeHeat = null;
 let activeHeatKey = null;
+
+// ---- Тост «Загружаю слой…» поверх карты ----
+// Показываем только если слой ещё не готов: при кэш-хите ensureLayer резолвится мгновенно,
+// таймер в 150 мс не успевает сработать — флика нет.
+let _toastTimer = null;
+let _toastDepth = 0;  // на случай параллельных вызовов (режим + слой)
+function showLayerToast(text = 'Загружаю слой…') {
+  const el = document.getElementById('layer-toast');
+  if (!el) return;
+  el.textContent = text;
+  _toastDepth++;
+  if (_toastTimer) return;
+  _toastTimer = setTimeout(() => { el.classList.add('visible'); }, 150);
+}
+function hideLayerToast() {
+  _toastDepth = Math.max(0, _toastDepth - 1);
+  if (_toastDepth > 0) return;
+  const el = document.getElementById('layer-toast');
+  if (_toastTimer) { clearTimeout(_toastTimer); _toastTimer = null; }
+  if (el) el.classList.remove('visible');
+}
 
 // ================= КРУПНЫЕ ОБЪЕКТЫ =================
 // destinations — приблизительное кол-во прямых направлений по регионам (оценка на основе публичных данных pre-2024).
@@ -1401,7 +1520,7 @@ const TOP_BIG_KEYS = ['airports', 'rail'];
 
 const POINT_SUBGROUPS = [
   { key: 'general', label: 'General', points: ['spanish', 'hospitals'], bigs: ['ski'] },
-  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'speech', 'neuro', 'neurorehab'], bigs: [] },
+  { key: 'kids',    label: 'Дети',    points: ['schools', 'neae', 'hippo', 'speech', 'psych', 'neuro', 'neurorehab'], bigs: [] },
   { key: 'adults',  label: 'Взрослые', points: ['yoga', 'enduro'], bigs: [] }
 ];
 
@@ -1538,8 +1657,14 @@ async function applyActiveHeat() {
     legend.classList.remove('active');
     return;
   }
+  const requestedKey = activeHeatKey;
+  const requestedMode = renderMode;
+  const cached = layerCache[requestedKey]?.[requestedMode];
+  if (!cached) showLayerToast();
   try {
-    const layer = await ensureLayer(activeHeatKey, renderMode);
+    const layer = await ensureLayer(requestedKey, requestedMode);
+    // Пользователь мог переключиться, пока мы ждали — не подсовываем устаревший слой.
+    if (activeHeatKey !== requestedKey || renderMode !== requestedMode) return;
     if (!layer) {
       legend.classList.remove('active');
       return;
@@ -1552,8 +1677,13 @@ async function applyActiveHeat() {
     document.getElementById('legend-max').textContent = meta.max ?? '';
     document.getElementById('legend-sub').textContent = meta.sub ?? '';
     legend.classList.add('active');
+    // Muni layers fill dataCache + centroids only after first activation — refresh
+    // the badge now so the counter appears without waiting for a map pan/zoom.
+    refreshMuniCounts();
   } catch (err) {
-    console.error('heat load failed', activeHeatKey, err);
+    if (err?.name !== 'AbortError') console.error('heat load failed', requestedKey, err);
+  } finally {
+    if (!cached) hideLayerToast();
   }
 }
 
@@ -1732,6 +1862,31 @@ async function refreshCounts() {
   } catch (e) {
     if (e.name !== 'AbortError') console.error('counts failed', e);
   }
+  refreshMuniCounts();
+}
+
+// Muni-level layers are served straight from JSON (no parquet sidecar), so the
+// server-side /api/counts scan misses them. Count locally using the cached
+// data + centroids populated by loadMunicipiosGeo. No-op until the user has
+// activated the layer at least once (that's when dataCache + centroids fill).
+function refreshMuniCounts() {
+  const b = map.getBounds();
+  const south = b.getSouth(), north = b.getNorth(), west = b.getWest(), east = b.getEast();
+  for (const key of Object.keys(HEAT_DEFS)) {
+    const data = dataCache[key];
+    if (!data || data.granularity !== 'municipio') continue;
+    const heatEl = document.querySelector(`.status[data-status-heat="${key}"]`);
+    if (!heatEl) continue;
+    let n = 0;
+    for (const m of (data.municipios || [])) {
+      if (muniValueFor(m) == null) continue;
+      const c = municipioCentroids[m.ine];
+      if (!c) continue;
+      if (c[0] >= south && c[0] <= north && c[1] >= west && c[1] <= east) n++;
+    }
+    heatEl.textContent = formatCount(n);
+    heatEl.className = 'status';
+  }
 }
 
 async function refreshEnabledLayers() {
@@ -1774,7 +1929,43 @@ async function applyMeta() {
 applyMeta().then(() => {
   // Первый рендер счётчиков — как только DOM готов.
   onViewportChange();
+  // Прогреваем тяжёлые слои в фоне, от самого большого к маленьким.
+  prefetchHeatmapsInBackground();
 });
+
+// ================= ФОНОВЫЙ ПРОГРЕВ ТЕПЛОВЫХ СЛОЁВ =================
+// Задача: убрать ожидание при первом клике по слою. Грузим последовательно, heavy→light,
+// с паузами, чтобы не конкурировать с интерактивным /api/counts и /api/points.
+// Важное: loadHeatData дедуплен (dataLoading), поэтому если пользователь кликнет слой, который
+// ещё в очереди prefetch, это не создаст второго запроса — оба await'а дождутся одного промиса.
+const HEAT_PREFETCH_ORDER = [
+  'salary_net_median',   // 522K JSON + municipios topojson 1.7M
+  'internet_speed',      // 143K
+  'rent_cost',           // 15K
+  'cita_previa',         // 12K
+  'hate_crimes',         // 11K
+  'power_outages',       // 11K
+  'yoga_price',          // 3.1K
+];
+
+async function prefetchHeatmapsInBackground() {
+  // Даём первичному рендеру и /api/counts отработать.
+  await new Promise(r => setTimeout(r, 1500));
+  // Тяжёлая гео-геометрия нужна для municipio/province choropleth — грузим её первой.
+  try { await loadMunicipiosGeo(); } catch (e) { console.warn('prefetch municipios failed', e); }
+  await new Promise(r => setTimeout(r, 250));
+  try { await loadProvincesGeo(); } catch (e) { console.warn('prefetch provinces failed', e); }
+  for (const key of HEAT_PREFETCH_ORDER) {
+    if (layerAvailable[key] === false) continue;   // /api/meta сказал «нет данных»
+    if (dataCache[key]) continue;                  // юзер уже открыл — кэш прогрет
+    try {
+      await loadHeatData(key);
+    } catch (e) {
+      if (e?.name !== 'AbortError') console.warn('prefetch', key, 'failed', e);
+    }
+    await new Promise(r => setTimeout(r, 250));
+  }
+}
 
 // ================= СТАРТОВОЕ СОСТОЯНИЕ =================
 // «Крупные объекты» по умолчанию выключены — пользователь включает нужное сам.

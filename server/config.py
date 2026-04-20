@@ -55,8 +55,9 @@ LAYER_CATALOGUE: dict[str, dict] = {
     "yoga":       {"type": "points", "label": "Йога-студии",                     "icon": "🧘", "color": "#16a085", "zoom_min": 0},
     "hippo":      {"type": "points", "label": "Лечение лошадьми",                "icon": "🐴", "color": "#8e6a3f", "zoom_min": 0},
     "enduro":     {"type": "points", "label": "Вело-эндуро (MTB)",               "icon": "🚵", "color": "#7f8c8d", "zoom_min": 0},
-    "neurorehab": {"type": "points", "label": "Нейрореабилитационные центры",    "icon": "🧠", "color": "#9b59b6", "zoom_min": 0},
+    "neurorehab": {"type": "points", "label": "Нейрореабилитационные центры",    "icon": "🦽", "color": "#34495e", "zoom_min": 0},
     "speech":     {"type": "points", "label": "Логопеды: CAS / диспраксия",      "icon": "💬", "color": "#f39c12", "zoom_min": 0},
+    "psych":      {"type": "points", "label": "Детский психолог / психиатр",     "icon": "🧠", "color": "#9b59b6", "zoom_min": 0},
     "neuro":      {"type": "points", "label": "Детский невролог",                "icon": "🩺", "color": "#d35400", "zoom_min": 0},
     # heatmaps
     "internet_speed":    {"type": "heatmap", "label": "Скорость интернета"},
