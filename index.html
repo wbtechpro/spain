@@ -1194,22 +1194,30 @@ async function buildMuniHeatLayer(data) {
 }
 
 async function ensureLayer(key, mode) {
+  const def = HEAT_DEFS[key];
+  if (!def || !def.source) return null;
+
+  const data = await loadHeatData(key);
+
+  // Muni choropleth must rebuild on every activation. Leaflet 1.9.4's canvas
+  // renderer loses mouse hit-testing when a cached canvas-rendered GeoJSON is
+  // re-added after another canvas layer was interposed — repro: russian_share
+  // → salary_net_median → russian_share, hover stops firing tooltips. Data and
+  // geometry are already cached, so the rebuild is cheap.
+  if (data.granularity === 'municipio' && mode === 'zones') {
+    return buildMuniChoroplethLayer(data, key);
+  }
+
   layerCache[key] ??= {};
   layerLoading[key] ??= {};
   if (layerCache[key][mode]) return layerCache[key][mode];
   if (layerLoading[key][mode]) return layerLoading[key][mode];
 
-  const def = HEAT_DEFS[key];
-  if (!def || !def.source) return null;
-
   layerLoading[key][mode] = (async () => {
-    const data = await loadHeatData(key);
     const unit = unitFor(key);
     let layer;
     if (data.granularity === 'municipio') {
-      layer = mode === 'heat'
-        ? await buildMuniHeatLayer(data)
-        : await buildMuniChoroplethLayer(data, key);
+      layer = await buildMuniHeatLayer(data);
     } else if (mode === 'heat') {
       layer = buildHeatLayer(data);
     } else if (key === 'internet_speed') {
@@ -1516,6 +1524,9 @@ async function applyActiveHeat() {
     document.getElementById('legend-max').textContent = meta.max ?? '';
     document.getElementById('legend-sub').textContent = meta.sub ?? '';
     legend.classList.add('active');
+    // Muni layers fill dataCache + centroids only after first activation — refresh
+    // the badge now so the counter appears without waiting for a map pan/zoom.
+    refreshMuniCounts();
   } catch (err) {
     console.error('heat load failed', activeHeatKey, err);
   }
@@ -1695,6 +1706,31 @@ async function refreshCounts() {
     }
   } catch (e) {
     if (e.name !== 'AbortError') console.error('counts failed', e);
+  }
+  refreshMuniCounts();
+}
+
+// Muni-level layers are served straight from JSON (no parquet sidecar), so the
+// server-side /api/counts scan misses them. Count locally using the cached
+// data + centroids populated by loadMunicipiosGeo. No-op until the user has
+// activated the layer at least once (that's when dataCache + centroids fill).
+function refreshMuniCounts() {
+  const b = map.getBounds();
+  const south = b.getSouth(), north = b.getNorth(), west = b.getWest(), east = b.getEast();
+  for (const key of Object.keys(HEAT_DEFS)) {
+    const data = dataCache[key];
+    if (!data || data.granularity !== 'municipio') continue;
+    const heatEl = document.querySelector(`.status[data-status-heat="${key}"]`);
+    if (!heatEl) continue;
+    let n = 0;
+    for (const m of (data.municipios || [])) {
+      if (muniValueFor(m) == null) continue;
+      const c = municipioCentroids[m.ine];
+      if (!c) continue;
+      if (c[0] >= south && c[0] <= north && c[1] >= west && c[1] <= east) n++;
+    }
+    heatEl.textContent = formatCount(n);
+    heatEl.className = 'status';
   }
 }
 
