@@ -588,18 +588,12 @@ const POINT_CATEGORIES = {
                 sources: OSM_SOURCE },
   yoga:       { label: 'Йога-студии',                          color: '#16a085', icon: '🧘',
                 sources: OSM_SOURCE },
-  hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴',
-                sources: [{ label: 'Ручная курация: AEDEQ + публичные сайты центров' }] },
-  enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵',
-                sources: [{ label: 'Ручная курация: MTB bike-парки и этапы Enduro World Series' }] },
-  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#34495e', icon: '🦽',
-                sources: [{ label: 'Ручная курация: FEDACE, ASPACE, Instituto Guttmann, сайты госпиталей' }] },
-  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬',
-                sources: [{ label: 'Ручная курация: публичные сайты специалистов и каталогов (вкл. Instituto Ruso Pushkin)' }] },
-  psych:      { label: 'Детский психолог / психиатр',          color: '#9b59b6', icon: '🧠',
-                sources: [{ label: 'Ручная курация: USMIJ при госпиталях SNS + частные клиники (Sinews, Hellerhofkidz)' }] },
-  neuro:      { label: 'Детский невролог',                     color: '#d35400', icon: '🩺',
-                sources: [{ label: 'Ручная курация: Neurología Pediátrica при крупных госпиталях SNS + частные клиники (Ruber, Quirónsalud, HM)' }] }
+  hippo:      { label: 'Лечение лошадьми',                     color: '#8e6a3f', icon: '🐴' },
+  enduro:     { label: 'Вело-эндуро (MTB)',                    color: '#7f8c8d', icon: '🚵' },
+  neurorehab: { label: 'Нейрореабилитационные центры',         color: '#34495e', icon: '🦽' },
+  speech:     { label: 'Логопеды: CAS / диспраксия',           color: '#f39c12', icon: '💬' },
+  psych:      { label: 'Детский психолог / психиатр',          color: '#9b59b6', icon: '🧠' },
+  neuro:      { label: 'Детский невролог',                     color: '#d35400', icon: '🩺' }
 };
 // Доступность слоя (есть ли parquet на бэкенде) — заполняется из /api/meta.
 const layerAvailable = {};
@@ -1609,8 +1603,7 @@ const pointContainer = document.getElementById('point-layers');
 const BIG_ROWS = {
   airports: { label: '✈️ Аэропорты',                      count: AIRPORTS.length,    color: null,
               sources: [{ year: 2025, url: 'https://www.aena.es/', label: 'Aena.es (ссылки на каждый аэропорт — в попапах)' }] },
-  ski:      { label: '⛷ Горнолыжные курорты',             count: SKI_RESORTS.length, color: '#00bcd4',
-              sources: [{ label: 'Ручная курация: официальные сайты курортов (ссылки в попапах)' }] },
+  ski:      { label: '⛷ Горнолыжные курорты',             count: SKI_RESORTS.length, color: '#00bcd4' },
   rail:     { label: '🚄 Скоростная ж/д (AVE + ≥200 км/ч)', count: null,              color: null,
               sources: OSM_SOURCE }
 };
